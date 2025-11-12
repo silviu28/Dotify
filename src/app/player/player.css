@@ -3,15 +3,21 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  border: solid;
   padding: 4%;
   position: fixed;
-  top: 75%;
-  left: 50%;
+  top: 80%;
+  left: 60%;
+  gap: 10px;
   transform: translateX(-50%);
+  background-color: rgba(48, 48, 48);
+  border-radius: 10px;
+  color: white;
+  width: 40vw;
+  height: 5vh;
 }
 
 .progress {
+  border-radius: 10px;
   width: 10vw;
   height: 1vw;
   background: green;

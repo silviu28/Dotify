@@ -1,4 +1,7 @@
 .main-page {
   position: absolute;
+  justify-content: space-between;
+  display: flex;
+  gap: 3%;
   top: 5%;
 }
