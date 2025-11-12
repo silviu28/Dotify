@@ -1,0 +1,18 @@
+.player {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  border: solid;
+  padding: 4%;
+  position: fixed;
+  top: 75%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.progress {
+  width: 10vw;
+  height: 1vw;
+  background: green;
+}

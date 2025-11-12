@@ -1,0 +1,11 @@
+.nav {
+  top: 0%;
+  left: 0%;
+  width: 100vw;
+  position: fixed;
+  padding: 1%;
+  background-color: black;
+  display: flex;
+  gap: 1%;
+  justify-content: center;
+}
