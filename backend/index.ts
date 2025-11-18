@@ -32,6 +32,17 @@ app.get("/songs", async (req, res) => {
             const meta = await mm.parseFile(filePath);
             const stats = fs.statSync(filePath);
 
+            // album art
+            let albumArt: any = null;
+            if (meta.common.picture && meta.common.picture.length > 0) {
+              const art = meta.common.picture[0];
+              if (art?.data) {
+                const mimeType = art.format;
+                const buffer = Buffer.from(art.data).toString("base64");
+                albumArt = `data:${mimeType};base64,${buffer}`;
+              }
+            }
+
             return {
               filename,
               title: meta.common.title || "Unknown title",
@@ -43,6 +54,7 @@ app.get("/songs", async (req, res) => {
               bitrate: meta.format.bitrate,
               sampleRate: meta.format.sampleRate,
               size: stats.size,
+              albumArt
             };
           } catch (error: any) {
             res.status(500).json({

@@ -1,3 +1,6 @@
+// use this type whenever using buffers to avoid confusion
+export type base64 = string;
+
 export interface Song {
   filename: string;
   title: string;
@@ -9,4 +12,5 @@ export interface Song {
   genre: string;
   sampleRate: number;
   year: number;
+  albumArt?: base64;
 };

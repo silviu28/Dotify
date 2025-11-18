@@ -3,11 +3,11 @@
   <div class="song-grid">
     @for (song of songs(); track $index) {
       <app-song-container
-        [thumbnailSrc]="'/blank.png'"
         [title]="song.title"
         [artist]="song.artist"
         [album]="song.album || 'single'"
         [year]="song.year"
+        [albumArt]="song.albumArt"
       />
     } 
     @empty {

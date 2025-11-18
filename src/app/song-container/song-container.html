@@ -1,5 +1,5 @@
 <div class="glassmorph-container song-container">
-  <img [src]="thumbnailSrc" />
+  <img [src]="albumArt || '/blank.png'" />
   <h2>{{ title }}</h2>
   <p>{{ artist }}</p>
   <sub>{{ year }}, {{ album }}</sub>

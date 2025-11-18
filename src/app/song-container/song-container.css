@@ -9,6 +9,8 @@
 
 img {
   max-width: 100%;
+  min-width: 200px;
+  min-height: 200px;
   height: auto;
   border-radius: 10px;
   object-fit: cover;

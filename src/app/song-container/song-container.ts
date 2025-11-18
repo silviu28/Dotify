@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { base64 } from '../../types';
 
 @Component({
   selector: 'app-song-container',
@@ -7,8 +8,6 @@ import { Component, Input } from '@angular/core';
   styleUrl: './song-container.css',
 })
 export class SongContainer {
-  // uri for song thumbnail
-  @Input() declare thumbnailSrc: string;
   // song's title
   @Input() declare title: string;
   // song's artist
@@ -17,4 +16,6 @@ export class SongContainer {
   @Input() declare year: number;
   // song's album (if it's single then "single")
   @Input() declare album: string;
+  // song's album art (if it exists)
+  @Input() albumArt?: base64;
 }
