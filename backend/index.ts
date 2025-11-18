@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-
+import mm from "music-metadata";
 import _ from "dotenv";
 
 const app = express();
@@ -9,6 +9,55 @@ const PORT = 4000;
 const AUDIO_DIR = path.join(__dirname, "./public");
 
 app.use(express.json());
+
+// get all songs data
+app.get("/songs", async (req, res) => {
+  try {
+    // read directory's contents
+    fs.readdir(AUDIO_DIR, async (err, files) => {
+      if (err) {
+        return res.status(500).json({
+          message: err.message,
+        });
+      }
+
+      // await returning metadata for each file
+      const songsMeta = await Promise.all(
+        files.map(async filename => {
+          const filePath = path.join(AUDIO_DIR, filename);
+
+          try {
+            const meta = await mm.parseFile(filePath);
+            const stats = fs.statSync(filePath);
+
+            return {
+              filename,
+              title: meta.common.title || "Unknown title",
+              artist: meta.common.artist || "Unknown artist",
+              album: meta.common.album || "Unkown album",
+              year: meta.common.year || 0,
+              genre: meta.common.genre || "Unknown genre",
+              duration: meta.format.duration,
+              bitrate: meta.format.bitrate,
+              sampleRate: meta.format.sampleRate,
+              size: stats.size,
+            };
+          } catch (error: any) {
+            res.status(500).json({
+              message: error.message,
+            });
+          }
+        })
+      );
+
+      res.json({ songs: songsMeta });
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+});
 
 // this streams audio
 app.get("/stream/:name", async (req, res) => {
