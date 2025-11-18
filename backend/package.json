@@ -23,6 +23,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "music-metadata": "^11.10.1"
   }
 }

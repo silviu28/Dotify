@@ -1,8 +1,17 @@
 <div class="listing">
   <h1>Welcome back</h1>
-  <app-song-container
-    [thumbnailSrc]="'/blank.png'"
-    [title]="'Example song'"
-    [artist]="'John Doe'"
-  />
+  <div class="song-grid">
+    @for (song of songs(); track $index) {
+      <app-song-container
+        [thumbnailSrc]="'/blank.png'"
+        [title]="song.title"
+        [artist]="song.artist"
+        [album]="song.album || 'single'"
+        [year]="song.year"
+      />
+    } 
+    @empty {
+      <p>Nothing to show.</p>
+    }
+  </div>
 </div>

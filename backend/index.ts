@@ -3,11 +3,13 @@ import path from "path";
 import fs from "fs";
 import mm from "music-metadata";
 import _ from "dotenv";
+import cors from "cors";
 
 const app = express();
 const PORT = 4000;
 const AUDIO_DIR = path.join(__dirname, "./public");
 
+app.use(cors());
 app.use(express.json());
 
 // get all songs data
