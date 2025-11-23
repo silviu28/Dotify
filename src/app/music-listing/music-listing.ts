@@ -1,9 +1,8 @@
-import { Component, Inject, signal } from '@angular/core';
+import { Component, inject, model, signal } from '@angular/core';
 import { SongContainer } from "../song-container/song-container";
 import { Song } from '../../types';
 import { OnInit } from '@angular/core';
 import { MusicService } from '../music-service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-music-listing',
@@ -13,18 +12,30 @@ import { Observable } from 'rxjs';
 })
 export class MusicListing implements OnInit {
   songs = signal<Song[]>([]);
-
-  constructor(@Inject(MusicService) private musicService: MusicService) {}
+  searchQuery = model<string>('');
+  musicService = inject(MusicService);
 
   ngOnInit() {
     this.musicService
       .getSongs()
       .subscribe(data => {
         console.log(data);
-        // data is of type object with the songs in the "songs" key
-        // typescript bug
-        this.songs.set((data as any).songs);
+        this.songs.set(data.songs);
         console.log("Showing songs", this.songs());
       });
+  }
+
+  onSearchChange() {
+    const search = this.searchQuery().trim();
+    if(search === '') {
+      this.musicService.getSongs().subscribe(data => {
+        this.songs.set(data.songs);
+      })
+    }
+    else {
+      this.musicService.getSongsByName(search).subscribe(songs => {
+        this.songs.set(songs);
+      });
+    }
   }
 }

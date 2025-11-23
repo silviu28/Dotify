@@ -1,6 +1,7 @@
-import { HttpClient, httpResource } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, resource } from '@angular/core';
 import { Song } from '../types';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,18 @@ export class MusicService {
   constructor(private http: HttpClient) {}
 
   getSongs() {
-    return this.http.get(`${this.apiUrl}/songs`);
+    return this.http.get<{songs: Song[]}>(`${this.apiUrl}/songs`);
+  }
+
+  getSongsByName(query: string) {
+    return this.getSongs().pipe(
+      map(data => data.songs.filter(song => song.title.toLowerCase().includes(query.toLowerCase())))
+      );
+  }
+
+  getSongsByArtist(artist: string) {
+    return this.getSongs().pipe(
+      map(data => data.songs.filter(song => song.artist.toLowerCase() === artist.toLowerCase()))
+    )
   }
 }

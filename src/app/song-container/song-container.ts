@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { base64 } from '../../types';
+import { RouterLink, Router } from '@angular/router';
 
 @Component({
   selector: 'app-song-container',
@@ -8,6 +9,7 @@ import { base64 } from '../../types';
   styleUrl: './song-container.css',
 })
 export class SongContainer {
+  private router = inject(Router);
   // song's title
   @Input() declare title: string;
   // song's artist
@@ -18,4 +20,8 @@ export class SongContainer {
   @Input() declare album: string;
   // song's album art (if it exists)
   @Input() albumArt?: base64;
+  navigateToArtist() {
+    const encodedName = encodeURIComponent(this.artist);
+    this.router.navigate(['/artist', encodedName]);
+  }
 }

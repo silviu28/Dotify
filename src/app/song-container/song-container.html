@@ -1,6 +1,6 @@
 <div class="glassmorph-container song-container">
   <img [src]="albumArt || '/blank.png'" />
   <h2>{{ title }}</h2>
-  <p>{{ artist }}</p>
+  <p (click)="navigateToArtist()" class="artist-link">{{ artist }}</p>
   <sub>{{ year }}, {{ album }}</sub>
 </div>
