@@ -1,20 +1,24 @@
 <div class="artist-page">
     <div class="artist-name">
     <h1>{{ artist }}</h1>
-    <p>Songs</p>
+    <h2>Songs</h2>
     @if(songs().length === 0) {
         <p>No songs found for this artist.</p>
     } @else {
         <div class="songs-grid">
         @for(song of songs(); track song.title) {
-        <app-song-container
-            [title]="song.title"
-            [artist]="song.artist"
-            [album]="song.album || 'single'"
-            [year]="song.year"
-            [albumArt]="song.albumArt"
-        />
+					<app-song-container
+							[title]="song.title"
+							[artist]="song.artist"
+							[album]="song.album || 'single'"
+							[year]="song.year"
+							[albumArt]="song.albumArt"
+					/>
     }
         </div>
+		<h2>Albums</h2>
+		@if (albums().length === 0) {
+			<p>No albums to show for this artist.</p>
+		}
 }
 </div>

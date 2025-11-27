@@ -1,12 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
 import { MusicService } from '../music-service';
 import { ActivatedRoute } from '@angular/router';
-import { Song } from '../../types';
+import { Album, Song } from '../../types';
 import { SongContainer } from "../song-container/song-container";
+import { AlbumPage } from "../album-page/album-page";
 
 @Component({
   selector: 'app-artist-page',
-  imports: [SongContainer],
+  imports: [SongContainer, AlbumPage],
   templateUrl: './artist-page.html',
   styleUrl: './artist-page.css',
 })
@@ -15,6 +16,7 @@ export class ArtistPage {
   private activatedRoute = inject(ActivatedRoute);
   songs = signal<Song[]>([]);
   //TODO: add albums as well
+  albums = signal<Album[]>([]);
   artist: string = '';
 
   constructor() {

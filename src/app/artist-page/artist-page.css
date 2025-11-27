@@ -4,13 +4,15 @@
   max-width: 900px;
   margin: 0 auto;
   padding-top: 4.5rem;
+  display: flex;
+  flex-direction: column;
 }
 
 p {
     color: white;
 }
 
-h1 {
+h1, h2 {
     color: white;
 }
 

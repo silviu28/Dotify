@@ -12,5 +12,10 @@ export interface Song {
   genre: string;
   sampleRate: number;
   year: number;
-  albumArt?: base64;
+  albumArt?: base64
+};
+
+export interface Album {
+  coverArt?: base64;
+  songs: Song[];
 };

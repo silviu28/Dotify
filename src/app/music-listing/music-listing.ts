@@ -30,7 +30,7 @@ export class MusicListing implements OnInit {
     if(search === '') {
       this.musicService.getSongs().subscribe(data => {
         this.songs.set(data.songs);
-      })
+      });
     }
     else {
       this.musicService.getSongsByName(search).subscribe(songs => {

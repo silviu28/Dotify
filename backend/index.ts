@@ -47,7 +47,7 @@ app.get("/songs", async (req, res) => {
               filename,
               title: meta.common.title || "Unknown title",
               artist: meta.common.artist || "Unknown artist",
-              album: meta.common.album || "Unkown album",
+              album: meta.common.album || "Unknown album",
               year: meta.common.year || 0,
               genre: meta.common.genre || "Unknown genre",
               duration: meta.format.duration,
