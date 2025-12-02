@@ -24,6 +24,12 @@ export class MusicService {
   getSongsByArtist(artist: string) {
     return this.getSongs().pipe(
       map(data => data.songs.filter(song => song.artist.toLowerCase() === artist.toLowerCase()))
-    )
+    );
+  }
+
+  getByQuery(query: string) {
+    return this.getSongs().pipe(
+      map(data => data.songs.filter(song => song.title.toLowerCase().includes(query) || song.artist.includes(query)))
+    );
   }
 }

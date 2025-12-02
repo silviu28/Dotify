@@ -1,4 +1,4 @@
-import { Component, model, output, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 
 @Component({
@@ -8,15 +8,20 @@ import { RouterLink, Router } from '@angular/router';
   styleUrl: './top-bar.css',
 })
 export class TopBar {
-  searchTerm = model<string>('');
-  searchChange = output<string>();
+  searchTerm = signal<string>('');
   private router = inject(Router);
 
-  onInput(value: string) {
-    this.searchChange.emit(value);
+  navigateHome() {
+    this.router.navigate(['/'], { replaceUrl: true });
+    this.searchTerm.set('');
   }
 
-  navigateHome() {
-    this.router.navigate(["/"]);
+  search() {
+    if(this.searchTerm() === '') {
+      this.navigateHome();
+      return;
+    }
+
+    this.router.navigate(["/search", encodeURI(this.searchTerm())]);
   }
 }
