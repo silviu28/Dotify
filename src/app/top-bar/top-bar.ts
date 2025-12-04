@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, model, signal } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
 
 @Component({
@@ -8,7 +8,7 @@ import { RouterLink, Router } from '@angular/router';
   styleUrl: './top-bar.css',
 })
 export class TopBar {
-  searchTerm = signal<string>('');
+  searchTerm = model<string>('');
   private router = inject(Router);
 
   navigateHome() {
