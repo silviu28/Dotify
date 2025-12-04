@@ -6,24 +6,24 @@ import { ArtistPage } from './artist-page/artist-page';
 import { SearchResult } from './search-result/search-result';
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: MainPage,
-    },
-    {
-        path: 'songs',
-        component: MusicListing
-    },
-    {
-        path: 'recently-played',
-        component: RecentlyPlayed
-    },
-    {
-        path: 'artist/:name',
-        component: ArtistPage
-    },
-    {
-        path: 'search/:query',
-        component: SearchResult
-    }
+  {
+    path: '',
+    component: MainPage,
+  },
+  {
+    path: 'songs',
+    component: MusicListing
+  },
+  {
+    path: 'recently-played',
+    component: RecentlyPlayed
+  },
+  {
+    path: 'artist/:name',
+    component: ArtistPage
+  },
+  {
+    path: 'search/:query',
+    component: SearchResult
+  }
 ];

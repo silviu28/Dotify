@@ -17,7 +17,10 @@ export class ArtistPage {
   songs = signal<Song[]>([]);
   //TODO: add albums as well
   albums = signal<Album[]>([]);
-  artist: string = '';
+  artist = '';
+  artistId = 0;
+  
+  artistPictureSrc = signal<string>("");
 
   constructor() {
     this.activatedRoute.params.subscribe(
@@ -28,6 +31,6 @@ export class ArtistPage {
           this.songs.set(songs);
         });
       }
-    )
+    );
   }
 }

@@ -5,15 +5,15 @@
   flex-direction: row;
   padding: 4%;
   position: fixed;
-  top: 80%;
+  bottom: 20px;
   left: 50%;
   gap: 10px;
   transform: translateX(-50%);
-  background-color: rgba(48, 48, 48);
+  /* background-color: rgba(48, 48, 48); */
   border-radius: 10px;
   color: white;
-  width: 40vw;
-  height: 5vh;
+  width: 500px;
+  height: 50px;
 }
 
 .progress {

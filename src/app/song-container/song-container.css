@@ -3,14 +3,16 @@
   justify-content: center;
   align-items: center;
   width: fit-content;
-  max-width: 200px;
-  padding: 5%;
+  max-width: 150px;
+  padding: 10px;
+  font-size: .8rem;
 }
 
 img {
-  max-width: 100%;
-  min-width: 200px;
-  min-height: 200px;
+  width: 100%;
+  max-width: 150px;
+  box-sizing: border-box;
+  min-height: 150px;
   height: auto;
   border-radius: 10px;
   object-fit: cover;

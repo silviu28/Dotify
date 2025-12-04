@@ -32,4 +32,8 @@ export class MusicService {
       map(data => data.songs.filter(song => song.title.toLowerCase().includes(query) || song.artist.includes(query)))
     );
   }
+
+  getArtistData(artistId: number) {
+    return this.http.get(`https://api.deezer.com/artist/${artistId}`);
+  }
 }

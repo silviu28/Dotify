@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
+import { Song } from '../../types';
 
 @Component({
   selector: 'app-player',
@@ -14,6 +15,8 @@ export class Player implements OnInit {
   songLength = signal<number>(0);
   // how much of it has been played
   playedTimestamp = signal<number>(0);
+  // the song that is playing
+  song = signal<Song | null>(null);
 
   ngOnInit() {
     // ... retrieve song data
