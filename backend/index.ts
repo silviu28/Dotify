@@ -12,6 +12,22 @@ const AUDIO_DIR = path.join(__dirname, "./public");
 app.use(cors());
 app.use(express.json());
 
+// JSON server automatically generates endpoints based on the given db.json.
+// To use the app, first populate the [public] directory.
+// paste [db.json] or create it in root directory with this schema:
+// {
+//   songs: [
+//      <<song>>
+//   ]
+// }
+// with each <<song>> being of schema:
+// {
+//   "id": (any unused integer),
+//   "name": (name of the mp3 file stored in /public)
+//   "deezer_artist_id": (the song artist's ID on Deezer, used for the API calls on the frontend)
+// }
+// note: JSON server will run on port 3000.
+
 // get all songs data
 app.get("/songs", async (req, res) => {
   try {
