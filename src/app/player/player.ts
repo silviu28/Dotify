@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { Song } from '../../types';
 
 @Component({
@@ -8,7 +8,7 @@ import { Song } from '../../types';
   templateUrl: './player.html',
   styleUrl: './player.css',
 })
-export class Player implements OnInit {
+export class Player {
   // describes if the song is playing
   isPlaying = signal<boolean>(false);
   // how long the song is
@@ -17,12 +17,14 @@ export class Player implements OnInit {
   playedTimestamp = signal<number>(0);
   // the song that is playing
   song = signal<Song | null>(null);
-
-  ngOnInit() {
-    // ... retrieve song data
-  }
+  // show or hide the player
+  playerShowing = signal<boolean>(true);
 
   toggle() {
     this.isPlaying.set(!this.isPlaying());
+  }
+
+  toggleView() {
+    this.playerShowing.set(!this.playerShowing());
   }
 }

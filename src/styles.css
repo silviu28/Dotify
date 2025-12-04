@@ -23,8 +23,8 @@ button:hover {
 }
 
 body {
-  background: #00FF00;
-  background: linear-gradient(0deg, rgba(0, 255, 0, 1) 0%, rgba(17, 108, 17, 1) 10%, rgba(26, 26, 26, 1) 24%, rgba(48, 48, 48, 1) 100%);
+  background: rgb(48, 48, 48);
+  /* background: linear-gradient(0deg, rgba(0, 255, 0, 1) 0%, rgba(17, 108, 17, 1) 10%, rgba(26, 26, 26, 1) 24%, rgba(48, 48, 48, 1) 100%); */
   background-repeat: no-repeat;
   background-attachment: fixed;
   margin: 0;
@@ -53,5 +53,13 @@ input {
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+.solid {
+  background-color: rgb(48, 48, 48);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  color: white;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }

@@ -3,22 +3,29 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  padding: 4%;
+  padding: 20px;
   position: fixed;
   bottom: 20px;
   left: 50%;
   gap: 10px;
   transform: translateX(-50%);
-  /* background-color: rgba(48, 48, 48); */
   border-radius: 10px;
-  color: white;
   width: 500px;
   height: 50px;
 }
 
+.hide-button {
+  position: fixed;
+  bottom: 13%;
+  left: 50%;
+  height: 50px;
+  width: 50px;
+  transform: translateX(-50%);
+}
+
 .progress {
   border-radius: 10px;
-  width: 10vw;
-  height: 1vw;
+  width: 50%;
+  height: 10px;
   background: green;
 }

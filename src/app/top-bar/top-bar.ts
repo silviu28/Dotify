@@ -10,6 +10,8 @@ import { RouterLink, Router } from '@angular/router';
 export class TopBar {
   searchTerm = model<string>('');
   private router = inject(Router);
+  showNotificationPanel = signal<boolean>(false);
+  notifications = signal<string[]>([]);
 
   navigateHome() {
     this.router.navigate(['/'], { replaceUrl: true });
@@ -23,5 +25,9 @@ export class TopBar {
     }
 
     this.router.navigate(["/search", encodeURI(this.searchTerm())]);
+  }
+
+  toggleNotificationPanel() {
+    this.showNotificationPanel.set(!this.showNotificationPanel());
   }
 }

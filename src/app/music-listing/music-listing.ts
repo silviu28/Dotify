@@ -3,10 +3,11 @@ import { SongContainer } from "../song-container/song-container";
 import { Song } from '../../types';
 import { OnInit } from '@angular/core';
 import { MusicService } from '../music-service';
+import { ArtistListing } from "../artist-listing/artist-listing";
 
 @Component({
   selector: 'app-music-listing',
-  imports: [SongContainer],
+  imports: [SongContainer, ArtistListing],
   templateUrl: './music-listing.html',
   styleUrl: './music-listing.css',
 })

@@ -4,6 +4,8 @@
   align-items: center;
   width: fit-content;
   max-width: 150px;
+  max-height: 250px;
+  overflow: hidden;
   padding: 10px;
   font-size: .8rem;
 }
@@ -19,7 +21,7 @@ img {
 }
 
 .song-container:hover {
-  background-color: rgba(48, 48, 48, 0.5);
+  background-color: rgb(55, 55, 55);
 }
 
 .artist-link{
