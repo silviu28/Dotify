@@ -17,5 +17,6 @@ export interface Song {
 
 export interface Album {
   coverArt?: base64;
+  name?: string;
   songs: Song[];
 };

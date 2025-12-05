@@ -4,6 +4,7 @@ import { MusicListing } from './music-listing/music-listing';
 import { RecentlyPlayed } from './recently-played/recently-played';
 import { ArtistPage } from './artist-page/artist-page';
 import { SearchResult } from './search-result/search-result';
+import { MePage } from './me-page/me-page';
 
 export const routes: Routes = [
   {
@@ -25,5 +26,9 @@ export const routes: Routes = [
   {
     path: 'search/:query',
     component: SearchResult
+  },
+  {
+    path: "me",
+    component: MePage,
   }
 ];

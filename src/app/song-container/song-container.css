@@ -8,6 +8,7 @@
   overflow: hidden;
   padding: 10px;
   font-size: .8rem;
+  text-overflow: ellipsis;
 }
 
 img {

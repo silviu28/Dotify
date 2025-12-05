@@ -1,0 +1,25 @@
+<div class="me-page solid">
+  <h1>Hello, {{ name() }}</h1>
+
+  <h2>Favorite songs:</h2>
+  @for (song of favoritedSongs(); track $index) {
+    <app-song-container
+      [title]="song.title",
+      [artist]="song.artist",
+      [year]="song.year",
+      [album]="song.album",
+      [albumArt]="song.albumArt",
+    />
+  } @empty {
+    <p>Nothing to show for now.</p>
+  }
+
+  <h2>Favorite albums:</h2>
+  @for (album of favoritedAlbums(); track $index) {
+    <!-- album data as props... -->
+    <app-album-container
+    />
+  } @empty {
+    <p>Nothing to show for now.</p>
+  }
+</div>

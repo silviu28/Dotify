@@ -30,4 +30,8 @@ export class TopBar {
   toggleNotificationPanel() {
     this.showNotificationPanel.set(!this.showNotificationPanel());
   }
+
+  navigateToMe() {
+    this.router.navigate(["/me"]);
+  }
 }
