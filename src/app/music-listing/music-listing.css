@@ -10,3 +10,12 @@
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 20px;
 }
+
+app-song-container {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+app-song-container:active {
+  transform: scale(0.98); /* Slight click effect */
+}

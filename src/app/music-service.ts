@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, resource } from '@angular/core';
+import { Injectable, resource, signal } from '@angular/core';
 import { Song } from '../types';
 import { map } from 'rxjs';
 
@@ -8,7 +8,7 @@ import { map } from 'rxjs';
 })
 export class MusicService {
   apiUrl: string = "http://localhost:4000";
-
+  currentSong = signal<Song | null>(null);
   constructor(private http: HttpClient) {}
 
   getSongs() {
@@ -19,6 +19,10 @@ export class MusicService {
     return this.getSongs().pipe(
       map(data => data.songs.filter(song => song.title.toLowerCase().includes(query.toLowerCase())))
       );
+  }
+
+  getSongStreamUrl(filename: string): string {
+    return `${this.apiUrl}/stream/${filename}`;
   }
 
   getSongsByArtist(artist: string) {
@@ -35,5 +39,9 @@ export class MusicService {
 
   getArtistData(artistId: number) {
     return this.http.get(`https://api.deezer.com/artist/${artistId}`);
+  }
+
+  playSong(song: Song) {
+    this.currentSong.set(song);
   }
 }

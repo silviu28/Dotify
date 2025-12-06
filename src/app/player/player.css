@@ -1,31 +1,107 @@
+/* --- MAIN PLAYER CONTAINER --- */
 .player {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  padding: 20px;
+  /* 1. POSITIONING (From your old code - keeps it floating at the bottom) */
   position: fixed;
   bottom: 20px;
   left: 50%;
-  gap: 10px;
   transform: translateX(-50%);
-  border-radius: 10px;
   width: 500px;
-  height: 50px;
+  z-index: 1000; /* Ensures it sits on top of other content */
+
+  /* 2. LAYOUT (New code - aligns the buttons and bar) */
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 20px;
+  
+  /* 3. STYLING */
+  background-color: #181818;
+  color: white;
+  border-radius: 10px;
+  box-sizing: border-box;
+  height: auto; /* Let content define height, or set fixed e.g., 60px */
 }
 
+/* --- SONG INFO (Left) --- */
+.song-info {
+  width: 120px;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --- CONTROLS (Center Buttons) --- */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ctrl-btn {
+  background: transparent;
+  border: none;
+  color: #b3b3b3;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+  transition: transform 0.2s;
+}
+
+.ctrl-btn:hover {
+  color: white;
+  transform: scale(1.1);
+}
+
+.play-btn {
+  background-color: white;
+  color: black;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+/* --- PROGRESS BAR (Seeker) --- */
+.progress-bar {
+  flex-grow: 1;
+  cursor: pointer;
+  height: 4px;
+  border-radius: 2px;
+  accent-color: #1db954;
+}
+
+/* --- TIMESTAMPS (Right) --- */
+.timestamps {
+  font-size: 0.8rem;
+  color: #b3b3b3;
+  min-width: 80px;
+  text-align: right;
+  margin: 0;
+}
+
+/* --- HIDE BUTTON (The arrow) --- */
+/* We need to position this relative to the fixed player */
 .hide-button {
   position: fixed;
-  bottom: 13%;
+  bottom: 85px; /* 20px (player bottom) + ~60px (player height) + 5px gap */
   left: 50%;
-  height: 50px;
-  width: 50px;
   transform: translateX(-50%);
+  
+  background: #181818; /* Give it background so it's visible */
+  border: none;
+  border-radius: 50%; /* Make it round */
+  color: white;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.progress {
-  border-radius: 10px;
-  width: 50%;
-  height: 10px;
-  background: green;
+.solid {
+  background-color: #181818;
 }

@@ -14,6 +14,8 @@ import { ArtistListing } from "../artist-listing/artist-listing";
 export class MusicListing implements OnInit {
   songs = signal<Song[]>([]);
   searchQuery = model<string>('');
+  
+  // Inject the service (already present in your code)
   musicService = inject(MusicService);
 
   ngOnInit() {
@@ -39,4 +41,10 @@ export class MusicListing implements OnInit {
       });
     }
   }
+
+  play(song: Song) {
+    console.log("Playing:", song.title);
+    this.musicService.playSong(song);
+  }
+
 }
