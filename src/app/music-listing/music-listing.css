@@ -1,21 +1,35 @@
 .listing {
-  min-width: 70vw;
-  height: 100%;
+  padding: 100px 20px 120px 20px;
   color: white;
-  padding: 50px;
+  min-height: 100vh;
+  box-sizing: border-box;
 }
 
+/* Grid Layout for the songs */
 .song-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  /* Creates a responsive grid: minimum 200px per card, fits as many as possible */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 20px;
+  margin-bottom: 40px;
 }
 
-app-song-container {
+/* Visual feedback that the card is clickable */
+.clickable-card {
   cursor: pointer;
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, background-color 0.2s;
+  display: block; /* Ensures the component takes space properly */
 }
 
-app-song-container:active {
-  transform: scale(0.98); /* Slight click effect */
+/* Hover effect */
+.clickable-card:hover {
+  transform: translateY(-5px); /* Moves up slightly */
+  filter: brightness(1.1);
+}
+
+.empty-state {
+  grid-column: 1 / -1; /* Spans full width */
+  text-align: center;
+  padding: 50px;
+  color: #b3b3b3;
 }

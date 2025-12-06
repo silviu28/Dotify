@@ -7,7 +7,7 @@ import cors from "cors";
 
 const app = express();
 const PORT = 4000;
-const AUDIO_DIR = path.join(__dirname, "./public");
+const AUDIO_DIR = path.join(process.cwd(), "public");
 
 app.use(cors());
 app.use(express.json());
@@ -30,18 +30,36 @@ app.use(express.json());
 
 // get all songs data
 app.get("/songs", async (req, res) => {
+  console.log("------------------------------------------------");
+  console.log("🔍 Caut muzica în folderul:", AUDIO_DIR);
+  
+  if (!fs.existsSync(AUDIO_DIR)) {
+      console.error("❌ EROARE: Folderul nu există la această cale!");
+      return res.status(500).json({ message: "Audio directory not found" });
+  } else {
+      console.log("✅ Folderul există.");
+  }
   try {
     // read directory's contents
     fs.readdir(AUDIO_DIR, async (err, files) => {
       if (err) {
-        return res.status(500).json({
-          message: err.message,
-        });
+        console.error("❌ Eroare la citirea folderului:", err);
+        return res.status(500).json({ message: err.message });
+      }
+
+      console.log("📂 Fișiere găsite (brut):", files);
+
+      // Filtrare MP3
+      const audioFiles = files.filter(file => file.toLowerCase().endsWith('.mp3'));
+      console.log("🎵 Fișiere MP3 identificate:", audioFiles);
+
+      if (audioFiles.length === 0) {
+          console.warn("⚠️ Nu am găsit niciun fișier .mp3!");
       }
 
       // await returning metadata for each file
       const songsMeta = await Promise.all(
-        files.map(async filename => {
+        audioFiles.map(async filename => {
           const filePath = path.join(AUDIO_DIR, filename);
 
           try {
@@ -61,7 +79,7 @@ app.get("/songs", async (req, res) => {
 
             return {
               filename,
-              title: meta.common.title || "Unknown title",
+              title: meta.common.title || filename, // Fallback la nume fișier
               artist: meta.common.artist || "Unknown artist",
               album: meta.common.album || "Unknown album",
               year: meta.common.year || 0,
@@ -73,14 +91,17 @@ app.get("/songs", async (req, res) => {
               albumArt
             };
           } catch (error: any) {
-            res.status(500).json({
-              message: error.message,
-            });
+            // 2. ERROR HANDLING: Dacă un fișier e stricat, îl ignorăm (returnăm null), NU crăpăm serverul
+            console.error(`Eroare la citirea fișierului ${filename}:`, error.message);
+            return null;
           }
         })
       );
 
-      res.json({ songs: songsMeta });
+      // 3. CURĂȚARE: Eliminăm rezultatele nule (fișierele cu erori)
+      const validSongs = songsMeta.filter(song => song !== null);
+
+      res.json({ songs: validSongs });
     });
   } catch (error: any) {
     res.status(500).json({

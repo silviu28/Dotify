@@ -1,20 +1,22 @@
 <div class="listing glassmorph-container">
-  <h1>Welcome back</h1>
-  
-  <div class="song-grid">
+  <h1>Library</h1> <div class="song-grid">
     @for (song of songs(); track $index) {
+      
       <app-song-container
         (click)="play(song)"
-        class="song-card"
+        class="clickable-card"
         [title]="song.title"
         [artist]="song.artist"
-        [album]="song.album || 'single'"
+        [album]="song.album || 'Single'"
         [year]="song.year"
         [albumArt]="song.albumArt"
       />
+
     } 
     @empty {
-      <p>Nothing to show.</p>
+      <div class="empty-state">
+        <p>No songs found.</p>
+      </div>
     }
   </div>
 

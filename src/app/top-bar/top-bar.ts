@@ -18,6 +18,10 @@ export class TopBar {
     this.searchTerm.set('');
   }
 
+  navigateToLibrary() {
+    this.router.navigate(['/songs']);
+  }
+
   search() {
     if(this.searchTerm() === '') {
       this.navigateHome();
