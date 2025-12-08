@@ -34,6 +34,14 @@ export class Player {
     });
   }
 
+  next() {
+    this.musicService.playNext();
+  }
+
+  prev() {
+    this.musicService.playPrev();
+  }
+
   private setupAudioListeners() {
     // Update the timestamp as the song plays
     this.audio.addEventListener('timeupdate', () => {
