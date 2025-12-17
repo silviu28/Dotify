@@ -2,17 +2,16 @@ import express from "express";
 import path from "path";
 import fs from "fs";
 import mm from "music-metadata";
-import _ from "dotenv";
 import cors from "cors";
 
 const app = express();
 const PORT = 4000;
 const AUDIO_DIR = path.join(process.cwd(), "public");
+import db from "./db.json";
 
 app.use(cors());
 app.use(express.json());
 
-// JSON server automatically generates endpoints based on the given db.json.
 // To use the app, first populate the [public] directory.
 // paste [db.json] or create it in root directory with this schema:
 // {
@@ -26,24 +25,24 @@ app.use(express.json());
 //   "name": (name of the mp3 file stored in /public)
 //   "deezer_artist_id": (the song artist's ID on Deezer, used for the API calls on the frontend)
 // }
-// note: JSON server will run on port 3000.
+// this way the resources don't have to be hardcoded.
 
 // get all songs data
-app.get("/songs", async (req, res) => {
+app.get("/songs", async (_req, res) => {
   console.log("------------------------------------------------");
   console.log("🔍 Caut muzica în folderul:", AUDIO_DIR);
   
   if (!fs.existsSync(AUDIO_DIR)) {
-      console.error("❌ EROARE: Folderul nu există la această cale!");
-      return res.status(500).json({ message: "Audio directory not found" });
+    console.error("Directory does not exist on given path.");
+    return res.status(500).json({ message: "Audio directory not found" });
   } else {
-      console.log("✅ Folderul există.");
+    console.log("✅ Folderul există.");
   }
   try {
     // read directory's contents
     fs.readdir(AUDIO_DIR, async (err, files) => {
       if (err) {
-        console.error("❌ Eroare la citirea folderului:", err);
+        console.error("Directory contents read error: ", err);
         return res.status(500).json({ message: err.message });
       }
 
@@ -51,10 +50,10 @@ app.get("/songs", async (req, res) => {
 
       // Filtrare MP3
       const audioFiles = files.filter(file => file.toLowerCase().endsWith('.mp3'));
-      console.log("🎵 Fișiere MP3 identificate:", audioFiles);
+      console.log("Songs: ", audioFiles);
 
       if (audioFiles.length === 0) {
-          console.warn("⚠️ Nu am găsit niciun fișier .mp3!");
+        console.warn("No .mp3's found.");
       }
 
       // await returning metadata for each file
@@ -67,7 +66,7 @@ app.get("/songs", async (req, res) => {
             const stats = fs.statSync(filePath);
 
             // album art
-            let albumArt: any = null;
+            let albumArt = "";
             if (meta.common.picture && meta.common.picture.length > 0) {
               const art = meta.common.picture[0];
               if (art?.data) {
@@ -88,9 +87,10 @@ app.get("/songs", async (req, res) => {
               bitrate: meta.format.bitrate,
               sampleRate: meta.format.sampleRate,
               size: stats.size,
-              albumArt
+              albumArt,
+              deezer_artist_id: db.songs.find(song => song.name === filename)?.deezer_artist_id,
             };
-          } catch (error: any) {
+          } catch (error) {
             // 2. ERROR HANDLING: Dacă un fișier e stricat, îl ignorăm (returnăm null), NU crăpăm serverul
             console.error(`Eroare la citirea fișierului ${filename}:`, error.message);
             return null;
@@ -103,7 +103,7 @@ app.get("/songs", async (req, res) => {
 
       res.json({ songs: validSongs });
     });
-  } catch (error: any) {
+  } catch (error) {
     res.status(500).json({
       message: error.message,
     });

@@ -12,7 +12,8 @@ export interface Song {
   genre: string;
   sampleRate: number;
   year: number;
-  albumArt?: base64
+  albumArt?: base64;
+  deezer_artist_id?: number;
 };
 
 export interface Album {
