@@ -1,6 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
-import { base64 } from '../../types';
+import { Song } from '../../types';
 import { Router } from '@angular/router';
+import { UserPreferencesService } from '../user-preferences-service';
 
 @Component({
   selector: 'app-song-container',
@@ -10,18 +11,20 @@ import { Router } from '@angular/router';
 })
 export class SongContainer {
   private router = inject(Router);
-  // song's title
-  @Input() declare title: string;
-  // song's artist
-  @Input() declare artist: string;
-  // song's release year
-  @Input() declare year: number;
-  // song's album (if it's single then "single")
-  @Input() declare album: string;
-  // song's album art (if it exists)
-  @Input() albumArt?: base64;
+  private userPrefsService = inject(UserPreferencesService);
+
+  @Input() declare song: Song;
+
   navigateToArtist() {
-    const encodedName = encodeURIComponent(this.artist);
+    const encodedName = encodeURIComponent(this.song.artist);
     this.router.navigate(['/artist', encodedName]);
   }
+
+  favoriteSong() {
+    const currentFavoriteSongs = [... this.userPrefsService.favoriteSongs()];
+    currentFavoriteSongs.push(this.song);
+    this.userPrefsService.favoriteSongs.set(currentFavoriteSongs);
+    this.userPrefsService.savePreferences();
+  }
+
 }

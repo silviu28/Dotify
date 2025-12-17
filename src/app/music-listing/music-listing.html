@@ -5,11 +5,7 @@
       <app-song-container
         (click)="play(song)"
         class="clickable-card"
-        [title]="song.title"
-        [artist]="song.artist"
-        [album]="song.album || 'Single'"
-        [year]="song.year"
-        [albumArt]="song.albumArt"
+        [song]="song"
       />
 
     } 

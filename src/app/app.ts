@@ -14,4 +14,12 @@ export class App {
   protected readonly title = signal('Dotify');
   searchTerm = model<string>('');
   playingSong = signal<Song | null>(null);
+
+  constructor() {
+    // make sure that prefs is set even if localStorage is empty
+    const rawPrefs = localStorage.getItem("prefs");
+    if (!rawPrefs) {
+      localStorage.setItem("prefs", "{}");
+    }
+  }
 }

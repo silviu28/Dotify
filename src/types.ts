@@ -46,3 +46,10 @@ interface DeezerBadResponse {
 }
 
 export type DeezerResponse = DeezerGoodResponse | DeezerBadResponse;
+
+export interface Prefs {
+  username?: string;
+  favoriteSongs?: Song[];
+  favoriteAlbums?: Album[];
+  favoriteArtists?: string[];
+}
