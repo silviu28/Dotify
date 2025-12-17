@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { Song } from '../types';
+import { DeezerResponse, Song } from '../types';
 import { map } from 'rxjs';
 
 @Injectable({
@@ -44,7 +44,9 @@ export class MusicService {
   }
 
   getArtistData(artistId: number) {
-    return this.http.get(`http://localhost:4000/deezer/artist/${artistId}`);
+    return this.http.get<DeezerResponse>(
+      `http://localhost:4000/deezer/artist/${artistId}`
+    );
   }
 
   playSong(song: Song) {

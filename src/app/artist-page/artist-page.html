@@ -1,6 +1,13 @@
-<div class="artist-page solid">
-    <div class="artist-name">
-    <h1>{{ artist }}</h1>
+<div class="artist-page glassmorph-container">
+    <div style="display:flex;flex-direction:row;justify-content:space-between;">
+			<div style="display:flex;flex-direction:column;">
+				<h1>{{ artist }}</h1>
+				<h2>{{ fanCount() | number : "1.0-0" }} {{ "fans" }}</h2>
+			</div>
+			<div style="display:flex;flex-direction:column">
+				<img [src]="pictureSrc()" style="border-radius:15px;">
+			</div>
+		</div>
     <h2>Songs</h2>
     @if(songs().length === 0) {
         <p>No songs found for this artist.</p>

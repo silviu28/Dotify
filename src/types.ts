@@ -21,3 +21,28 @@ export interface Album {
   name?: string;
   songs: Song[];
 };
+
+interface DeezerGoodResponse {
+  id: number;
+  name: string;
+  link: string;
+  share: string;
+  picture: string;
+  picture_small: string;
+  picture_medium: string;
+  picture_big: string;
+  picture_xl: string;
+  nb_album: number;
+  nb_fan: number;
+  radio: boolean;
+  tracklist: string;
+  type: "artist";
+}
+
+interface DeezerBadResponse {
+  type: string;
+  message: string;
+  code: number;
+}
+
+export type DeezerResponse = DeezerGoodResponse | DeezerBadResponse;
