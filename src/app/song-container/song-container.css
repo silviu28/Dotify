@@ -25,7 +25,7 @@ img {
   background-color: rgb(55, 55, 55);
 }
 
-.artist-link{
+.artist-link {
   cursor: pointer;
 }
 
@@ -35,4 +35,11 @@ img {
 
 h2, p, sub {
   color: white;
+}
+
+.row-flex {
+  display:flex;
+  flex-direction:row;
+  justify-content: space-between;
+  align-items: center;
 }

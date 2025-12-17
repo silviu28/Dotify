@@ -1,13 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { DeezerResponse, Song } from '../types';
-import { map } from 'rxjs';
+import { map, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class MusicService {
   private http = inject(HttpClient);
+  private onPlaySubject = new Subject<Song>();
+  onPlay = this.onPlaySubject.asObservable();
 
   apiUrl = "http://localhost:4000";
   currentSong = signal<Song | null>(null);
@@ -51,6 +53,7 @@ export class MusicService {
 
   playSong(song: Song) {
     this.currentSong.set(song);
+    this.onPlaySubject.next(song);
   }
 
   playNext() {
