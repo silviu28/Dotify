@@ -19,6 +19,7 @@ export class ArtistPage {
   albums = signal<Album[]>([]);
   artist = '';
   artistId = 0;
+  deezerData: any = null;
   
   artistPictureSrc = signal<string>("");
 
@@ -29,6 +30,14 @@ export class ArtistPage {
         this.artist = decodeURIComponent(artistName);
         this.musicService.getSongsByArtist(this.artist).subscribe(songs => {
           this.songs.set(songs);
+
+          const artistId = songs[0]?.deezer_artist_id;
+          if (artistId) {
+            this.musicService.getArtistData(artistId).subscribe(data => {
+              this.deezerData = data;
+              console.log("your sweet artist kind sire", data);
+            });
+          }
         });
       }
     );

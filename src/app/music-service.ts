@@ -44,7 +44,7 @@ export class MusicService {
   }
 
   getArtistData(artistId: number) {
-    return this.http.get(`https://api.deezer.com/artist/${artistId}`);
+    return this.http.get(`http://localhost:4000/deezer/artist/${artistId}`);
   }
 
   playSong(song: Song) {

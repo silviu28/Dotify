@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import mm from "music-metadata";
 import cors from "cors";
+import proxyRouter from "./deezer-proxy";
 
 const app = express();
 const PORT = 4000;
@@ -90,7 +91,7 @@ app.get("/songs", async (_req, res) => {
               albumArt,
               deezer_artist_id: db.songs.find(song => song.name === filename)?.deezer_artist_id,
             };
-          } catch (error) {
+          } catch (error: any) {
             // 2. ERROR HANDLING: Dacă un fișier e stricat, îl ignorăm (returnăm null), NU crăpăm serverul
             console.error(`Eroare la citirea fișierului ${filename}:`, error.message);
             return null;
@@ -103,7 +104,7 @@ app.get("/songs", async (_req, res) => {
 
       res.json({ songs: validSongs });
     });
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).json({
       message: error.message,
     });
@@ -153,6 +154,8 @@ app.get("/stream/:name", async (req, res) => {
 
   file.pipe(res);
 });
+
+app.use(proxyRouter);
 
 app.listen(PORT, () => {
   console.log(`Backend running on http://localhost:${PORT}`);

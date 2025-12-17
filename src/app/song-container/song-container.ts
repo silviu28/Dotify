@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
 import { base64 } from '../../types';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-song-container',
