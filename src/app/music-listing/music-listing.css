@@ -12,6 +12,7 @@
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 20px;
   margin-bottom: 40px;
+  margin-top: 40px;
 }
 
 /* Visual feedback that the card is clickable */

@@ -3,11 +3,12 @@ import { SongContainer } from "../song-container/song-container"; // Import the 
 import { Song } from '../../types';
 import { MusicService } from '../music-service';
 import { ArtistListing } from "../artist-listing/artist-listing";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-music-listing',
   // Add SongContainer to imports so we can use it in HTML
-  imports: [SongContainer, ArtistListing], 
+  imports: [SongContainer, ArtistListing, FormsModule], 
   templateUrl: './music-listing.html',
   styleUrl: './music-listing.css',
 })

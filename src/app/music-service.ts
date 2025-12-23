@@ -100,4 +100,39 @@ export class MusicService {
       this.currentSong.set(list[list.length - 1]);
     }
   }
+
+
+  addToQueue(song: Song) {
+    // Folosim .update() pentru a lua lista veche si a adauga piesa noua la sfarsit
+    this.playlist.update(currentList => [...currentList, song]);
+    console.log(`Added to queue: ${song.title}`);
+  }
+
+  // 2. Redă următorul (inserează imediat după piesa curentă)
+  playNextInQueue(song: Song) {
+    const currentList = this.playlist();
+    const currentSong = this.currentSong();
+
+    if (!currentSong) {
+      // Daca nu canta nimic, o punem in coada si ii dam play
+      this.setQueue([song]);
+      this.playSong(song);
+      return;
+    }
+
+    const currentIndex = currentList.findIndex(s => s.filename === currentSong.filename);
+    
+    if (currentIndex !== -1) {
+      // Cream o copie a listei
+      const newList = [...currentList];
+      // Inseram piesa noua la index + 1
+      newList.splice(currentIndex + 1, 0, song);
+      this.playlist.set(newList);
+      console.log(`Will play next: ${song.title}`);
+    } else {
+      // Fallback
+      this.addToQueue(song);
+    }
+  }
+  
 }

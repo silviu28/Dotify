@@ -1,20 +1,34 @@
-<div class="listing glassmorph-container">
-  <h1>Library</h1> <div class="song-grid">
-    @for (song of songs(); track $index) {
-      
-      <app-song-container
-        (click)="play(song)"
-        class="clickable-card"
-        [song]="song"
-      />
+<div class="listing">
+  
+  <div class="header">
+    <h1>Library</h1>
+    <input 
+      type="text" 
+      class="search-bar" 
+      placeholder="Search for songs..." 
+      [ngModel]="searchQuery()"
+      (ngModelChange)="searchQuery.set($event); onSearchChange()"
+    >
+  </div>
 
-    } 
-    @empty {
+  <div class="song-grid">
+    @if (songs().length === 0) {
       <div class="empty-state">
         <p>No songs found.</p>
       </div>
     }
+
+    @for (song of songs(); track song) {
+      <app-song-container
+        class="clickable-card"
+        (click)="play(song)"
+        [song]="song"
+        [title]="song.title"
+        [artist]="song.artist"
+        [year]="song.year"
+        [album]="song.album"
+        [albumArt]="song.albumArt"  ></app-song-container>
+    }
   </div>
 
-  <app-artist-listing />
 </div>
