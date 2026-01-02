@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { DeezerResponse, Song } from '../types';
+import { Album, DeezerResponse, Song } from '../types';
 import { map, Subject } from 'rxjs';
 
 @Injectable({
@@ -15,12 +15,53 @@ export class MusicService {
   currentSong = signal<Song | null>(null);
   playlist = signal<Song[]>([]);
 
+  albums = signal<Album[]>([]);
+  artistNames = signal<string[]>([]);
+
   setQueue(songs: Song[]) {
     this.playlist.set(songs);
   }
 
+  // builds the list of albums based on received songs
+  aggregateAlbums(songs: Song[]): Album[] {
+    const albums = new Map<string, Album>();
+    songs.forEach((song) => {
+      if (!albums.has(song.album)) {
+      // if album doesn't exist, create it
+        albums.set(song.album, {
+          name: song.album,
+          coverArt: song.albumArt || "",
+          songs: [song],
+        });
+      } else {
+      // if album exists, update it
+        const existingAlbum = albums.get(song.album)!;
+        albums.set(song.album, {
+          ...existingAlbum,
+          songs: [... existingAlbum.songs, song],
+        });
+      }
+    });
+
+    return Array.from(albums.values());
+  }
+
+  // build unique artist names list based on received songs
+  aggregateArtistNames(songs: Song[]): string[] {
+    const artists = new Set<string>();
+    songs.forEach(song => artists.add(song.artist));
+    return Array.from(artists.keys());
+  }
+
   getSongs() {
-    return this.http.get<{songs: Song[]}>(`${this.apiUrl}/songs`);
+    return this.http
+      .get<{songs: Song[]}>(`${this.apiUrl}/songs`)
+      .pipe(map(res => {
+        this.artistNames.set(this.aggregateArtistNames(res.songs));
+        this.albums.set(this.aggregateAlbums(res.songs));
+        console.log("Built listings from response stream", this.artistNames(), this.albums());
+        return res;
+      }));
   }
 
   getSongsByName(query: string) {
