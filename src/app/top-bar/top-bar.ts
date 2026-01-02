@@ -1,9 +1,10 @@
 import { Component, inject, model, signal } from '@angular/core';
 import { RouterLink, Router } from '@angular/router';
+import { NotificationPanel } from '../notification-panel/notification-panel';
 
 @Component({
   selector: 'app-top-bar',
-  imports: [RouterLink],
+  imports: [RouterLink, NotificationPanel],
   templateUrl: './top-bar.html',
   styleUrl: './top-bar.css',
 })

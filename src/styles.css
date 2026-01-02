@@ -64,3 +64,42 @@ input {
   color: white;
   border: 1px solid rgba(0, 0, 0, 0.3);
 }
+
+/* Animations, keyframes and stuff... */
+.fade-in {
+  opacity: 0;
+  animation: fade-in .5s ease-out forwards;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  } to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-in {
+  animation: slideDown .25s ease-out forwards;
+}
+@keyframes slideDown {
+  from {
+    transform: translateY(-200px);
+  } to {
+    transform: translateY(0);
+  }
+}
+
+.slide-out {
+  animation: slideUp .25s ease-out forwards;
+}
+@keyframes slideUp {
+  from {
+    transform: translateY(0);
+    opacity: 0;
+  } to {
+    transform: translateY(-200px);
+    opacity: 1;
+  }
+}

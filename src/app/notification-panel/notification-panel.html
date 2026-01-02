@@ -1,0 +1,7 @@
+<div class="solid notification-panel">
+  @for (notification of notifications(); track $index) {
+    <p>- {{ notification }}</p>
+  } @empty {
+    <p>No new announcements.</p>
+  }
+</div>

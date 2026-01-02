@@ -37,12 +37,12 @@
   </button>
 
   @if (showNotificationPanel()) {
-    <div class="solid notification-panel">
-      @for (notification of notifications(); track $index) {
-        <p>- {{ notification }}</p>
-      } @empty {
-        <p>No new announcements.</p>
-      }
-    </div>
+    <app-notification-panel
+      [notifications]="notifications"
+      animate.enter="slide-in"
+      animate.leave="slide-out"
+    />
+  } @else {
+    <div></div>
   }
 </div>
