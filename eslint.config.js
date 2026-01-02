@@ -37,7 +37,7 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ["**/*.html", "**/*.css"],
+    files: ["**/*.html"],
     extends: [
       angular.configs.templateRecommended,
       angular.configs.templateAccessibility,

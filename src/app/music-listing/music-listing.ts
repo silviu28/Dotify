@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-music-listing',
   // Add SongContainer to imports so we can use it in HTML
-  imports: [SongContainer, ArtistListing, FormsModule], 
+  imports: [SongContainer, FormsModule], 
   templateUrl: './music-listing.html',
   styleUrl: './music-listing.css',
 })

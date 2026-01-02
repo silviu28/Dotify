@@ -31,13 +31,13 @@ app.use(express.json());
 // get all songs data
 app.get("/songs", async (_req, res) => {
   console.log("------------------------------------------------");
-  console.log("🔍 Caut muzica în folderul:", AUDIO_DIR);
+  console.log("Searching for contents in directory:", AUDIO_DIR);
   
   if (!fs.existsSync(AUDIO_DIR)) {
     console.error("Directory does not exist on given path.");
     return res.status(500).json({ message: "Audio directory not found" });
   } else {
-    console.log("✅ Folderul există.");
+    console.log("Directory exists.");
   }
   try {
     // read directory's contents
@@ -47,9 +47,9 @@ app.get("/songs", async (_req, res) => {
         return res.status(500).json({ message: err.message });
       }
 
-      console.log("📂 Fișiere găsite (brut):", files);
+      console.log("Found contents:", files);
 
-      // Filtrare MP3
+      // filter to get only .mp3's
       const audioFiles = files.filter(file => file.toLowerCase().endsWith('.mp3'));
       console.log("Songs: ", audioFiles);
 
@@ -91,23 +91,27 @@ app.get("/songs", async (_req, res) => {
               albumArt,
               deezer_artist_id: db.songs.find(song => song.name === filename)?.deezer_artist_id,
             };
-          } catch (error: any) {
-            // 2. ERROR HANDLING: Dacă un fișier e stricat, îl ignorăm (returnăm null), NU crăpăm serverul
-            console.error(`Eroare la citirea fișierului ${filename}:`, error.message);
-            return null;
+          } catch (error: unknown) {
+            // 2. ERROR HANDLING: If a file is corrupted/malformatted don't crash the server
+            if (error instanceof Error) {
+              console.error(`File read error for ${filename}:`, error.message);
+              return null;
+            }
           }
         })
       );
 
-      // 3. CURĂȚARE: Eliminăm rezultatele nule (fișierele cu erori)
+      // 3. CLEANUP: Don't send off broken media files
       const validSongs = songsMeta.filter(song => song !== null);
 
       res.json({ songs: validSongs });
     });
-  } catch (error: any) {
-    res.status(500).json({
-      message: error.message,
-    });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(500).json({
+        message: error.message,
+      });
+    }
   }
 });
 
