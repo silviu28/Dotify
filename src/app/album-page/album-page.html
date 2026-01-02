@@ -1,1 +1,10 @@
-<p>album-page works!</p>
+<div class="album-page solid fade-in">
+  <h1>{{ album().name }}</h1>
+  <div class="songs-grid">
+    @for (song of album().songs; track $index) {
+      <app-song-container [song]="song" />
+    } @empty {
+      <p>How would you even get here...</p>
+    }
+  </div>
+</div>

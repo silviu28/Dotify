@@ -1,0 +1,14 @@
+.songs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2vw;
+}
+
+.album-page {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  padding-top: 4.5rem;
+  display: flex;
+  flex-direction: column;
+}

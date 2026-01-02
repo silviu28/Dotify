@@ -25,7 +25,6 @@ export class SongContainer {
     this.router.navigate(['/artist', encodedName]);
   }
 
-  // --- MODIFICARE: Am adăugat event pentru stopPropagation ---
   favoriteSong(event: Event) {
     event.stopPropagation(); // OPRIRE PLAY CÂND DAI LIKE
     

@@ -5,6 +5,7 @@ import { RecentlyPlayed } from './recently-played/recently-played';
 import { ArtistPage } from './artist-page/artist-page';
 import { SearchResult } from './search-result/search-result';
 import { MePage } from './me-page/me-page';
+import { AlbumPage } from './album-page/album-page';
 
 export const routes: Routes = [
   {
@@ -30,5 +31,9 @@ export const routes: Routes = [
   {
     path: "me",
     component: MePage,
+  },
+  {
+    path: "album/:name",
+    component: AlbumPage
   }
 ];
