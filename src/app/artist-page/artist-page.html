@@ -18,8 +18,12 @@
     }
         </div>
 		<h2>Albums</h2>
-		@if (albums().length === 0) {
-			<p>No albums to show for this artist.</p>
-		}
+		<div class="songs-grid">
+			@for (album of albums(); track $index) {
+				<app-album-container [album]="album" />
+			} @empty { 
+				<p>No albums to show for this artist.</p>
+			}
+		</div>
 }
 </div>

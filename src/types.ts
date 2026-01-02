@@ -20,6 +20,7 @@ export interface Album {
   coverArt?: base64;
   name?: string;
   songs: Song[];
+  artist: string;
 };
 
 interface DeezerGoodResponse {

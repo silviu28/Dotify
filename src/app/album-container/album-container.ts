@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Album } from '../../types';
 
 @Component({
   selector: 'app-album-container',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './album-container.css',
 })
 export class AlbumContainer {
-
+  @Input() declare album: Album;
 }

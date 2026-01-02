@@ -5,10 +5,11 @@ import { Album, DeezerResponse, Song } from '../../types';
 import { SongContainer } from "../song-container/song-container";
 import { AlbumPage } from "../album-page/album-page";
 import { DecimalPipe } from '@angular/common';
+import { AlbumContainer } from "../album-container/album-container";
 
 @Component({
   selector: 'app-artist-page',
-  imports: [SongContainer, AlbumPage, DecimalPipe],
+  imports: [SongContainer, AlbumPage, DecimalPipe, AlbumContainer],
   templateUrl: './artist-page.html',
   styleUrl: './artist-page.css',
 })
@@ -46,6 +47,12 @@ export class ArtistPage {
           }
         });
       }
+    );
+
+    this.albums.set(
+      this.musicService
+        .albums()
+        .filter(album => album.artist === this.artist)
     );
   }
 }

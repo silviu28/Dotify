@@ -32,6 +32,7 @@ export class MusicService {
           name: song.album,
           coverArt: song.albumArt || "",
           songs: [song],
+          artist: song.artist,
         });
       } else {
       // if album exists, update it

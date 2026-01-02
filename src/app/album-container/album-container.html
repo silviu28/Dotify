@@ -1,1 +1,12 @@
-<p>album-container works!</p>
+<div class="solid album-container">
+  
+  <div class="image-wrapper">
+    <img [src]="album.coverArt || '/blank.png'" loading="lazy" alt="Album Art" />
+  </div>
+
+  <div class="info-wrapper">
+    <h2>{{ album.name }}</h2>
+    <p class="artist-link">{{ album.artist }}</p>
+  </div>
+
+</div>
