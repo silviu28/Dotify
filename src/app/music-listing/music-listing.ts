@@ -20,16 +20,16 @@ export class MusicListing implements OnInit {
 
   ngOnInit() {
     this.musicService.getSongs().subscribe(data => {
-        this.songs.set(data.songs);
-        this.musicService.setQueue(data.songs);
+      this.songs.set(data.songs);
+      this.musicService.setQueue(data.songs);
     });
   }
 
   onSearchChange() {
     const search = this.searchQuery().trim();
     const updateSongs = (songs: Song[]) => {
-       this.songs.set(songs);
-       this.musicService.setQueue(songs); 
+      this.songs.set(songs);
+      this.musicService.setQueue(songs); 
     };
 
     if(search === '') {

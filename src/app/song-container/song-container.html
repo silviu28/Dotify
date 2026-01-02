@@ -1,13 +1,13 @@
 <div class="solid song-container" [class.menu-active]="isMenuOpen()">
   
   <div class="image-wrapper">
-    <img [src]="albumArt || '/blank.png'" loading="lazy" alt="Album Art" />
+    <img [src]="song.albumArt || '/blank.png'" loading="lazy" alt="Album Art" />
   </div>
 
   <div class="info-wrapper">
-    <h2>{{ title }}</h2>
-    <p (click)="navigateToArtist($event)" class="artist-link">{{ artist }}</p>
-    <sub>{{ year }}, {{ album }}</sub>
+    <h2>{{ song.title }}</h2>
+    <p (click)="navigateToArtist($event)" class="artist-link">{{ song.artist }}</p>
+    <sub>{{ song.year }}, {{ song.album }}</sub>
   </div>
 
   <div class="actions-area">

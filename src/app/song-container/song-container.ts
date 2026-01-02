@@ -1,5 +1,5 @@
 import { Component, inject, Input, signal } from '@angular/core';
-import { Song, base64 } from '../../types';
+import { Song } from '../../types';
 import { Router } from '@angular/router';
 import { MusicService } from '../music-service';
 import { UserPreferencesService } from '../user-preferences-service';
@@ -15,21 +15,13 @@ export class SongContainer {
   private musicService = inject(MusicService);
   private userPrefsService = inject(UserPreferencesService);
 
-  // --- INPUTURI VECHI (Păstrate pentru compatibilitate) ---
-  @Input() declare title: string;
-  @Input() declare artist: string;
-  @Input() declare year: number;
-  @Input() declare album: string;
-  @Input() albumArt?: base64;
-
-  // --- INPUT NOU ---
   @Input() song!: Song; 
 
   isMenuOpen = signal(false);
 
   navigateToArtist(event: Event) {
     event.stopPropagation();
-    const encodedName = encodeURIComponent(this.artist);
+    const encodedName = encodeURIComponent(this.song.artist);
     this.router.navigate(['/artist', encodedName]);
   }
 
