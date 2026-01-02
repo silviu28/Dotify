@@ -16,12 +16,12 @@
       
       @if (song()) {
         <div class="song-info">
-             <span>{{ song()?.title }}</span>
-             <br>
-             <small>{{ song()?.artist }}</small>
+          <span>{{ song()?.title }}</span>
+          <br>
+          <small>{{ song()?.artist }}</small>
         </div>
       } @else {
-        <div class="song-info">No song selected</div>
+        <span class="song-info">No song selected</span>
       }
 
       <div class="controls">

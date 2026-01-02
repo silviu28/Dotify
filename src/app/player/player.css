@@ -5,7 +5,7 @@
   bottom: 20px;
   left: 50%;
   transform: translateX(-50%);
-  width: 500px;
+  width: 600px;
   z-index: 1000; /* Ensures it sits on top of other content */
 
   /* 2. LAYOUT (New code - aligns the buttons and bar) */

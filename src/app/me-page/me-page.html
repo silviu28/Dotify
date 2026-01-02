@@ -13,13 +13,15 @@
   </h1>
 
   <h2>Favorite songs:</h2>
-  @for (song of favoritedSongs(); track $index) {
-    <app-song-container
-      [song]="song"
-    />
-  } @empty {
-    <p>Nothing to show for now.</p>
-  }
+  <div class="songs-grid">
+    @for (song of favoritedSongs(); track $index) {
+      <app-song-container
+        [song]="song"
+      />
+    } @empty {
+      <p>Nothing to show for now.</p>
+    }
+  </div>
 
   <h2>Favorite albums:</h2>
   @for (album of favoritedAlbums(); track $index) {
