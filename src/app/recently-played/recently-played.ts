@@ -18,7 +18,7 @@ export class RecentlyPlayed implements OnInit {
   ngOnInit() {
     this.onPlaySub = this.musicService.onPlay.subscribe({next: song => {
       console.log("yep, i'm updating", this.recentlyPlayedSongs());
-      this.recentlyPlayedSongs.update(old => [song, ... old]);
+      this.recentlyPlayedSongs.update(old => [{ ... song }, ... old]);
     }});
   }
 }

@@ -36,6 +36,26 @@ export class UserPreferencesService implements OnDestroy {
     localStorage.setItem("prefs", JSON.stringify(prefs));
   }
 
+  addSongToFavorites(song: Song) {
+    if (this.favoriteSongs().find(s => s.title === song.title && s.artist === song.artist))
+      return;
+    this.favoriteSongs.set([... this.favoriteSongs(), song]);
+    this.savePreferences();
+  }
+
+  addAlbumToFavorites(album: Album) {
+    if (this.favoriteAlbums().find(a => a.artist === album.artist && a.name === album.name))
+      return;
+    this.favoriteAlbums.set([... this.favoriteAlbums(), album]);
+    this.savePreferences();
+  }
+
+  addArtistToFavorites(artistName: string) {
+    if (this.favoriteArtists().find(a => a === artistName))
+      return;
+    this.favoriteArtists.set([... this.favoriteArtists(), artistName]);
+  }
+
   // save preferences on dispose
   ngOnDestroy() {
     this.savePreferences();

@@ -15,6 +15,8 @@ export class MePage implements OnDestroy {
 
   favoritedSongs = this.userPrefsService.favoriteSongs;
   favoritedAlbums = this.userPrefsService.favoriteAlbums;
+  favoritedArtists = this.userPrefsService.favoriteArtists;
+
   name = this.userPrefsService.username;
   editModeEnabled = signal<boolean>(false);
 

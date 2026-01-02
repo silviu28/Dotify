@@ -21,7 +21,6 @@ export class ArtistPage {
   albums = signal<Album[]>([]);
   artist = '';
   artistId = 0;
-  // deezerDataFetch: DeezerResponse | null = null;
   pictureSrc = signal<string>("");
   fanCount = signal<number>(0);
   
