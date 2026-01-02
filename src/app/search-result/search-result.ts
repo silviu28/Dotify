@@ -18,7 +18,7 @@ export class SearchResult {
       params => {
         const searchQuery = String(params['query']);
         this.query.set(decodeURIComponent(searchQuery));
-        this.musicService.getByQuery(this.query())
-        });
-      }
+        this.musicService.getByQuery(this.query());
+      });
   }
+}

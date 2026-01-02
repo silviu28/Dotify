@@ -51,7 +51,6 @@
 }
 
 .ctrl-btn:hover {
-  color: white;
   transform: scale(1.1);
 }
 
@@ -68,7 +67,6 @@
   flex-grow: 1;
   cursor: pointer;
   height: 4px;
-  border-radius: 2px;
   accent-color: #1db954;
 }
 

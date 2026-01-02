@@ -12,6 +12,17 @@ button {
   background-color: transparent;
   border-radius: 50%;
   padding: 1%;
+  transition: color .5s ease;
+  background: transparent;
+  border: none;
+  color: #b3b3b3; /* Gri deschis */
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button svg {
@@ -21,6 +32,7 @@ button svg {
 
 button:hover {
   color: #00FF00;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 body {
@@ -45,6 +57,13 @@ input {
   border-width: 1px;
   color: white;
   padding: 5px;
+  outline: none;
+  transition: border-color .3s ease, color .3s ease;
+}
+
+input:focus {
+  border-color: #00FF00;
+  color: #00FF00;
 }
 
 .glassmorph-container {

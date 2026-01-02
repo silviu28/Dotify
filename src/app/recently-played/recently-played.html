@@ -1,11 +1,11 @@
 <div class="recent">
   <h1>Recently played</h1>
     @for (song of recentlyPlayedSongs(); track $index) {
-      <div class="glassmorph-container">
+      <div class="glassmorph-container" style="padding:10px;">
         <p>{{ song.title }}</p>
       </div>
     } @empty {
-      <div class="glassmorph-container">
+      <div class="glassmorph-container" style="padding:10px;">
         <p>Nothing for now.</p>
       </div>
     }
