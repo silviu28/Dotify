@@ -12,7 +12,7 @@ export class UserPreferencesService implements OnDestroy {
 
   // use an in-memory set to quickly sort out favorites
   private favoriteSongsSet = computed(() =>
-    new Set<Song>(this.favoriteSongs()));
+    new Set<string>(this.favoriteSongs().map(song => this.songKey(song))));
   private favoriteAlbumsSet = computed(() =>
     new Set<Album>(this.favoriteAlbums()));
   private favoriteArtistsSet = computed(() =>
@@ -44,10 +44,23 @@ export class UserPreferencesService implements OnDestroy {
     localStorage.setItem("prefs", JSON.stringify(prefs));
   }
 
+  private songKey(song: Song): string {
+    return song.filename;
+  }
+
   addSongToFavorites(song: Song) {
-    if (this.favoriteSongs().find(s => s.title === song.title && s.artist === song.artist))
+    if (this.isSongFavorited(song))
       return;
     this.favoriteSongs.set([... this.favoriteSongs(), song]);
+    this.savePreferences();
+  }
+
+  removeSongFromFavorites(song: Song) {
+    const keyToRemove = this.songKey(song);
+    const nextFavorites = this.favoriteSongs().filter(saved => this.songKey(saved) !== keyToRemove);
+    if (nextFavorites.length === this.favoriteSongs().length)
+      return;
+    this.favoriteSongs.set(nextFavorites);
     this.savePreferences();
   }
 
@@ -65,7 +78,7 @@ export class UserPreferencesService implements OnDestroy {
   }
 
   isSongFavorited(song: Song): boolean {
-    return this.favoriteSongsSet().has(song);
+    return this.favoriteSongsSet().has(this.songKey(song));
   }
 
   isAlbumFavorited(album: Album): boolean {

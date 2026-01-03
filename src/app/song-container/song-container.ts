@@ -29,11 +29,11 @@ export class SongContainer {
 
   favoriteSong(event: Event) {
     event.stopPropagation(); // OPRIRE PLAY CÂND DAI LIKE
-    this.userPrefsService.addSongToFavorites(this.song);
-    // const currentFavoriteSongs = [... this.userPrefsService.favoriteSongs()];
-    // currentFavoriteSongs.push(this.song);
-    // this.userPrefsService.favoriteSongs.set(currentFavoriteSongs);
-    // this.userPrefsService.savePreferences();
+    if (this.isFavorited()) {
+      this.userPrefsService.removeSongFromFavorites(this.song);
+    } else {
+      this.userPrefsService.addSongToFavorites(this.song);
+    }
   }
 
   toggleMenu(event: Event) {
