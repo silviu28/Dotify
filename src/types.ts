@@ -65,3 +65,6 @@ export interface Artist {
   picture_xl: string;
   type: "artist";
 }
+
+export type SortCriterion = "No sort" | "Title" | "Album" | "Artist";
+export type GroupCriterion = "No group" | "Album" | "Artist";
