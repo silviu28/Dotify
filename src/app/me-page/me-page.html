@@ -24,13 +24,16 @@
   </div>
 
   <h2>Favorite albums:</h2>
-  @for (album of favoritedAlbums(); track $index) {
-    <!-- album data as props... -->
-    <app-album-container
-    />
-  } @empty {
-    <p>Nothing to show for now.</p>
-  }
+  <div class="songs-grid">
+    @for (album of favoritedAlbums(); track $index) {
+      <!-- album data as props... -->
+      <app-album-container
+        [album]="album"
+      />
+    } @empty {
+      <p>Nothing to show for now.</p>
+    }
+  </div>
 
   <h2>Favorite artists:</h2>
   @for (artist of favoritedArtists(); track $index) {

@@ -66,6 +66,28 @@ input:focus {
   color: #00FF00;
 }
 
+select {
+  background-color: transparent;
+  border: solid 1px white;
+  border-radius: 10px;
+  color: white;
+  padding: 5px 10px; /* slightly wider for arrow */
+  outline: none;
+  appearance: none; /* remove default arrow for most browsers */
+  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath fill='white' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px 6px;
+  padding-right: 25px;
+}
+
+select:focus {
+  border-color: #00FF00;
+  color: #00FF00;
+}
+
 .glassmorph-container {
   /* From https://css.glass */
   background: rgba(0, 0, 0, 0.2);
@@ -85,9 +107,14 @@ input:focus {
 }
 
 .centered-row {
+  background-color: black;
+  padding: 15px;
+  border-radius: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 /* Animations, keyframes and stuff... */

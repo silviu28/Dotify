@@ -107,8 +107,4 @@ export class MusicListing implements OnInit {
   play(song: Song) {
     this.musicService.playSong(song);
   }
-
-  applySortingThenGrouping() {
-    
-  }
 }
