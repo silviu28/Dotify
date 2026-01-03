@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal, effect } from '@angular/core';
 import { Album, DeezerResponse, Song } from '../types';
 import { map, Subject } from 'rxjs';
 
@@ -13,13 +13,30 @@ export class MusicService {
 
   apiUrl = "http://localhost:4000";
   currentSong = signal<Song | null>(null);
+  
+  // Playlist-ul principal (contextul curent: album, search results, etc.)
   playlist = signal<Song[]>([]);
+
+  // NOU: Coada de prioritate (melodiile adăugate manual prin Add to Queue)
+  queue = signal<Song[]>([]);
 
   albums = signal<Album[]>([]);
   artistNames = signal<string[]>([]);
 
+  constructor() {
+    // Debugging: Să vedem în consolă când se schimbă piesa
+    effect(() => {
+      const song = this.currentSong();
+      if (song) {
+        console.log(`Now Playing: ${song.title}`);
+      }
+    });
+  }
+
   setQueue(songs: Song[]) {
     this.playlist.set(songs);
+    // Opțional: Când schimbi playlist-ul complet, poți goli coada de prioritate sau o poți păstra.
+    // De obicei se păstrează, deci nu apelăm this.queue.set([]) aici.
   }
 
   // builds the list of albums based on received songs
@@ -27,7 +44,7 @@ export class MusicService {
     const albums = new Map<string, Album>();
     songs.forEach((song) => {
       if (!albums.has(song.album)) {
-      // if album doesn't exist, create it
+        // if album doesn't exist, create it
         albums.set(song.album, {
           name: song.album,
           coverArt: song.albumArt || "",
@@ -35,7 +52,7 @@ export class MusicService {
           artist: song.artist,
         });
       } else {
-      // if album exists, update it
+        // if album exists, update it
         const existingAlbum = albums.get(song.album)!;
         albums.set(song.album, {
           ...existingAlbum,
@@ -98,7 +115,23 @@ export class MusicService {
     this.onPlaySubject.next(song);
   }
 
+  // --- LOGICA DE PLAY NEXT (MODIFICATĂ PENTRU QUEUE) ---
   playNext() {
+    // 1. Verificăm întâi Coada de Prioritate (Queue)
+    const userQueue = this.queue();
+    
+    if (userQueue.length > 0) {
+      console.log("🛑 Priority Queue found! Playing:", userQueue[0].title);
+      
+      const nextSong = userQueue[0];
+      
+      // O scoatem din coadă și o redăm (stergem primul element)
+      this.queue.update(q => q.slice(1)); 
+      this.currentSong.set(nextSong);
+      return;
+    }
+
+    // 2. Dacă nu e nimic în coadă, continuăm lista normală (Playlist)
     const current = this.currentSong();
     const list = this.playlist();
     
@@ -108,17 +141,18 @@ export class MusicService {
       return;
     }
 
+    // Folosim findIndex după filename pentru siguranță
     const currentIndex = list.findIndex(s => s.filename === current.filename);
-    console.log("Index găsit:", currentIndex);
+    console.log("Index găsit în playlist:", currentIndex);
 
     if (currentIndex === -1) {
-      console.error("❌ Piesa curentă nu a fost găsită în playlist-ul activ!");
+      console.error("❌ Piesa curentă nu a fost găsită în playlist-ul activ! Redau prima piesă.");
       this.currentSong.set(list[0]);
       return;
     }
 
     if (currentIndex < list.length - 1) {
-      console.log("⏭️ Trec la piesa următoare:", list[currentIndex + 1].title);
+      console.log("⏭️ Trec la piesa următoare din playlist:", list[currentIndex + 1].title);
       this.currentSong.set(list[currentIndex + 1]);
     } else {
       console.log("🔄 Loop la început:", list[0].title);
@@ -143,38 +177,17 @@ export class MusicService {
     }
   }
 
-
+  // --- MODIFICAT: Adaugă în coada de prioritate separată ---
   addToQueue(song: Song) {
-    // Folosim .update() pentru a lua lista veche si a adauga piesa noua la sfarsit
-    this.playlist.update(currentList => [...currentList, song]);
-    console.log(`Added to queue: ${song.title}`);
+    // Adăugăm piesa la sfârșitul cozii de prioritate
+    this.queue.update(currentQueue => [...currentQueue, song]);
+    console.log(`✅ Added to Priority Queue: ${song.title}. Queue length: ${this.queue().length + 1}`);
   }
 
-  // 2. Redă următorul (inserează imediat după piesa curentă)
+  // --- MODIFICAT: Adaugă la începutul cozii de prioritate ---
   playNextInQueue(song: Song) {
-    const currentList = this.playlist();
-    const currentSong = this.currentSong();
-
-    if (!currentSong) {
-      // Daca nu canta nimic, o punem in coada si ii dam play
-      this.setQueue([song]);
-      this.playSong(song);
-      return;
-    }
-
-    const currentIndex = currentList.findIndex(s => s.filename === currentSong.filename);
-    
-    if (currentIndex !== -1) {
-      // Cream o copie a listei
-      const newList = [...currentList];
-      // Inseram piesa noua la index + 1
-      newList.splice(currentIndex + 1, 0, song);
-      this.playlist.set(newList);
-      console.log(`Will play next: ${song.title}`);
-    } else {
-      // Fallback
-      this.addToQueue(song);
-    }
+    // O punem chiar prima în coada de prioritate
+    this.queue.update(currentQueue => [song, ...currentQueue]);
+    console.log(`⚡ Will play next (Priority): ${song.title}`);
   }
-  
 }
