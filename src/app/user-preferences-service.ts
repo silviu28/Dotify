@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, signal } from '@angular/core';
+import { computed, Injectable, OnDestroy, signal } from '@angular/core';
 import { Album, Prefs, Song } from '../types';
 
 @Injectable({
@@ -9,6 +9,14 @@ export class UserPreferencesService implements OnDestroy {
   favoriteSongs = signal<Song[]>([]);
   favoriteAlbums = signal<Album[]>([]);
   favoriteArtists = signal<string[]>([]);
+
+  // use an in-memory set to quickly sort out favorites
+  private favoriteSongsSet = computed(() =>
+    new Set<Song>(this.favoriteSongs()));
+  private favoriteAlbumsSet = computed(() =>
+    new Set<Album>(this.favoriteAlbums()));
+  private favoriteArtistsSet = computed(() =>
+    new Set<string>(this.favoriteArtists()));
 
   constructor() {
     // parse user preferences from localStorage object
@@ -54,6 +62,18 @@ export class UserPreferencesService implements OnDestroy {
     if (this.favoriteArtists().find(a => a === artistName))
       return;
     this.favoriteArtists.set([... this.favoriteArtists(), artistName]);
+  }
+
+  isSongFavorited(song: Song): boolean {
+    return this.favoriteSongsSet().has(song);
+  }
+
+  isAlbumFavorited(album: Album): boolean {
+    return this.favoriteAlbumsSet().has(album);
+  }
+
+  isArtistFavorited(artistName: string): boolean {
+    return this.favoriteArtistsSet().has(artistName);
   }
 
   // save preferences on dispose

@@ -1,4 +1,4 @@
-import { Component, inject, Input, signal } from '@angular/core';
+import { Component, computed, inject, Input, signal } from '@angular/core';
 import { Song } from '../../types';
 import { Router } from '@angular/router';
 import { MusicService } from '../music-service';
@@ -18,6 +18,8 @@ export class SongContainer {
   @Input() song!: Song; 
 
   isMenuOpen = signal(false);
+  isFavorited = computed(() =>
+    this.userPrefsService.isSongFavorited(this.song));
 
   navigateToArtist(event: Event) {
     event.stopPropagation();

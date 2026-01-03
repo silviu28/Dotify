@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, computed, inject, Input } from '@angular/core';
 import { Album } from '../../types';
 import { Router } from '@angular/router';
 import { UserPreferencesService } from '../user-preferences-service';
@@ -15,6 +15,9 @@ export class AlbumContainer {
 
   @Input() declare album: Album;
 
+  isFavorited = computed(() =>
+    this.userPrefsService.isAlbumFavorited(this.album));
+
   navigateToAlbum() {
     this.router.navigate(['/album', encodeURI(this.album.name!)]);
   }
@@ -22,5 +25,5 @@ export class AlbumContainer {
   favoriteAlbum(event: Event) {
     event.stopPropagation();
     this.userPrefsService.addAlbumToFavorites(this.album);
-  } 
+  }
 }
