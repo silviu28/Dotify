@@ -3,10 +3,11 @@ import { RouterOutlet } from '@angular/router';
 import { TopBar } from "./top-bar/top-bar";
 import { Player } from "./player/player";
 import { Song } from '../types';
+import { Suspense } from "./suspense/suspense";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, TopBar, Player],
+  imports: [RouterOutlet, TopBar, Player, Suspense],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
