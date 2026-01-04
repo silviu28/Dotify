@@ -5,6 +5,7 @@ import { DeezerResponse, Song } from '../../types';
 import { SongContainer } from "../song-container/song-container";
 import { DecimalPipe } from '@angular/common';
 import { AlbumContainer } from "../album-container/album-container";
+import { UserPreferencesService } from '../user-preferences-service';
 
 @Component({
   selector: 'app-artist-page',
@@ -14,6 +15,7 @@ import { AlbumContainer } from "../album-container/album-container";
 })
 export class ArtistPage implements OnInit {
   musicService = inject(MusicService);
+  userPrefsService = inject(UserPreferencesService);
   private activatedRoute = inject(ActivatedRoute);
   songs = signal<Song[]>([]);
 
@@ -21,6 +23,8 @@ export class ArtistPage implements OnInit {
     this.musicService
       .albums()
       .filter(album => album.artist === this.artist));
+  isFavorited = computed(() =>
+    this.userPrefsService.isArtistFavorited(this.artist));
 
   artist = '';
   pictureSrc = signal<string>("");
@@ -49,5 +53,14 @@ export class ArtistPage implements OnInit {
         });
       }
     );
+  }
+
+  favoriteArtist(event: Event) {
+    event.stopPropagation();
+    if (this.isFavorited()) {
+      this.userPrefsService.removeArtistFromFavorites(this.artist);
+    } else {
+      this.userPrefsService.addArtistToFavorites(this.artist);
+    }
   }
 }

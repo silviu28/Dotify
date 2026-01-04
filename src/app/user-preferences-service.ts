@@ -71,10 +71,23 @@ export class UserPreferencesService implements OnDestroy {
     this.savePreferences();
   }
 
+  removeAlbumFromFavorites(album: Album) {
+    this.favoriteAlbums.set(
+      [... this.favoriteAlbums()].filter(a => a.name !== album.name && a.artist !== album.artist)
+    );
+    this.savePreferences();
+  }
+
   addArtistToFavorites(artistName: string) {
     if (this.favoriteArtists().find(a => a === artistName))
       return;
     this.favoriteArtists.set([... this.favoriteArtists(), artistName]);
+  }
+
+  removeArtistFromFavorites(artistName: string) {
+    this.favoriteArtists.set(
+      [... this.favoriteArtists()].filter(name => artistName !== name)
+    );
   }
 
   isSongFavorited(song: Song): boolean {

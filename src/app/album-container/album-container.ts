@@ -24,6 +24,10 @@ export class AlbumContainer {
 
   favoriteAlbum(event: Event) {
     event.stopPropagation();
-    this.userPrefsService.addAlbumToFavorites(this.album);
+    if (this.isFavorited()) {
+      this.userPrefsService.removeAlbumFromFavorites(this.album);
+    } else {
+      this.userPrefsService.addAlbumToFavorites(this.album);
+    }
   }
 }
