@@ -4,10 +4,12 @@ import {
   signal,
   inject,
   effect,
-  ViewChild,
+  computed,
   ElementRef,
+  ViewChild,
   AfterViewInit,
   OnDestroy,
+  HostListener,
 } from '@angular/core';
 import { Song } from '../../types';
 import { MusicService } from '../music-service';
@@ -19,33 +21,33 @@ import { MusicService } from '../music-service';
   styleUrl: './player.css',
 })
 export class Player implements AfterViewInit, OnDestroy {
+  @ViewChild('playerWrapper') playerWrapper?: ElementRef<HTMLDivElement>;
+
   private musicService = inject(MusicService);
   private audio = new Audio();
-  @ViewChild('playerWrapper') playerWrapper?: ElementRef<HTMLElement>;
+  private dragOffset = { x: 0, y: 0 };
+  private readonly dragMargin = 16;
+  private readonly pointerMoveListener = (event: PointerEvent) =>
+    this.handlePointerMove(event);
+  private readonly pointerUpListener = () => this.endDrag();
 
   isPlaying = signal<boolean>(false);
   songLength = signal<number>(0);
   playedTimestamp = signal<number>(0);
   playerShowing = signal<boolean>(true);
-  playerPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
+  playerPosition = signal<{ x: number; y: number }>({ x: 20, y: 20 });
   isDragging = signal<boolean>(false);
-  private dragOffset = { x: 0, y: 0 };
-  private dragInitialized = false;
-  private readonly handlePointerMove = (event: PointerEvent) => {
-    if (!this.isDragging()) {
-      return;
-    }
-    this.playerPosition.set(this.computeNextPosition(event.clientX, event.clientY));
-  };
-  private readonly handlePointerUp = () => {
-    this.isDragging.set(false);
-  };
+  playerWrapperStyle = computed(() => {
+    const { x, y } = this.playerPosition();
+    return { top: `${y}px`, left: `${x}px` };
+  });
   
   // Instead of a local signal, we read from the service
   song = this.musicService.currentSong;
 
   constructor() {
     this.setupAudioListeners();
+    this.seedInitialPosition();
 
     // EFFECT: This runs automatically whenever 'musicService.currentSong' changes
     effect(() => {
@@ -55,6 +57,14 @@ export class Player implements AfterViewInit, OnDestroy {
         this.playTrack(currentSong);
       }
     });
+  }
+
+  ngAfterViewInit() {
+    this.centerPlayer();
+  }
+
+  ngOnDestroy() {
+    this.detachPointerListeners();
   }
 
   next() {
@@ -107,25 +117,6 @@ export class Player implements AfterViewInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit() {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    queueMicrotask(() => {
-      this.setInitialPlayerPosition();
-    });
-    window.addEventListener('pointermove', this.handlePointerMove);
-    window.addEventListener('pointerup', this.handlePointerUp);
-  }
-
-  ngOnDestroy() {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    window.removeEventListener('pointermove', this.handlePointerMove);
-    window.removeEventListener('pointerup', this.handlePointerUp);
-  }
-
   private playAudio() {
     this.audio.play();
     this.isPlaying.set(true);
@@ -138,6 +129,8 @@ export class Player implements AfterViewInit, OnDestroy {
 
   toggleView() {
     this.playerShowing.set(!this.playerShowing());
+    const { x, y } = this.playerPosition();
+    this.playerPosition.set(this.getClampedPosition(x, y));
   }
 
   // Handle seeking via the range input
@@ -149,73 +142,106 @@ export class Player implements AfterViewInit, OnDestroy {
   }
 
   startDrag(event: PointerEvent) {
-    if (this.shouldIgnoreDrag(event.target)) {
-      return;
-    }
-
-    if (!this.playerWrapper) {
-      return;
-    }
-
-    this.ensurePlayerPosition();
-    const currentPosition = this.playerPosition();
-    this.dragOffset = {
-      x: event.clientX - currentPosition.x,
-      y: event.clientY - currentPosition.y,
-    };
-
-    const wrapper = this.playerWrapper.nativeElement;
-    wrapper.setPointerCapture?.(event.pointerId);
-    this.isDragging.set(true);
-    event.preventDefault();
-  }
-
-  private setInitialPlayerPosition() {
-    if (this.dragInitialized || typeof window === 'undefined') {
-      return;
-    }
-
-    this.dragInitialized = true;
-    this.playerPosition.set(this.computeNextPosition(window.innerWidth / 2, window.innerHeight - 40, true));
-  }
-
-  private ensurePlayerPosition() {
-    if (!this.dragInitialized) {
-      this.setInitialPlayerPosition();
-    }
-  }
-
-  private computeNextPosition(clientX: number, clientY: number, forceCenter = false) {
     if (typeof window === 'undefined') {
-      return { x: clientX - this.dragOffset.x, y: clientY - this.dragOffset.y };
+      return;
     }
 
-    const wrapper = this.playerWrapper?.nativeElement;
-    const width = wrapper?.offsetWidth ?? 600;
-    const height = wrapper?.offsetHeight ?? 120;
-
-    let nextX: number;
-    let nextY: number;
-
-    if (forceCenter) {
-      nextX = window.innerWidth / 2 - width / 2;
-      nextY = window.innerHeight - height - 20;
-    } else {
-      nextX = clientX - this.dragOffset.x;
-      nextY = clientY - this.dragOffset.y;
+    const target = event.target as HTMLElement | null;
+    if (target?.closest('button, input, svg')) {
+      return;
     }
 
-    // Keep the player inside the viewport bounds
-    nextX = Math.min(Math.max(10, nextX), window.innerWidth - width - 10);
-    nextY = Math.min(Math.max(10, nextY), window.innerHeight - height - 10);
+    event.preventDefault();
+    this.isDragging.set(true);
 
-    return { x: nextX, y: nextY };
+    const wrapperRect = this.playerWrapper?.nativeElement.getBoundingClientRect();
+    const offsetX = event.clientX - (wrapperRect?.left ?? this.playerPosition().x);
+    const offsetY = event.clientY - (wrapperRect?.top ?? this.playerPosition().y);
+    this.dragOffset = { x: offsetX, y: offsetY };
+
+    this.detachPointerListeners();
+    window.addEventListener('pointermove', this.pointerMoveListener);
+    window.addEventListener('pointerup', this.pointerUpListener);
+    window.addEventListener('pointercancel', this.pointerUpListener);
   }
 
-  private shouldIgnoreDrag(target: EventTarget | null): boolean {
-    if (!(target instanceof HTMLElement)) {
-      return false;
+  private handlePointerMove(event: PointerEvent) {
+    if (!this.isDragging()) {
+      return;
     }
-    return Boolean(target.closest('button, input, svg, path'));
+
+    const desiredX = event.clientX - this.dragOffset.x;
+    const desiredY = event.clientY - this.dragOffset.y;
+    this.playerPosition.set(this.getClampedPosition(desiredX, desiredY));
+  }
+
+  private endDrag() {
+    if (!this.isDragging()) {
+      return;
+    }
+
+    this.isDragging.set(false);
+    this.detachPointerListeners();
+  }
+
+  private detachPointerListeners() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.removeEventListener('pointermove', this.pointerMoveListener);
+    window.removeEventListener('pointerup', this.pointerUpListener);
+    window.removeEventListener('pointercancel', this.pointerUpListener);
+  }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+    const { x, y } = this.playerPosition();
+    this.playerPosition.set(this.getClampedPosition(x, y));
+  }
+
+  private centerPlayer() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const { width, height } = this.getWrapperDimensions();
+    const centeredX = (window.innerWidth - width) / 2;
+    const bottomOffset = window.innerHeight - height - 20;
+    this.playerPosition.set(this.getClampedPosition(centeredX, bottomOffset));
+  }
+
+  private getClampedPosition(x: number, y: number) {
+    if (typeof window === 'undefined') {
+      return { x, y };
+    }
+
+    const { width, height } = this.getWrapperDimensions();
+    const maxX = window.innerWidth - width - this.dragMargin;
+    const maxY = window.innerHeight - height - this.dragMargin;
+
+    return {
+      x: Math.min(Math.max(this.dragMargin, x), Math.max(this.dragMargin, maxX)),
+      y: Math.min(Math.max(this.dragMargin, y), Math.max(this.dragMargin, maxY)),
+    };
+  }
+
+  private getWrapperDimensions() {
+    const wrapperWidth = this.playerWrapper?.nativeElement.offsetWidth ?? 620;
+    const wrapperHeight =
+      this.playerWrapper?.nativeElement.offsetHeight ?? (this.playerShowing() ? 150 : 60);
+    return { width: wrapperWidth, height: wrapperHeight };
+  }
+
+  private seedInitialPosition() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    const approxWidth = 600;
+    const approxHeight = 150;
+    const x = (window.innerWidth - approxWidth) / 2;
+    const y = window.innerHeight - approxHeight - 20;
+    this.playerPosition.set(this.getClampedPosition(x, y));
   }
 }

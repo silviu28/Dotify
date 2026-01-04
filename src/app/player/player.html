@@ -1,27 +1,41 @@
 <div
-  #playerWrapper
-  class="player-wrapper"
+  #playerWindow
+  class="player solid"
+  [class.dragging]="isDragging()"
   [style.left.px]="playerPosition().x"
   [style.top.px]="playerPosition().y"
-  [class.dragging]="isDragging()"
-  (pointerdown)="startDrag($event)"
 >
-  <!-- <button class="solid hide-button" (click)="toggleView()">
-      @if (playerShowing()) {
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-up" viewBox="0 0 16 16">
-          <path fill-rule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
+  <div class="player-header" (pointerdown)="startDrag($event)">
+    <div class="drag-handle">
+      <span class="drag-label">Now Playing</span>
+      <span class="drag-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M3 4h10v1H3zm0 3h10v1H3zm0 3h10v1H3z" />
         </svg>
-      } @else {
+      </span>
+    </div>
+
+    <!-- <button
+      type="button"
+      class="window-btn"
+      (pointerdown)="$event.stopPropagation()"
+      (click)="toggleView($event)"
+      aria-label="Toggle player visibility"
+    >
+      @if (playerShowing()) {
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-down" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M1.553 6.776a.5.5 0 0 1 .67-.223L8 9.44l5.776-2.888a.5.5 0 1 1 .448.894l-6 3a.5.5 0 0 1-.448 0l-6-3a.5.5 0 0 1-.223-.67"/>
         </svg>
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-compact-up" viewBox="0 0 16 16">
+          <path fill-rule="evenodd" d="M7.776 5.553a.5.5 0 0 1 .448 0l6 3a.5.5 0 1 1-.448.894L8 6.56 2.224 9.447a.5.5 0 1 1-.448-.894z"/>
+        </svg>
       }
-  </button> 
-  //not needed if user can drag the player -->
+    </button> -->
+  </div>
 
   @if (playerShowing()) {
-    <div class="player solid">
-      
+    <div class="player-body">
       @if (song()) {
         <div class="song-info">
           <span>{{ song()?.title }}</span>
@@ -33,7 +47,6 @@
       }
 
       <div class="controls">
-        
         <button class="ctrl-btn" (click)="prev()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-skip-start-fill" viewBox="0 0 16 16">
             <path d="M4 4a.5.5 0 0 1 1 0v3.248l6.267-3.636c.54-.313 1.232.066 1.232.696v7.384c0 .63-.692 1.01-1.232.697L5 8.753V12a.5.5 0 0 1-1 0z"/>
@@ -59,11 +72,11 @@
         </button>
       </div>
 
-      <input 
-        type="range" 
-        class="progress-bar" 
-        min="0" 
-        [max]="songLength() / 1000" 
+      <input
+        type="range"
+        class="progress-bar"
+        min="0"
+        [max]="songLength() / 1000"
         [value]="playedTimestamp() / 1000"
         (input)="seek($event)"
       >
@@ -71,6 +84,10 @@
       <p class="timestamps">
         {{ playedTimestamp() | date: "mm:ss" }} / {{ songLength() | date: "mm:ss" }}
       </p>
+    </div>
+  } @else {
+    <div class="player-collapsed">
+      Player hidden. Use the arrow to reopen it.
     </div>
   }
 </div>

@@ -1,32 +1,82 @@
-/* --- DRAGGABLE WRAPPER --- */
-.player-wrapper {
+/* --- PLAYER WINDOW --- */
+.player {
   position: fixed;
-  z-index: 10;
+  z-index: 20;
+  width: min(600px, calc(100vw - 32px));
+  background-color: #181818;
+  color: white;
+  border-radius: 16px;
+  border: 1px solid #2d2d2d;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  cursor: grab;
-  touch-action: none;
+  gap: 0;
+  pointer-events: auto;
   user-select: none;
 }
 
-.player-wrapper.dragging {
+.player.dragging {
   cursor: grabbing;
+  box-shadow: 0 26px 70px rgba(0, 0, 0, 0.65);
 }
 
-/* --- MAIN PLAYER CONTAINER --- */
-.player {
-  width: min(600px, calc(100vw - 40px));
+.player-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  border-bottom: 1px solid #2a2a2a;
+  cursor: grab;
+}
+
+.drag-handle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b3b3b3;
+}
+
+.drag-icon svg {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+}
+
+.window-btn {
+  border: 1px solid #2d2d2d;
+  background: #202020;
+  color: white;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.window-btn:hover {
+  background: #2d2d2d;
+  transform: translateY(-1px);
+}
+
+.player-body {
   display: flex;
   align-items: center;
   gap: 15px;
-  padding: 10px 20px;
-  background-color: #181818;
-  color: white;
-  border-radius: 10px;
-  box-sizing: border-box;
-  height: auto;
+  padding: 16px;
+  flex-wrap: wrap;
+  user-select: auto;
+}
+
+.player-collapsed {
+  padding: 16px;
+  color: #b3b3b3;
+  font-size: 0.85rem;
 }
 
 /* --- SONG INFO (Left) --- */
@@ -84,21 +134,6 @@
   min-width: 80px;
   text-align: right;
   margin: 0;
-}
-
-/* --- HIDE BUTTON (The arrow) --- */
-.hide-button {
-  background: #181818;
-  border: none;
-  border-radius: 50%;
-  color: white;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .solid {
