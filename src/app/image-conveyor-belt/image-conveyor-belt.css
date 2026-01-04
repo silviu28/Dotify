@@ -1,0 +1,19 @@
+.carousel-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.carousel-track {
+  display: flex;
+  flex-wrap: nowrap;
+  transition: transform 0.05s linear;
+}
+
+.carousel-track img {
+  height: 150px;
+  margin-right: 16px;
+  flex-shrink: 0;
+  border-radius: 8px;
+}

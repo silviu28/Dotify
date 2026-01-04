@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
 import { RecentlyPlayed } from "../recently-played/recently-played";
-import { MusicListing } from "../music-listing/music-listing";
-import { ArtistListing } from "../artist-listing/artist-listing";
 import { RouterLink } from '@angular/router';
+import { ImageConveyorBelt } from "../image-conveyor-belt/image-conveyor-belt";
 
 @Component({
   selector: 'app-main-page',
-  imports: [RecentlyPlayed, MusicListing, ArtistListing, RouterLink],
+  imports: [RecentlyPlayed, RouterLink, ImageConveyorBelt],
   templateUrl: './main-page.html',
   styleUrl: './main-page.css',
 })
