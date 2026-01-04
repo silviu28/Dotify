@@ -49,7 +49,7 @@ export class MusicListing implements OnInit {
       _songs.forEach(song => {
         if (songGroups.has(song.album)) {
           songGroups.set(song.album,
-            [... songGroups.get(song.album)!]
+            [... songGroups.get(song.album)!, song]
           );
         } else {
           songGroups.set(song.album, [song]);
@@ -61,7 +61,7 @@ export class MusicListing implements OnInit {
       _songs.forEach(song => {
         if (songGroups.has(song.artist)) {
           songGroups.set(song.artist,
-            [... songGroups.get(song.artist)!]
+            [... songGroups.get(song.artist)!, song]
           );
         } else {
           songGroups.set(song.artist, [song]);

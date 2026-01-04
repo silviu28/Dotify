@@ -24,6 +24,7 @@ export class MusicService {
   artistNames = signal<string[]>([]);
 
   constructor() {
+    this.loadData();
     // Debugging: Să vedem în consolă când se schimbă piesa
     effect(() => {
       const song = this.currentSong();
@@ -37,6 +38,15 @@ export class MusicService {
     this.playlist.set(songs);
     // Opțional: Când schimbi playlist-ul complet, poți goli coada de prioritate sau o poți păstra.
     // De obicei se păstrează, deci nu apelăm this.queue.set([]) aici.
+  }
+
+  loadData() {
+    this.getSongs().pipe(map(res => {
+      this.artistNames.set(this.aggregateArtistNames(res.songs));
+      this.albums.set(this.aggregateAlbums(res.songs));
+      console.log("Built listings from response stream", this.artistNames(), this.albums());
+      return res;
+    })).subscribe();
   }
 
   // builds the list of albums based on received songs
@@ -72,14 +82,7 @@ export class MusicService {
   }
 
   getSongs() {
-    return this.http
-      .get<{songs: Song[]}>(`${this.apiUrl}/songs`)
-      .pipe(map(res => {
-        this.artistNames.set(this.aggregateArtistNames(res.songs));
-        this.albums.set(this.aggregateAlbums(res.songs));
-        console.log("Built listings from response stream", this.artistNames(), this.albums());
-        return res;
-      }));
+    return this.http.get<{songs: Song[]}>(`${this.apiUrl}/songs`);
   }
 
   getSongsByName(query: string) {

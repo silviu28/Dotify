@@ -1,30 +1,32 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MusicService } from '../music-service';
 import { ActivatedRoute } from '@angular/router';
-import { Album, DeezerResponse, Song } from '../../types';
+import { DeezerResponse, Song } from '../../types';
 import { SongContainer } from "../song-container/song-container";
-import { AlbumPage } from "../album-page/album-page";
 import { DecimalPipe } from '@angular/common';
 import { AlbumContainer } from "../album-container/album-container";
 
 @Component({
   selector: 'app-artist-page',
-  imports: [SongContainer, AlbumPage, DecimalPipe, AlbumContainer],
+  imports: [SongContainer, DecimalPipe, AlbumContainer],
   templateUrl: './artist-page.html',
   styleUrl: './artist-page.css',
 })
-export class ArtistPage {
+export class ArtistPage implements OnInit {
   musicService = inject(MusicService);
   private activatedRoute = inject(ActivatedRoute);
   songs = signal<Song[]>([]);
-  //TODO: add albums as well
-  albums = signal<Album[]>([]);
+
+  albums = computed(() =>
+    this.musicService
+      .albums()
+      .filter(album => album.artist === this.artist));
+
   artist = '';
-  artistId = 0;
   pictureSrc = signal<string>("");
   fanCount = signal<number>(0);
   
-  constructor() {
+  ngOnInit() {
     this.activatedRoute.params.subscribe(
       params => {
         const artistName = String(params['name']);
@@ -46,12 +48,6 @@ export class ArtistPage {
           }
         });
       }
-    );
-
-    this.albums.set(
-      this.musicService
-        .albums()
-        .filter(album => album.artist === this.artist)
     );
   }
 }
