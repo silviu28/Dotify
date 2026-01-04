@@ -10,9 +10,12 @@ import {
   AfterViewInit,
   OnDestroy,
   HostListener,
+  untracked,
 } from '@angular/core';
 import { Song } from '../../types';
 import { MusicService } from '../music-service';
+
+type PlayerView = 'full' | 'compact' | 'bar';
 
 @Component({
   selector: 'app-player',
@@ -21,7 +24,7 @@ import { MusicService } from '../music-service';
   styleUrl: './player.css',
 })
 export class Player implements AfterViewInit, OnDestroy {
-  @ViewChild('playerWrapper') playerWrapper?: ElementRef<HTMLDivElement>;
+  @ViewChild('playerWindow') playerWindow?: ElementRef<HTMLDivElement>;
 
   private musicService = inject(MusicService);
   private audio = new Audio();
@@ -34,29 +37,28 @@ export class Player implements AfterViewInit, OnDestroy {
   isPlaying = signal<boolean>(false);
   songLength = signal<number>(0);
   playedTimestamp = signal<number>(0);
-  playerShowing = signal<boolean>(true);
   playerPosition = signal<{ x: number; y: number }>({ x: 20, y: 20 });
   isDragging = signal<boolean>(false);
-  playerWrapperStyle = computed(() => {
-    const { x, y } = this.playerPosition();
-    return { top: `${y}px`, left: `${x}px` };
-  });
+  playerView = signal<PlayerView>('full');
+  private lastExpandedView: PlayerView = 'full';
+  private forcedBarByEmptyQueue = false;
   
   // Instead of a local signal, we read from the service
   song = this.musicService.currentSong;
+  albumArtUrl = computed(() => {
+    const art = this.song()?.albumArt;
+    if (!art) {
+      return null;
+    }
+
+    return art.startsWith('data:') ? art : `data:image/jpeg;base64,${art}`;
+  });
 
   constructor() {
     this.setupAudioListeners();
     this.seedInitialPosition();
-
-    // EFFECT: This runs automatically whenever 'musicService.currentSong' changes
-    effect(() => {
-      const currentSong = this.musicService.currentSong();
-      if (currentSong) {
-        // If a new song is selected, play it immediately
-        this.playTrack(currentSong);
-      }
-    });
+    this.setupPlaybackEffect();
+    this.setupViewGuardEffect();
   }
 
   ngAfterViewInit() {
@@ -127,12 +129,6 @@ export class Player implements AfterViewInit, OnDestroy {
     this.isPlaying.set(false);
   }
 
-  toggleView() {
-    this.playerShowing.set(!this.playerShowing());
-    const { x, y } = this.playerPosition();
-    this.playerPosition.set(this.getClampedPosition(x, y));
-  }
-
   // Handle seeking via the range input
   seek(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -154,7 +150,7 @@ export class Player implements AfterViewInit, OnDestroy {
     event.preventDefault();
     this.isDragging.set(true);
 
-    const wrapperRect = this.playerWrapper?.nativeElement.getBoundingClientRect();
+    const wrapperRect = this.playerWindow?.nativeElement.getBoundingClientRect();
     const offsetX = event.clientX - (wrapperRect?.left ?? this.playerPosition().x);
     const offsetY = event.clientY - (wrapperRect?.top ?? this.playerPosition().y);
     this.dragOffset = { x: offsetX, y: offsetY };
@@ -227,10 +223,23 @@ export class Player implements AfterViewInit, OnDestroy {
   }
 
   private getWrapperDimensions() {
-    const wrapperWidth = this.playerWrapper?.nativeElement.offsetWidth ?? 620;
-    const wrapperHeight =
-      this.playerWrapper?.nativeElement.offsetHeight ?? (this.playerShowing() ? 150 : 60);
-    return { width: wrapperWidth, height: wrapperHeight };
+    const element = this.playerWindow?.nativeElement;
+    if (element) {
+      return { width: element.offsetWidth, height: element.offsetHeight };
+    }
+
+    return this.getFallbackDimensions();
+  }
+
+  private getFallbackDimensions() {
+    switch (this.playerView()) {
+      case 'compact':
+        return { width: 280, height: 170 };
+      case 'bar':
+        return { width: 220, height: 90 };
+      default:
+        return { width: 350, height: 260 };
+    }
   }
 
   private seedInitialPosition() {
@@ -238,10 +247,79 @@ export class Player implements AfterViewInit, OnDestroy {
       return;
     }
 
-    const approxWidth = 600;
-    const approxHeight = 150;
+    const { width: approxWidth, height: approxHeight } = this.getFallbackDimensions();
     const x = (window.innerWidth - approxWidth) / 2;
     const y = window.innerHeight - approxHeight - 20;
     this.playerPosition.set(this.getClampedPosition(x, y));
+  }
+
+  setView(view: PlayerView) {
+    if (view !== 'bar') {
+      this.lastExpandedView = view;
+    }
+
+    if (this.playerView() === view) {
+      return;
+    }
+
+    this.playerView.set(view);
+    this.reclampPosition();
+  }
+
+  restoreExpandedView(event?: Event) {
+    event?.stopPropagation();
+    const targetView = this.lastExpandedView === 'bar' ? 'full' : this.lastExpandedView;
+    this.setView(targetView);
+  }
+
+  cycleView(event?: Event) {
+    event?.stopPropagation();
+    const order: PlayerView[] = ['full', 'compact', 'bar'];
+    const currentIndex = order.indexOf(this.playerView());
+    let nextIndex = (currentIndex + 1) % order.length;
+    const hasSong = Boolean(this.song());
+
+    if (!hasSong) {
+      nextIndex = order.indexOf('bar');
+    }
+
+    this.setView(order[nextIndex]);
+  }
+
+  private reclampPosition() {
+    const { x, y } = this.playerPosition();
+    this.playerPosition.set(this.getClampedPosition(x, y));
+  }
+
+  private setupPlaybackEffect() {
+    effect(() => {
+      const currentSong = this.musicService.currentSong();
+      if (currentSong) {
+        this.playTrack(currentSong);
+      }
+    });
+  }
+
+  private setupViewGuardEffect() {
+    effect(() => {
+      const hasSong = Boolean(this.musicService.currentSong());
+      untracked(() => {
+        const currentView = this.playerView();
+        if (!hasSong && currentView !== 'bar') {
+          this.lastExpandedView = currentView;
+          this.playerView.set('bar');
+          this.reclampPosition();
+          this.forcedBarByEmptyQueue = true;
+          return;
+        }
+
+        if (hasSong && this.forcedBarByEmptyQueue && currentView === 'bar') {
+          this.forcedBarByEmptyQueue = false;
+          const targetView = this.lastExpandedView === 'bar' ? 'full' : this.lastExpandedView;
+          this.playerView.set(targetView);
+          this.reclampPosition();
+        }
+      });
+    });
   }
 }

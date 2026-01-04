@@ -1,18 +1,33 @@
 /* --- PLAYER WINDOW --- */
 .player {
+  --player-width: 350px;
   position: fixed;
   z-index: 20;
-  width: min(600px, calc(100vw - 32px));
+  width: min(var(--player-width), calc(100vw - 32px));
+  max-height: 360px;
   background-color: #181818;
-  color: white;
+  color: #ffffff;
   border-radius: 16px;
   border: 1px solid #2d2d2d;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
   display: flex;
   flex-direction: column;
-  gap: 0;
   pointer-events: auto;
   user-select: none;
+  overflow: hidden;
+  transition: width 0.25s ease, box-shadow 0.25s ease;
+}
+
+.player.view-full {
+  --player-width: 350px;
+}
+
+.player.view-compact {
+  --player-width: 330px;
+}
+
+.player.view-bar {
+  --player-width: 220px;
 }
 
 .player.dragging {
@@ -39,19 +54,18 @@
   color: #b3b3b3;
 }
 
-.drag-icon svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
+.window-controls {
+  display: flex;
+  gap: 6px;
 }
 
-.window-btn {
+.state-toggle {
   border: 1px solid #2d2d2d;
-  background: #202020;
-  color: white;
+  background: #1f1f1f;
+  color: #ffffff;
   border-radius: 8px;
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -59,40 +73,109 @@
   transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.window-btn:hover {
+.state-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.state-toggle:hover {
   background: #2d2d2d;
   transform: translateY(-1px);
 }
 
 .player-body {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  flex-direction: column;
+  gap: 14px;
   padding: 16px;
-  flex-wrap: wrap;
   user-select: auto;
 }
 
-.player-collapsed {
-  padding: 16px;
-  color: #b3b3b3;
-  font-size: 0.85rem;
+.player-main-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
 }
 
-/* --- SONG INFO (Left) --- */
+.player-body.compact .player-main-row {
+  justify-content: space-between;
+  gap: 10px;
+}
+
+
+.player.view-bar .song-info {
+  display: none;
+}
+
+.compact-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.player-body.compact .compact-controls .play-btn {
+  width: 30px;
+  height: 30px;
+}
+
+.player-body.compact .song-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.artwork-frame {
+  width: 110px;
+  height: 110px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #2d2d2d;
+  flex-shrink: 0;
+}
+
+.artwork-frame img,
+.artwork-placeholder {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.artwork-placeholder {
+  background: linear-gradient(135deg, #2c2c2c, #1b1b1b);
+  color: #777777;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+/* --- SONG INFO --- */
 .song-info {
-  width: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   font-size: 0.9rem;
+  min-width: 0;
+}
+
+.song-info .title {
+  font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* --- CONTROLS (Center Buttons) --- */
+/* --- CONTROLS --- */
 .controls {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
 
 .ctrl-btn {
@@ -112,14 +195,14 @@
 }
 
 .play-btn {
-  background-color: white;
-  color: black;
+  background-color: #ffffff;
+  color: #000000;
   border-radius: 50%;
   width: 32px;
   height: 32px;
 }
 
-/* --- PROGRESS BAR (Seeker) --- */
+/* --- PROGRESS BAR --- */
 .progress-bar {
   flex-grow: 1;
   cursor: pointer;
@@ -127,13 +210,61 @@
   accent-color: #1db954;
 }
 
-/* --- TIMESTAMPS (Right) --- */
+.player-body.compact .progress-bar {
+  margin-top: 4px;
+}
+
+/* --- TIMESTAMPS --- */
 .timestamps {
   font-size: 0.8rem;
   color: #b3b3b3;
   min-width: 80px;
   text-align: right;
   margin: 0;
+}
+
+/* --- BAR VIEW --- */
+.player-bar {
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.bar-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.bar-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.bar-controls .ctrl-btn {
+  padding: 4px;
+}
+
+.bar-controls .play-btn {
+  width: 28px;
+  height: 28px;
+}
+
+.bar-details strong {
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bar-details small,
+.bar-empty {
+  font-size: 0.75rem;
+  color: #b3b3b3;
 }
 
 .solid {
