@@ -6,7 +6,7 @@ import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-top-bar',
-  imports: [RouterLink, NotificationPanel],
+  imports: [NotificationPanel],
   templateUrl: './top-bar.html',
   styleUrl: './top-bar.css',
 })

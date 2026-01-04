@@ -1,25 +1,32 @@
+/* --- DRAGGABLE WRAPPER --- */
+.player-wrapper {
+  position: fixed;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.player-wrapper.dragging {
+  cursor: grabbing;
+}
+
 /* --- MAIN PLAYER CONTAINER --- */
 .player {
-  /* 1. POSITIONING (From your old code - keeps it floating at the bottom) */
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 600px;
-  z-index: 10; /* Ensures it sits on top of other content */
-
-  /* 2. LAYOUT (New code - aligns the buttons and bar) */
+  width: min(600px, calc(100vw - 40px));
   display: flex;
   align-items: center;
   gap: 15px;
   padding: 10px 20px;
-  
-  /* 3. STYLING */
   background-color: #181818;
   color: white;
   border-radius: 10px;
   box-sizing: border-box;
-  height: auto; /* Let content define height, or set fixed e.g., 60px */
+  height: auto;
 }
 
 /* --- SONG INFO (Left) --- */
@@ -80,16 +87,10 @@
 }
 
 /* --- HIDE BUTTON (The arrow) --- */
-/* We need to position this relative to the fixed player */
 .hide-button {
-  position: fixed;
-  bottom: 85px; /* 20px (player bottom) + ~60px (player height) + 5px gap */
-  left: 50%;
-  transform: translateX(-50%);
-  
-  background: #181818; /* Give it background so it's visible */
+  background: #181818;
   border: none;
-  border-radius: 50%; /* Make it round */
+  border-radius: 50%;
   color: white;
   width: 30px;
   height: 30px;
@@ -97,7 +98,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
 }
 
 .solid {

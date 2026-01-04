@@ -1,5 +1,14 @@
 import { DatePipe } from '@angular/common';
-import { Component, signal, inject, effect } from '@angular/core';
+import {
+  Component,
+  signal,
+  inject,
+  effect,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  OnDestroy,
+} from '@angular/core';
 import { Song } from '../../types';
 import { MusicService } from '../music-service';
 
@@ -9,14 +18,28 @@ import { MusicService } from '../music-service';
   templateUrl: './player.html',
   styleUrl: './player.css',
 })
-export class Player {
+export class Player implements AfterViewInit, OnDestroy {
   private musicService = inject(MusicService);
   private audio = new Audio();
+  @ViewChild('playerWrapper') playerWrapper?: ElementRef<HTMLElement>;
 
   isPlaying = signal<boolean>(false);
   songLength = signal<number>(0);
   playedTimestamp = signal<number>(0);
   playerShowing = signal<boolean>(true);
+  playerPosition = signal<{ x: number; y: number }>({ x: 0, y: 0 });
+  isDragging = signal<boolean>(false);
+  private dragOffset = { x: 0, y: 0 };
+  private dragInitialized = false;
+  private readonly handlePointerMove = (event: PointerEvent) => {
+    if (!this.isDragging()) {
+      return;
+    }
+    this.playerPosition.set(this.computeNextPosition(event.clientX, event.clientY));
+  };
+  private readonly handlePointerUp = () => {
+    this.isDragging.set(false);
+  };
   
   // Instead of a local signal, we read from the service
   song = this.musicService.currentSong;
@@ -84,6 +107,25 @@ export class Player {
     }
   }
 
+  ngAfterViewInit() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    queueMicrotask(() => {
+      this.setInitialPlayerPosition();
+    });
+    window.addEventListener('pointermove', this.handlePointerMove);
+    window.addEventListener('pointerup', this.handlePointerUp);
+  }
+
+  ngOnDestroy() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+    window.removeEventListener('pointermove', this.handlePointerMove);
+    window.removeEventListener('pointerup', this.handlePointerUp);
+  }
+
   private playAudio() {
     this.audio.play();
     this.isPlaying.set(true);
@@ -104,5 +146,76 @@ export class Player {
     const valueInSeconds = Number(input.value);
     
     this.audio.currentTime = valueInSeconds;
+  }
+
+  startDrag(event: PointerEvent) {
+    if (this.shouldIgnoreDrag(event.target)) {
+      return;
+    }
+
+    if (!this.playerWrapper) {
+      return;
+    }
+
+    this.ensurePlayerPosition();
+    const currentPosition = this.playerPosition();
+    this.dragOffset = {
+      x: event.clientX - currentPosition.x,
+      y: event.clientY - currentPosition.y,
+    };
+
+    const wrapper = this.playerWrapper.nativeElement;
+    wrapper.setPointerCapture?.(event.pointerId);
+    this.isDragging.set(true);
+    event.preventDefault();
+  }
+
+  private setInitialPlayerPosition() {
+    if (this.dragInitialized || typeof window === 'undefined') {
+      return;
+    }
+
+    this.dragInitialized = true;
+    this.playerPosition.set(this.computeNextPosition(window.innerWidth / 2, window.innerHeight - 40, true));
+  }
+
+  private ensurePlayerPosition() {
+    if (!this.dragInitialized) {
+      this.setInitialPlayerPosition();
+    }
+  }
+
+  private computeNextPosition(clientX: number, clientY: number, forceCenter = false) {
+    if (typeof window === 'undefined') {
+      return { x: clientX - this.dragOffset.x, y: clientY - this.dragOffset.y };
+    }
+
+    const wrapper = this.playerWrapper?.nativeElement;
+    const width = wrapper?.offsetWidth ?? 600;
+    const height = wrapper?.offsetHeight ?? 120;
+
+    let nextX: number;
+    let nextY: number;
+
+    if (forceCenter) {
+      nextX = window.innerWidth / 2 - width / 2;
+      nextY = window.innerHeight - height - 20;
+    } else {
+      nextX = clientX - this.dragOffset.x;
+      nextY = clientY - this.dragOffset.y;
+    }
+
+    // Keep the player inside the viewport bounds
+    nextX = Math.min(Math.max(10, nextX), window.innerWidth - width - 10);
+    nextY = Math.min(Math.max(10, nextY), window.innerHeight - height - 10);
+
+    return { x: nextX, y: nextY };
+  }
+
+  private shouldIgnoreDrag(target: EventTarget | null): boolean {
+    if (!(target instanceof HTMLElement)) {
+      return false;
+    }
+    return Boolean(target.closest('button, input, svg, path'));
   }
 }
