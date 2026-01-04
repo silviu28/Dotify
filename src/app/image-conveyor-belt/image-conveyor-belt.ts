@@ -54,4 +54,17 @@ export class ImageConveyorBelt implements OnInit, OnDestroy {
   transformStyle() {
     return `translateX(${this.transformX()}px)`;
   }
+
+  playSong(song: Song) {
+    if (!song) {
+      return;
+    }
+
+    const collection = this.songs();
+    if (collection.length) {
+      this.musicService.setQueue(collection);
+    }
+
+    this.musicService.playSong(song);
+  }
 }

@@ -1,10 +1,22 @@
 <div class="carousel-container">
   <div class="carousel-track" [style.transform]="transformStyle()">
     @for (song of songs(); track song) {
-      <img [src]="song.albumArt" />
+      <button
+        type="button"
+        class="carousel-item"
+        (click)="playSong(song)"
+        [attr.aria-label]="'Play ' + song.title">
+        <img [src]="song.albumArt" [alt]="song.album + ' cover art'" />
+      </button>
     }
     @for (song of songs(); track song) {
-      <img [src]="song.albumArt" />
+      <button
+        type="button"
+        class="carousel-item"
+        (click)="playSong(song)"
+        [attr.aria-label]="'Play ' + song.title">
+        <img [src]="song.albumArt" [alt]="song.album + ' cover art'" />
+      </button>
     }
   </div>
 </div>
