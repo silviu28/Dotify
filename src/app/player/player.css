@@ -194,6 +194,40 @@
   transform: scale(1.1);
 }
 
+.fav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid #2d2d2d;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.2s ease, transform 0.2s ease, color 0.2s ease;
+}
+
+.fav-btn .heart-icon {
+  width: 16px;
+  height: 16px;
+  fill: currentColor;
+  transition: color 0.2s ease;
+}
+
+.fav-btn:hover:not(:disabled) {
+  background: #2d2d2d;
+  transform: translateY(-1px);
+}
+
+.fav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.fav-btn.active {
+  color: #1db954;
+  border-color: #1db954;
+  background: rgba(29, 185, 84, 0.18);
+}
+
 .play-btn {
   background-color: #ffffff;
   color: #000000;

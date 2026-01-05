@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { Song } from '../../types';
 import { MusicService } from '../music-service';
+import { UserPreferencesService } from '../user-preferences-service';
 
 type PlayerView = 'full' | 'compact' | 'bar';
 
@@ -27,6 +28,7 @@ export class Player implements AfterViewInit, OnDestroy {
   @ViewChild('playerWindow') playerWindow?: ElementRef<HTMLDivElement>;
 
   private musicService = inject(MusicService);
+  private userPreferences = inject(UserPreferencesService);
   private audio = new Audio();
   private dragOffset = { x: 0, y: 0 };
   private readonly dragMargin = 16;
@@ -54,6 +56,11 @@ export class Player implements AfterViewInit, OnDestroy {
     }
 
     return art.startsWith('data:') ? art : `data:image/jpeg;base64,${art}`;
+  });
+
+  isSongFavorite = computed(() => {
+    const current = this.song();
+    return current ? this.userPreferences.isSongFavorited(current) : false;
   });
 
   constructor() {
@@ -118,6 +125,20 @@ export class Player implements AfterViewInit, OnDestroy {
       if (this.audio.src) {
         this.playAudio();
       }
+    }
+  }
+
+  toggleFavorite(event?: Event) {
+    event?.stopPropagation();
+    const current = this.song();
+    if (!current) {
+      return;
+    }
+
+    if (this.userPreferences.isSongFavorited(current)) {
+      this.userPreferences.removeSongFromFavorites(current);
+    } else {
+      this.userPreferences.addSongToFavorites(current);
     }
   }
 
