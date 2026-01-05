@@ -1,12 +1,13 @@
-import { Component, computed, inject, Input, signal } from '@angular/core';
+import { Component, computed, inject, Input, model, signal } from '@angular/core';
 import { Song } from '../../types';
 import { Router } from '@angular/router';
 import { MusicService } from '../music-service';
 import { UserPreferencesService } from '../user-preferences-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-song-container',
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './song-container.html',
   styleUrl: './song-container.css',
 })
@@ -15,11 +16,21 @@ export class SongContainer {
   private musicService = inject(MusicService);
   private userPrefsService = inject(UserPreferencesService);
 
-  @Input() song!: Song; 
+  @Input() song!: Song;
 
   isMenuOpen = signal(false);
   isFavorited = computed(() =>
     this.userPrefsService.isSongFavorited(this.song));
+  // don't load all playlists unless adding to playlist
+  availablePlaylists = computed(() => {
+    if (!this.addingToPlaylist()) return;
+
+    return Array.from(this.userPrefsService.savedPlaylists());
+  });
+  selectedPlaylistOption = model<string>("New...");
+  newPlaylistName = model<string>("");
+
+  addingToPlaylist = signal<boolean>(false);
 
   navigateToArtist(event: Event) {
     event.stopPropagation();
@@ -56,5 +67,20 @@ export class SongContainer {
     event.stopPropagation();
     this.musicService.playNextInQueue(this.song);
     this.isMenuOpen.set(false);
+  }
+
+  toggleAddingToPlaylist(event: Event) {
+    event.stopPropagation();
+    this.addingToPlaylist.set(!this.addingToPlaylist());
+  }
+
+  addToPlaylist(event: Event) {
+    event.stopPropagation();
+    this.userPrefsService
+      .addSongToPlaylist(this.song, this.newPlaylistName());
+    
+    this.toggleAddingToPlaylist(event);
+    this.selectedPlaylistOption.set("New...");
+    this.newPlaylistName.set("");
   }
 }

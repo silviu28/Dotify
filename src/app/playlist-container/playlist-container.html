@@ -1,0 +1,19 @@
+<div class="playlist-container">
+  <div class="image-wrapper">
+    <img [src]="playlist.songs[0].albumArt" loading="lazy" alt="First song" />
+    @if (playlist.songs[1]) {
+      <img [src]="playlist.songs[1].albumArt" loading="lazy" alt="Second song"
+        style="transform: translateY(-150px);"
+      />
+    }
+    @if (playlist.songs[2]) {
+      <img [src]="playlist.songs[2].albumArt" loading="lazy" alt="Third song"
+        style="transform: translateY(-300px);"
+      />
+    }
+  </div>
+
+  <div class="info-wrapper">
+    <h2>{{ playlist.title }}</h2>
+  </div>
+</div>

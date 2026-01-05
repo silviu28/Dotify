@@ -1,13 +1,14 @@
-import { Component, inject, OnDestroy, signal } from '@angular/core';
+import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
 import { SongContainer } from "../song-container/song-container";
 import { AlbumContainer } from "../album-container/album-container";
 import { FormsModule } from '@angular/forms';
 import { UserPreferencesService } from '../user-preferences-service';
 import { Router } from '@angular/router';
+import { PlaylistContainer } from "../playlist-container/playlist-container";
 
 @Component({
   selector: 'app-me-page',
-  imports: [SongContainer, AlbumContainer, FormsModule],
+  imports: [SongContainer, AlbumContainer, FormsModule, PlaylistContainer],
   templateUrl: './me-page.html',
   styleUrl: './me-page.css',
 })
@@ -18,7 +19,8 @@ export class MePage implements OnDestroy {
   favoritedSongs = this.userPrefsService.favoriteSongs;
   favoritedAlbums = this.userPrefsService.favoriteAlbums;
   favoritedArtists = this.userPrefsService.favoriteArtists;
-
+  savedPlaylists = computed(() =>
+    Array.from(this.userPrefsService.savedPlaylists()));
 
   name = this.userPrefsService.username;
   editModeEnabled = signal<boolean>(false);

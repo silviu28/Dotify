@@ -12,6 +12,18 @@
     </button>
   </h1>
 
+  <!-- playlist[0] - playlist title, playlist[1] - songs -->
+  <h2>Your playlists:</h2>
+  <div class="songs-grid">
+    @for (playlist of savedPlaylists(); track playlist) {
+      <app-playlist-container
+        [playlist]="playlist[1]"
+      />
+    } @empty {
+      <p>Nothing to show for now.</p>
+    }
+  </div>
+
   <h2>Favorite songs:</h2>
   <div class="songs-grid">
     @for (song of favoritedSongs(); track $index) {
