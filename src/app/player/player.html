@@ -153,6 +153,8 @@
             </svg>
           </button>
         </div>
+
+        
       }
 
       <input
@@ -164,9 +166,22 @@
         (input)="seek($event)"
       >
 
+      
+
       <p class="timestamps">
         {{ playedTimestamp() | date: 'mm:ss' }} / {{ songLength() | date: 'mm:ss' }}
       </p>
+
+    <!-- volume bar -->
+    <input
+      type="range"
+      class="progress-bar"
+      min="0"
+      max="100"
+      [value]="volume()"
+      (input)="seekVolume($event)">
+
     </div>
+
   }
 </div>

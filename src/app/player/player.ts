@@ -40,6 +40,8 @@ export class Player implements AfterViewInit, OnDestroy {
   playerPosition = signal<{ x: number; y: number }>({ x: 20, y: 20 });
   isDragging = signal<boolean>(false);
   playerView = signal<PlayerView>('full');
+  volume = signal<number>(100);
+
   private lastExpandedView: PlayerView = 'full';
   private forcedBarByEmptyQueue = false;
   
@@ -321,5 +323,15 @@ export class Player implements AfterViewInit, OnDestroy {
         }
       });
     });
+  }
+
+  seekVolume(event: Event) {
+    console.log("update volume");
+    const input = event.target as HTMLInputElement;
+    const vol = parseInt(input.value);
+    this.volume.set(vol);
+    
+    // volume takes 0-1
+    this.audio.volume = vol / 100;
   }
 }
