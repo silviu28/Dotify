@@ -53,6 +53,7 @@ export interface Prefs {
   favoriteSongs?: Song[];
   favoriteAlbums?: Album[];
   favoriteArtists?: string[];
+  savedPlaylists?: Record<string, Playlist>;
 }
 
 export interface Artist {
@@ -68,3 +69,8 @@ export interface Artist {
 
 export type SortCriterion = "No sort" | "Title" | "Album" | "Artist";
 export type GroupCriterion = "No group" | "Album" | "Artist";
+
+export interface Playlist {
+  title: string;
+  songs: Song[];
+};

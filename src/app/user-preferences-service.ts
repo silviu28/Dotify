@@ -1,5 +1,5 @@
 import { computed, Injectable, OnDestroy, signal } from '@angular/core';
-import { Album, Prefs, Song } from '../types';
+import { Album, Playlist, Prefs, Song } from '../types';
 
 @Injectable({
   providedIn: 'root',
@@ -9,6 +9,7 @@ export class UserPreferencesService implements OnDestroy {
   favoriteSongs = signal<Song[]>([]);
   favoriteAlbums = signal<Album[]>([]);
   favoriteArtists = signal<string[]>([]);
+  savedPlaylists = signal(new Map<string, Playlist>());
 
   // use an in-memory set to quickly sort out favorites
   private favoriteSongsSet = computed(() =>
@@ -33,6 +34,12 @@ export class UserPreferencesService implements OnDestroy {
     if (prefs.favoriteArtists) {
       this.favoriteArtists.set(prefs.favoriteArtists);
     }
+    if (prefs.savedPlaylists) {
+      // create map from serialized savedPlaylists object
+      this.savedPlaylists.set(
+        new Map<string, Playlist>(Object.entries(prefs.savedPlaylists))
+      );
+    }
   }
 
   savePreferences() {
@@ -41,6 +48,9 @@ export class UserPreferencesService implements OnDestroy {
     prefs.favoriteSongs = this.favoriteSongs();
     prefs.favoriteAlbums = this.favoriteAlbums();
     prefs.favoriteArtists = this.favoriteArtists();
+    // since Map isn't serializable, convert to an object
+    prefs.savedPlaylists = Object.fromEntries(this.savedPlaylists());
+
     localStorage.setItem("prefs", JSON.stringify(prefs));
   }
 
@@ -100,6 +110,48 @@ export class UserPreferencesService implements OnDestroy {
 
   isArtistFavorited(artistName: string): boolean {
     return this.favoriteArtistsSet().has(artistName);
+  }
+
+  addSongToPlaylist(song: Song, playlistName: string) {
+    const currentPlaylists = this.savedPlaylists();
+    let playlist = currentPlaylists.get(playlistName);
+    if (playlist) {
+      // append to songs of existing playlist
+      playlist = {
+        ... playlist,
+        songs: [... playlist.songs, song]
+      };
+    } else {
+      // if a playlist of given name doesn't exist, create it
+      playlist = {
+        title: playlistName,
+        songs: [song]
+      };
+    }
+    currentPlaylists.set(playlistName, playlist);
+    this.savedPlaylists.set(currentPlaylists);
+    this.savePreferences();
+  }
+
+  removeSongFromPlaylist(song: Song, playlistName: string) {
+    const currentPlaylists = this.savedPlaylists();
+    let playlist = currentPlaylists.get(playlistName);
+    if (playlist) {
+      playlist = {
+        ... playlist,
+        songs: playlist.songs.filter(s => song.title !== s.title || song.artist !== s.artist)
+      };
+      currentPlaylists.set(playlistName, playlist);
+      this.savedPlaylists.set(currentPlaylists);
+    }
+  }
+
+  removePlaylist(playlistName: string) {
+    const currentPlaylists = this.savedPlaylists();
+    if (currentPlaylists.delete(playlistName)) {
+      this.savedPlaylists.set(currentPlaylists);
+      this.savePreferences();
+    }
   }
 
   // save preferences on dispose
