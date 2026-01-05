@@ -16,6 +16,7 @@ export class MusicService {
   
   // Playlist-ul principal (contextul curent: album, search results, etc.)
   playlist = signal<Song[]>([]);
+  recentlyPlayed = signal<Song[]>([]); // Now managed by the service
 
   // NOU: Coada de prioritate (melodiile adăugate manual prin Add to Queue)
   queue = signal<Song[]>([]);
@@ -116,6 +117,14 @@ export class MusicService {
   playSong(song: Song) {
     this.currentSong.set(song);
     this.onPlaySubject.next(song);
+    
+    this.addToRecentlyPlayed(song);
+  }
+
+  private addToRecentlyPlayed(song: Song) {
+    const filtered = this.recentlyPlayed().filter(s => s.filename !== song.filename);
+    const newList = [song, ...filtered].slice(0, 10);
+    this.recentlyPlayed.set(newList);
   }
 
   // --- LOGICA DE PLAY NEXT (MODIFICATĂ PENTRU QUEUE) ---
@@ -130,7 +139,7 @@ export class MusicService {
       
       // O scoatem din coadă și o redăm (stergem primul element)
       this.queue.update(q => q.slice(1)); 
-      this.currentSong.set(nextSong);
+      this.playSong(nextSong);
       return;
     }
 
@@ -150,16 +159,16 @@ export class MusicService {
 
     if (currentIndex === -1) {
       console.error("❌ Piesa curentă nu a fost găsită în playlist-ul activ! Redau prima piesă.");
-      this.currentSong.set(list[0]);
+      this.playSong(list[0]);
       return;
     }
 
     if (currentIndex < list.length - 1) {
       console.log("⏭️ Trec la piesa următoare din playlist:", list[currentIndex + 1].title);
-      this.currentSong.set(list[currentIndex + 1]);
+      this.playSong(list[currentIndex + 1]);
     } else {
       console.log("🔄 Loop la început:", list[0].title);
-      this.currentSong.set(list[0]);
+      this.playSong(list[0]);
     }
   }
 
@@ -174,9 +183,9 @@ export class MusicService {
     if (currentIndex === -1) return;
 
     if (currentIndex > 0) {
-      this.currentSong.set(list[currentIndex - 1]);
+      this.playSong(list[currentIndex - 1]);
     } else {
-      this.currentSong.set(list[list.length - 1]);
+      this.playSong(list[list.length - 1]);
     }
   }
 

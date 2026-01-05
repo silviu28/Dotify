@@ -27,6 +27,11 @@ export class SongContainer {
     this.router.navigate(['/artist', encodedName]);
   }
 
+  navigateToAlbum() {
+    const encodedName = encodeURI(this.song.album);
+    this.router.navigate(['/album', encodedName]);
+  }
+
   favoriteSong(event: Event) {
     event.stopPropagation(); // OPRIRE PLAY CÂND DAI LIKE
     if (this.isFavorited()) {

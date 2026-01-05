@@ -7,7 +7,7 @@
   <div class="info-wrapper">
     <h2>{{ song.title }}</h2>
     <p (click)="navigateToArtist($event)" class="artist-link">{{ song.artist }}</p>
-    <sub>{{ song.year }}, {{ song.album }}</sub>
+    <sub> {{ song.year }}, <span (click)="navigateToAlbum()" class="artist-link">{{ song.album }}</span></sub>
   </div>
 
   <div class="actions-area">

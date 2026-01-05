@@ -37,7 +37,7 @@
 
   <h2>Favorite artists:</h2>
   @for (artist of favoritedArtists(); track $index) {
-    <p>{{ artist }}</p>
+    <p (click)="navigateToArtist(artist)" class="artist-link">{{ artist }}</p>
   } @empty {
     <p>Nothing to show for now.</p>
   }

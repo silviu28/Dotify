@@ -93,7 +93,7 @@ export class Player implements AfterViewInit, OnDestroy {
     this.audio.addEventListener('ended', () => {
       this.isPlaying.set(false);
       this.playedTimestamp.set(0);
-      // TODO: Logic for auto-playing next song goes here
+      this.next();
     });
   }
 

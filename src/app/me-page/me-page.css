@@ -20,3 +20,12 @@ h1, h2 {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 2vw;
 }
+
+.artist-link {
+  cursor: pointer;
+  width: fit-content;
+}
+
+.artist-link:hover {
+  text-decoration: underline;
+}
