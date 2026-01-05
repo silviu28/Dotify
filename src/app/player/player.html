@@ -96,6 +96,30 @@
             <span class="title">No song selected</span>
           }
         </div>
+
+        @if (playerView() === 'full') {
+          <div class="visualizer-toggle-wrap" aria-hidden="true">
+            <button
+              type="button"
+              class="visualizer-toggle"
+              (click)="toggleVisualizer($event)"
+              [attr.aria-pressed]="showVisualizer()"
+              aria-label="Toggle waveform visualizer"
+            >
+              @if (showVisualizer()) {
+                <svg viewBox="0 0 120 30" aria-hidden="true" focusable="false">
+                  <path d="M0 18 Q10 6 20 18 T40 18 T60 18 T80 18 T100 18 T120 18" stroke="currentColor" stroke-width="4" fill="none" />
+                </svg>
+                <span class="visually-hidden">Hide wave visualizer</span>
+              } @else {
+                <svg viewBox="0 0 120 30" aria-hidden="true" focusable="false">
+                  <path d="M0 12 Q10 24 20 12 T40 12 T60 12 T80 12 T100 12 T120 12" stroke="currentColor" stroke-width="4" fill="none" />
+                </svg>
+                <span class="visually-hidden">Show wave visualizer</span>
+              }
+            </button>
+          </div>
+        }
           @if (playerView() === 'compact') {
             <button
               type="button"
@@ -141,6 +165,31 @@
         }
 
       </div>
+
+      @if (playerView() === 'full' && showVisualizer()) {
+        <div
+          class="visualizer-shell"
+          [class.compact]="playerView() === 'compact'"
+        >
+          <!-- <div class="visualizer-meta">
+            <span class="meta-chip meta-index">#{{ trackDisplayNumber() }}</span>
+            <span class="meta-song" [class.placeholder]="!song()">
+              {{ song()?.title ?? 'Waiting for track' }}
+              <span class="meta-artist">{{ song()?.artist ?? '---' }}</span>
+            </span>
+            <span class="meta-chip meta-format">{{ audioFormat() || 'MP3' }}</span>
+          </div> -->
+          <div class="visualizer-screen">
+            <canvas
+              #visualizerCanvas
+              class="visualizer-canvas"
+              role="img"
+              aria-label="Audio visualizer waveform"
+            ></canvas>
+            <div class="visualizer-grid"></div>
+          </div>
+        </div>
+      }
 
       @if (playerView() !== 'compact') {
         <div class="controls">

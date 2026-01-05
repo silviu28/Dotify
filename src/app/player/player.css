@@ -4,7 +4,7 @@
   position: fixed;
   z-index: 20;
   width: min(var(--player-width), calc(100vw - 32px));
-  max-height: 360px;
+  max-height: 750px;
   background-color: #181818;
   color: #ffffff;
   border-radius: 16px;
@@ -96,6 +96,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
+  flex-wrap: wrap;
   width: 100%;
 }
 
@@ -124,6 +125,172 @@
 .player-body.compact .song-info {
   min-width: 0;
   flex: 1;
+}
+
+/* PSP-inspired visualizer shell */
+.visualizer-shell {
+  border: 1.5px solid rgba(123, 66, 153, 0.7);
+  background:
+    radial-gradient(circle at 25% 15%, rgba(255, 138, 255, 0.22), transparent 55%),
+    radial-gradient(circle at 70% 20%, rgba(123, 178, 255, 0.1), transparent 60%),
+    linear-gradient(145deg, rgba(9, 4, 18, 0.95), rgba(7, 0, 22, 0.94));
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow:
+    inset 0 0 30px rgba(229, 76, 255, 0.18),
+    0 12px 30px rgba(7, 0, 25, 0.7);
+  position: relative;
+  overflow: hidden;
+}
+
+.visualizer-toggle-row {
+  display: none;
+}
+
+.visualizer-shell.compact {
+  padding: 10px;
+}
+
+.visualizer-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #d7ccff;
+}
+
+.meta-chip {
+  border-radius: 999px;
+  border: 1px solid #4d2f62;
+  padding: 3px 10px;
+  background: rgba(103, 61, 125, 0.35);
+  text-align: center;
+  min-width: 52px;
+  font-weight: 600;
+}
+
+.meta-index {
+  font-size: 0.75rem;
+}
+
+.meta-format {
+  font-size: 0.65rem;
+}
+
+.meta-song {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: #f5edff;
+}
+
+.meta-song.placeholder {
+  opacity: 0.6;
+}
+
+.meta-song .meta-artist {
+  margin-left: 8px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.visualizer-toggle-wrap {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  align-self: end;
+  justify-content: center;
+}
+
+.visualizer-toggle {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(32, 0, 54, 0.55);
+  color: #f4d9ff;
+  border-radius: 999px;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  scale: 0.7;
+}
+
+.visualizer-toggle:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #15061f;
+  transform: translateY(-1px);
+}
+
+.visualizer-toggle svg {
+  width: 34px;
+  height: 16px;
+}
+
+.visualizer-screen {
+  position: relative;
+  border: 1px solid #4a1f5e;
+  border-radius: 12px;
+  background: linear-gradient(185deg, rgba(8, 1, 20, 0.98) 0%, rgba(6, 0, 15, 0.9) 70%, rgba(24, 3, 47, 0.85) 100%);
+  height: 90px;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 40px rgba(255, 0, 204, 0.18),
+    inset 0 -20px 25px rgba(0, 0, 0, 0.65);
+  filter: drop-shadow(0 10px 22px rgba(8, 0, 20, 0.65));
+}
+
+.visualizer-shell.compact .visualizer-screen {
+  height: 70px;
+}
+
+.visualizer-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.visualizer-screen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.15), transparent 45%);
+  opacity: 0.45;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.visualizer-grid {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 100% 20px, 40px 100%;
+  mix-blend-mode: color-dodge;
+  opacity: 0.55;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }
 
 .artwork-frame {
