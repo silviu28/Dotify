@@ -1,4 +1,4 @@
-<div class="playlist-container">
+<div class="solid playlist-container" (click)="navigateToPlaylist()">
   <div class="image-wrapper">
     <img [src]="playlist.songs[0].albumArt" loading="lazy" alt="First song" />
     @if (playlist.songs[1]) {

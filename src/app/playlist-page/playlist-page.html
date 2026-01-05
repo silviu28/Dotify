@@ -1,0 +1,11 @@
+<div class="playlist-page solid fade-in">
+  <h1>{{ playlist().title }}</h1>
+  
+  <div class="songs-grid">
+    @for (song of playlist().songs; track $index) {
+      <app-song-container [song]="song" />
+    } @empty {
+      <p>How would you even get here...</p>
+    }
+  </div>
+</div>

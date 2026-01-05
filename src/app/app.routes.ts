@@ -6,6 +6,7 @@ import { ArtistPage } from './artist-page/artist-page';
 import { SearchResult } from './search-result/search-result';
 import { MePage } from './me-page/me-page';
 import { AlbumPage } from './album-page/album-page';
+import { PlaylistPage } from './playlist-page/playlist-page';
 
 export const routes: Routes = [
   {
@@ -35,5 +36,9 @@ export const routes: Routes = [
   {
     path: "album/:name",
     component: AlbumPage
+  },
+  {
+    path: "playlist/:title",
+    component: PlaylistPage
   }
 ];
