@@ -16,7 +16,9 @@
       <select
         [(ngModel)]="sortingCriterion">
         @for (criterion of sortingCriteria; track criterion) {
-          <option [value]="criterion">{{ criterion }}</option>
+          <option class="sorting-dropdown" 
+           [value]="criterion">{{ criterion }}
+          </option>
         }
       </select>
       <small> | </small>
@@ -26,7 +28,9 @@
       <select
         [(ngModel)]="groupingCriterion">
         @for (criterion of groupingCriteria; track criterion) {
-          <option [value]="criterion">{{ criterion }}</option>
+          <option class="sorting-dropdown"
+           [value]="criterion">{{ criterion }}
+          </option>
         }
       </select>
     </div>
