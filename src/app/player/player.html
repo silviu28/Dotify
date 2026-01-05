@@ -172,14 +172,22 @@
         {{ playedTimestamp() | date: 'mm:ss' }} / {{ songLength() | date: 'mm:ss' }}
       </p>
 
-    <!-- volume bar -->
-    <input
-      type="range"
-      class="progress-bar"
-      min="0"
-      max="100"
-      [value]="volume()"
-      (input)="seekVolume($event)">
+    <div class="volume-control" aria-label="Volume">
+      <span class="volume-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16" fill="currentColor">
+          <path d="M11.536 14.01a.75.75 0 0 1-.52-1.282 5.25 5.25 0 0 0 0-7.456.75.75 0 1 1 1.04-1.082 6.75 6.75 0 0 1 0 9.62.75.75 0 0 1-.52.2z" />
+          <path d="M10.086 11.59a.75.75 0 0 1-.53-1.28 2.75 2.75 0 0 0 0-3.903.75.75 0 0 1 1.061-1.06 4.25 4.25 0 0 1 0 6.024.75.75 0 0 1-.53.219z" />
+          <path d="M8 1.5a.75.75 0 0 1 .75.75v11.5a.75.75 0 0 1-1.2.6L4.223 11H2a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h2.223L7.55 1.65A.75.75 0 0 1 8 1.5z" />
+        </svg>
+      </span>
+      <input
+        type="range"
+        class="progress-bar volume-bar"
+        min="0"
+        max="100"
+        [value]="volume()"
+        (input)="seekVolume($event)">
+    </div>
 
     </div>
 
