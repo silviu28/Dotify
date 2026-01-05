@@ -11,12 +11,14 @@
       <path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm5.5-4a.5.5 0 0 1 .8-.4l3 2a.5.5 0 0 1 0 .8l-3 2a.5.5 0 0 1-.8-.4z"/>
     </svg>
   </button>
+
   <button (click)="navigateToFavorites()" title="Favorites">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
       <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
     </svg>
   </button>
-  <button (click)="search()"> 
+
+  <button (click)="search()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
       <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"/>
     </svg>
@@ -29,7 +31,7 @@
     (keypress)="$event.key === 'Enter' ? search() : null"
     placeholder="Search for songs or artists" />
 
-  <button #notificationToggle (click)="toggleNotificationPanel()"> 
+  <button #notificationToggle (click)="toggleNotificationPanel()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
       <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2m.995-14.901a1 1 0 1 0-1.99 0A5 5 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901"/>
     </svg>
@@ -38,6 +40,12 @@
   <button (click)="navigateToMe()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
       <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+    </svg>
+  </button>
+
+  <button (click)="navigateToSettings()" title="Sound settings">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders2" viewBox="0 0 16 16">
+      <path d="M11.5 2a1.5 1.5 0 1 1 0 3H11v9a.5.5 0 0 1-1 0V5h-.5a1.5 1.5 0 0 1 0-3zM11.5 3H11v1h.5a.5.5 0 0 0 0-1m-7 6a1.5 1.5 0 0 1 0 3H4v4a.5.5 0 0 1-1 0v-4h-.5a.5.5 0 0 1 0-3zm0 1H4v1h.5a.5.5 0 0 0 0-1m4-7a1.5 1.5 0 1 1 0 3H8v9a.5.5 0 0 1-1 0V5h-.5a.5.5 0 0 1 0-3zm0 1H8v1h.5a.5.5 0 0 0 0-1"/>
     </svg>
   </button>
 

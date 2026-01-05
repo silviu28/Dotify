@@ -23,6 +23,19 @@ export interface Album {
   artist: string;
 };
 
+export interface EqualizerBand {
+  label: string;
+  frequency: number;
+  value: number;
+}
+
+export interface EqualizerSettings {
+  enabled: boolean;
+  preset: string;
+  preamp: number;
+  bands: EqualizerBand[];
+}
+
 interface DeezerGoodResponse {
   id: number;
   name: string;
@@ -54,6 +67,7 @@ export interface Prefs {
   favoriteAlbums?: Album[];
   favoriteArtists?: string[];
   savedPlaylists?: Record<string, Playlist>;
+  equalizer?: EqualizerSettings;
 }
 
 export interface Artist {

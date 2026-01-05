@@ -8,6 +8,7 @@ import { MePage } from './me-page/me-page';
 import { AlbumPage } from './album-page/album-page';
 import { PlaylistPage } from './playlist-page/playlist-page';
 import { FavoritesPage } from './favorites-page/favorites-page';
+import { SettingsPage } from './settings-page/settings-page';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,10 @@ export const routes: Routes = [
   {
     path: "me",
     component: MePage,
+  },
+  {
+    path: "settings",
+    component: SettingsPage
   },
   {
     path: "album/:name",

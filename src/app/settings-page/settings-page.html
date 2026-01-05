@@ -1,0 +1,122 @@
+<div class="settings-page solid fade-in">
+  <section class="settings-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Dotify / Sound Lab</p>
+      <h1>Settings & Equalizer</h1>
+      <p class="subtitle">Dial in a personal sound signature, then sync it across every device connected to your account.</p>
+      <div class="hero-stats">
+        <div>
+          <span class="stat-label">Active preset</span>
+          <strong>{{ equalizer().preset }}</strong>
+        </div>
+        <div>
+          <span class="stat-label">Preamp</span>
+          <strong>{{ formatValue(equalizer().preamp) }} dB</strong>
+        </div>
+        <div>
+          <span class="stat-label">Status</span>
+          <strong>
+            @if (equalizer().enabled) {
+              Live
+            } @else {
+              Standby
+            }
+          </strong>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg viewBox="0 0 100 100" role="presentation" aria-hidden="true">
+        <defs>
+          <linearGradient id="eqGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#00ff99" />
+            <stop offset="100%" stop-color="#5ad8ff" />
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="100" height="100" rx="8" class="grid" />
+        <line x1="0" y1="20" x2="100" y2="20" class="grid-line" />
+        <line x1="0" y1="40" x2="100" y2="40" class="grid-line" />
+        <line x1="0" y1="60" x2="100" y2="60" class="grid-line" />
+        <line x1="0" y1="80" x2="100" y2="80" class="grid-line" />
+        <polyline [attr.points]="previewPolyline()" fill="none" stroke="url(#eqGradient)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <p class="visual-caption">Live EQ curve</p>
+    </div>
+  </section>
+
+  <section class="equalizer-card">
+    <header class="section-head">
+      <div>
+        <p class="eyebrow">Equalizer</p>
+        <h2>Multi-band control</h2>
+        <p class="section-copy">{{ activePresetDescription() }}</p>
+      </div>
+      <div class="section-actions">
+        <label class="toggle">
+          <input type="checkbox" [checked]="equalizer().enabled" (change)="toggleEnabled($event)">
+          <span>Equalizer {{ equalizer().enabled ? 'on' : 'off' }}</span>
+        </label>
+        <button class="ghost" (click)="resetEqualizer()">Reset to default</button>
+      </div>
+    </header>
+
+    <div class="preset-controls">
+      <label class="preset-select">
+        <span>Preset</span>
+        <select [value]="equalizer().preset" (change)="changePreset($event)">
+          @for (preset of presets; track preset.name) {
+            <option class="sorting-dropdown"[value]="preset.name">{{ preset.name }}</option>
+          }
+        </select>
+      </label>
+
+      <label class="preamp-control">
+        <span>Preamp - {{ formatValue(equalizer().preamp) }} dB</span>
+        <input
+          type="range"
+          [min]="minPreamp"
+          [max]="maxPreamp"
+          step="1"
+          [value]="equalizer().preamp"
+          (input)="updatePreamp($event)"
+        />
+      </label>
+    </div>
+
+    <div class="band-grid">
+      @for (band of equalizer().bands; track band.label) {
+        <article class="band-card">
+          <p class="band-label">{{ band.label }}</p>
+          <p class="band-value">{{ formatValue(band.value) }} dB</p>
+          <input
+            type="range"
+            [min]="minBand"
+            [max]="maxBand"
+            step="1"
+            [value]="band.value"
+            (input)="updateBandValue(band.label, $event)"
+          />
+        </article>
+      }
+    </div>
+  </section>
+
+  <section class="listening-modes">
+    <header class="section-head">
+      <div>
+        <p class="eyebrow">Earprint sync</p>
+        <h2>Listening modes</h2>
+        <p class="section-copy">These modes layer on top of your equalizer so each device can feel tailored to where you listen most.</p>
+      </div>
+    </header>
+    <div class="mode-grid">
+      @for (mode of listeningModes; track mode.title) {
+        <article class="mode-card" [attr.data-accent]="mode.accent">
+          <p class="mode-title">{{ mode.title }}</p>
+          <p class="mode-subtitle">{{ mode.subtitle }}</p>
+          <span class="mode-chip">Coming soon</span>
+        </article>
+      }
+    </div>
+  </section>
+</div>

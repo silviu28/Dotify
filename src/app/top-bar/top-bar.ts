@@ -76,4 +76,8 @@ export class TopBar {
   navigateToMe() {
     this.router.navigate(["/me"]);
   }
+
+  navigateToSettings() {
+    this.router.navigate(["/settings"]);
+  }
 }

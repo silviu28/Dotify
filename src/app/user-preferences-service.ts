@@ -1,5 +1,26 @@
 import { computed, Injectable, OnDestroy, signal } from '@angular/core';
-import { Album, Playlist, Prefs, Song } from '../types';
+import { Album, EqualizerBand, EqualizerSettings, Playlist, Prefs, Song } from '../types';
+
+const DEFAULT_EQUALIZER_BANDS: EqualizerBand[] = [
+  { label: "60 Hz", frequency: 60, value: 0 },
+  { label: "170 Hz", frequency: 170, value: 0 },
+  { label: "310 Hz", frequency: 310, value: 0 },
+  { label: "600 Hz", frequency: 600, value: 0 },
+  { label: "1 kHz", frequency: 1000, value: 0 },
+  { label: "3 kHz", frequency: 3000, value: 0 },
+  { label: "6 kHz", frequency: 6000, value: 0 },
+  { label: "12 kHz", frequency: 12000, value: 0 }
+];
+
+const cloneBands = (bands: EqualizerBand[] = []) =>
+  bands.map(band => ({ ... band }));
+
+const createDefaultEqualizer = (): EqualizerSettings => ({
+  enabled: true,
+  preset: "Balanced",
+  preamp: 0,
+  bands: cloneBands(DEFAULT_EQUALIZER_BANDS)
+});
 
 @Injectable({
   providedIn: 'root',
@@ -10,6 +31,7 @@ export class UserPreferencesService implements OnDestroy {
   favoriteAlbums = signal<Album[]>([]);
   favoriteArtists = signal<string[]>([]);
   savedPlaylists = signal(new Map<string, Playlist>());
+  equalizerSettings = signal<EqualizerSettings>(createDefaultEqualizer());
 
   // use an in-memory set to quickly sort out favorites
   private favoriteSongsSet = computed(() =>
@@ -40,6 +62,42 @@ export class UserPreferencesService implements OnDestroy {
         new Map<string, Playlist>(Object.entries(prefs.savedPlaylists))
       );
     }
+    this.equalizerSettings.set(this.mergeEqualizerSettings(prefs.equalizer));
+  }
+
+  private mergeEqualizerSettings(settings?: EqualizerSettings): EqualizerSettings {
+    if (!settings) {
+      return createDefaultEqualizer();
+    }
+
+    const incomingBands = new Map(
+      (settings.bands ?? []).map<[string, EqualizerBand]>(band => [band.label, band])
+    );
+
+    return {
+      enabled: settings.enabled ?? true,
+      preset: settings.preset ?? "Balanced",
+      preamp: settings.preamp ?? 0,
+      bands: cloneBands(DEFAULT_EQUALIZER_BANDS).map(band => {
+        const override = incomingBands.get(band.label);
+        return {
+          ... band,
+          value: override?.value ?? band.value,
+        };
+      })
+    };
+  }
+
+  setEqualizerSettings(next: EqualizerSettings) {
+    this.equalizerSettings.set({
+      ... next,
+      bands: cloneBands(next.bands)
+    });
+    this.savePreferences();
+  }
+
+  resetEqualizerSettings() {
+    this.setEqualizerSettings(createDefaultEqualizer());
   }
 
   savePreferences() {
@@ -50,6 +108,7 @@ export class UserPreferencesService implements OnDestroy {
     prefs.favoriteArtists = this.favoriteArtists();
     // since Map isn't serializable, convert to an object
     prefs.savedPlaylists = Object.fromEntries(this.savedPlaylists());
+    prefs.equalizer = this.equalizerSettings();
 
     localStorage.setItem("prefs", JSON.stringify(prefs));
   }
