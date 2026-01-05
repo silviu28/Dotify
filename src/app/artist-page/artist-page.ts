@@ -14,9 +14,10 @@ import { UserPreferencesService } from '../user-preferences-service';
   styleUrl: './artist-page.css',
 })
 export class ArtistPage implements OnInit {
-  musicService = inject(MusicService);
-  userPrefsService = inject(UserPreferencesService);
+  private musicService = inject(MusicService);
+  private userPrefsService = inject(UserPreferencesService);
   private activatedRoute = inject(ActivatedRoute);
+  
   songs = signal<Song[]>([]);
 
   albums = computed(() =>

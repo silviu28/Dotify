@@ -2,7 +2,7 @@
 @import url('https://fonts.cdnfonts.com/css/helvetica-neue-5');
 
 h1, h2, p, input, sub, span, small {
-  font-family: "Helvetica Neue", sans-serif;
+  font-family: "Helvetica Neue", sans-serif !important;
   text-overflow: ellipsis;
 }
 

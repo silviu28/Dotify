@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Album, Song } from '../../types';
+import { Song } from '../../types';
 import { MusicService } from '../music-service';
 import { SongContainer } from "../song-container/song-container";
 
@@ -11,8 +11,8 @@ import { SongContainer } from "../song-container/song-container";
   styleUrl: './album-page.css',
 })
 export class AlbumPage implements OnInit {
-  activatedRoute = inject(ActivatedRoute);
-  musicService = inject(MusicService);
+  private activatedRoute = inject(ActivatedRoute);
+  private musicService = inject(MusicService);
 
   album = computed(() =>
     this.musicService

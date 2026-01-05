@@ -9,8 +9,9 @@ import { MusicService } from '../music-service';
   styleUrl: './song-preview.css',
 })
 export class SongPreview {
+  private musicService = inject(MusicService);
+
   song = input.required<Song>();
-  musicService = inject(MusicService);
 
   playSong() {
     this.musicService.playSong(this.song()!);

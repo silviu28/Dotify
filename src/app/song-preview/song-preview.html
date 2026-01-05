@@ -1,10 +1,10 @@
 <div class="song-preview" (click)="playSong()">
-    <div class="image-wrapper">
-        <img [src]="song().albumArt" loading="lazy" alt="Album Art" />
-    </div>
-    
-    <div class="info-wrapper">
-        <h3>{{ song().title }}</h3>
-        <p class="artist-link">{{ song().artist }}</p>
-    </div>
+	<div class="image-wrapper">
+		<img [src]="song().albumArt || '/blank.png'" loading="lazy" alt="Album Art" />
+	</div>
+	
+	<div class="info-wrapper">
+		<h3>{{ song().title }}</h3>
+		<p class="artist-link">{{ song().artist }}</p>
+	</div>
 </div>

@@ -1,11 +1,12 @@
+<div style="width:100%;height:100%;position:fixed;pointer-events:none;z-index:-1">
+  <img src="abstract-wave-lines-background.png">
+</div>
+
 @defer (on idle) {
-  <div style="width:100%;height:100%;position:fixed;pointer-events:none;z-index:-1">
-    <img src="abstract-wave-lines-background.png">
-  </div>
   <app-top-bar [(searchTerm)]="searchTerm" />
   <router-outlet />
   <app-player />
-} @placeholder (minimum 500ms) {
+} @placeholder (minimum 1500ms) {
   <app-suspense />
 } @loading {
   <app-suspense />

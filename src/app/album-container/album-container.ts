@@ -10,8 +10,8 @@ import { UserPreferencesService } from '../user-preferences-service';
   styleUrl: './album-container.css',
 })
 export class AlbumContainer {
-  router = inject(Router);
-  userPrefsService = inject(UserPreferencesService);
+  private router = inject(Router);
+  private userPrefsService = inject(UserPreferencesService);
 
   @Input() declare album: Album;
 

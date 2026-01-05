@@ -11,7 +11,7 @@ import { Song } from '../../types';
 export class ImageConveyorBelt implements OnInit, OnDestroy {
   @Input() reversed = false;
 
-  musicService = inject(MusicService);
+  private musicService = inject(MusicService);
   transformX = signal<number>(0);
 
   songs = signal<Song[]>([]);

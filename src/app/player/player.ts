@@ -233,12 +233,12 @@ export class Player implements AfterViewInit, OnDestroy {
 
   private getFallbackDimensions() {
     switch (this.playerView()) {
-      case 'compact':
-        return { width: 280, height: 170 };
-      case 'bar':
-        return { width: 220, height: 90 };
-      default:
-        return { width: 350, height: 260 };
+    case 'compact':
+      return { width: 280, height: 170 };
+    case 'bar':
+      return { width: 220, height: 90 };
+    default:
+      return { width: 350, height: 260 };
     }
   }
 

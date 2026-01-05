@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class MePage implements OnDestroy {
   private userPrefsService = inject(UserPreferencesService);
-  private router = inject(Router)
+  private router = inject(Router);
 
   favoritedSongs = this.userPrefsService.favoriteSongs;
   favoritedAlbums = this.userPrefsService.favoriteAlbums;
