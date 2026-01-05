@@ -1,0 +1,138 @@
+.favorites-page {
+  padding: 110px 28px 140px;
+  min-height: 100vh;
+  color: #ffffff;
+  background-image: radial-gradient(circle at top, rgba(248, 82, 135, 0.25), transparent 45%),
+                    radial-gradient(circle at 20% 20%, rgba(74, 144, 226, 0.15), transparent 55%);
+  box-sizing: border-box;
+}
+
+.favorites-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.title-group h1 {
+  margin: 4px 0;
+  font-size: 2.5rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.3rem;
+  font-size: 0.75rem;
+  color: #f85287;
+  margin: 0;
+}
+
+.subtitle {
+  margin: 0;
+  color: #cfd2dc;
+}
+
+.favorite-meta {
+  display: flex;
+  align-items: center;
+}
+
+.favorites-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.search-field {
+  flex: 1 1 280px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background-color: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+}
+
+.search-field input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+.search-field input::placeholder {
+  color: #cfd2dc;
+}
+
+.results-note {
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cfd2dc;
+  font-size: 0.95rem;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.stat-pill {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 10px 28px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+}
+
+.stat-count {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #cfd2dc;
+}
+
+.song-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.clickable-card {
+  cursor: pointer;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.clickable-card:hover {
+  transform: translateY(-6px);
+  filter: brightness(1.1);
+}
+
+.empty-state {
+  margin-top: 80px;
+  text-align: center;
+  color: #a0a4b8;
+  padding: 60px 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+.empty-search-state {
+  margin-top: 20px;
+  padding: 40px 20px;
+}
+
+.empty-state h2 {
+  margin-bottom: 12px;
+}

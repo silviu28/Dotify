@@ -7,6 +7,7 @@ import { SearchResult } from './search-result/search-result';
 import { MePage } from './me-page/me-page';
 import { AlbumPage } from './album-page/album-page';
 import { PlaylistPage } from './playlist-page/playlist-page';
+import { FavoritesPage } from './favorites-page/favorites-page';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,10 @@ export const routes: Routes = [
   {
     path: 'recently-played',
     component: RecentlyPlayed
+  },
+  {
+    path: 'favorites',
+    component: FavoritesPage
   },
   {
     path: 'artist/:name',

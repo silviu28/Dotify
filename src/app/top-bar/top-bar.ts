@@ -38,6 +38,10 @@ export class TopBar {
     this.router.navigate(['/songs']);
   }
 
+  navigateToFavorites() {
+    this.router.navigate(['/favorites']);
+  }
+
   search() {
     if(this.searchTerm() === '') {
       this.navigateHome();
