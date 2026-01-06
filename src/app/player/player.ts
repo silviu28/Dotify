@@ -473,8 +473,6 @@ export class Player implements AfterViewInit, OnDestroy {
 
   private renderVisualizer() {
     const canvas = this.visualizerCanvas?.nativeElement;
-    const analyser = this.analyser;
-    const frequencyData = this.frequencyData;
 
     if (!canvas) {
       return;
@@ -505,119 +503,121 @@ export class Player implements AfterViewInit, OnDestroy {
     context.scale(pixelRatio, pixelRatio);
     context.clearRect(0, 0, width, height);
 
-    const isActive = this.isPlaying();
     const baseline = height / 2;
-    const maxAmplitude = height * (isActive ? 0.62 : 0.52);
-    const segments = 52;
-    const values = new Array<number>(segments).fill(0);
+    const maxAmplitude = height * 0.63;
+    const segments = 80;
 
-    for (let i = 0; i < segments; i++) {
-      const sampleIndex = frequencyData && analyser
-        ? Math.min(frequencyData.length - 1, Math.floor((i / segments) * frequencyData.length))
-        : 0;
-      const rawValue = frequencyData ? frequencyData[sampleIndex] / 255 : 0;
-      const wobble = (Math.sin(this.idlePhase + i * 0.32) + 1) * 0.05;
-      const energyBoost = isActive ? 1.35 : 1.05;
-      const eased = Math.pow(Math.min(1, rawValue * energyBoost + wobble + 0.06), isActive ? 1.12 : 1.28);
-      values[i] = eased;
-    }
+    type WaveLayer = {
+      amplitude: number;
+      speed: number;
+      phase: number;
+      stroke: string;
+      glow: number;
+      width: number;
+    };
 
-    this.idlePhase = (this.idlePhase + 0.02) % (Math.PI * 200);
+    const waveLayers: WaveLayer[] = [
+      { amplitude: 0.85, speed: 1.45, phase: 0, stroke: 'rgba(255, 160, 255, 0.95)', glow: 24, width: 2.6 },
+      { amplitude: 0.68, speed: 1.2, phase: 1.4, stroke: 'rgba(227, 132, 255, 0.8)', glow: 18, width: 2.1 },
+      { amplitude: 0.55, speed: 1.75, phase: 2.6, stroke: 'rgba(187, 118, 255, 0.7)', glow: 14, width: 1.6 },
+      { amplitude: 0.4, speed: 0.95, phase: 4.3, stroke: 'rgba(132, 96, 255, 0.55)', glow: 9, width: 1.3 },
+    ];
 
-    const backgroundGradient = context.createLinearGradient(0, 0, width, 0);
-    backgroundGradient.addColorStop(0, 'rgba(255, 105, 255, 0.05)');
-    backgroundGradient.addColorStop(0.5, 'rgba(248, 0, 217, 0.12)');
-    backgroundGradient.addColorStop(1, 'rgba(255, 105, 255, 0.05)');
+    const computeValues = (layer: WaveLayer) => {
+      const points: number[] = [];
+      for (let i = 0; i < segments; i++) {
+        const progress = i / (segments - 1);
+        const baseWave = Math.sin(progress * Math.PI * 2 + this.idlePhase * layer.speed + layer.phase);
+        const detailWave = Math.sin(progress * Math.PI * 6 + this.idlePhase * (layer.speed * 1.7) + layer.phase * 0.6);
+        const drift = Math.sin(this.idlePhase * 0.2 + layer.phase + progress * Math.PI) * 0.15;
+        const composite = Math.abs(baseWave * 0.65 + detailWave * 0.3 + drift * 0.2);
+        points.push(Math.min(1.25, composite));
+      }
+      return points;
+    };
+
+    const layerValues = waveLayers.map((layer) => computeValues(layer));
+    const areaValues = layerValues[0];
+
+    this.idlePhase = (this.idlePhase + 0.055) % (Math.PI * 200);
+
+    const backgroundGradient = context.createLinearGradient(0, 0, width, height);
+    backgroundGradient.addColorStop(0, 'rgba(255, 120, 255, 0.15)');
+    backgroundGradient.addColorStop(0.4, 'rgba(194, 92, 255, 0.12)');
+    backgroundGradient.addColorStop(1, 'rgba(94, 53, 255, 0.08)');
 
     context.beginPath();
     context.moveTo(0, baseline);
     for (let i = 0; i < segments; i++) {
       const x = (i / (segments - 1)) * width;
-      const offset = values[i] * maxAmplitude;
+      const offset = areaValues[i] * maxAmplitude;
       context.lineTo(x, baseline - offset);
     }
     for (let i = segments - 1; i >= 0; i--) {
       const x = (i / (segments - 1)) * width;
-      const offset = values[i] * maxAmplitude;
+      const offset = areaValues[i] * maxAmplitude;
       context.lineTo(x, baseline + offset);
     }
     context.closePath();
     context.fillStyle = backgroundGradient;
-    context.globalAlpha = 0.8;
+    context.globalAlpha = 0.9;
     context.fill();
     context.globalAlpha = 1;
 
-    const highlightGradient = context.createLinearGradient(0, 0, width, height);
-    highlightGradient.addColorStop(0, 'rgba(255, 176, 255, 0.38)');
-    highlightGradient.addColorStop(1, 'rgba(255, 176, 255, 0.05)');
+    const glowGradient = context.createLinearGradient(0, 0, width, height);
+    glowGradient.addColorStop(0, 'rgba(255, 190, 255, 0.4)');
+    glowGradient.addColorStop(1, 'rgba(147, 111, 255, 0.08)');
 
     context.beginPath();
+    context.moveTo(0, baseline);
     for (let i = 0; i < segments; i++) {
       const x = (i / (segments - 1)) * width;
-      const offset = values[i] * maxAmplitude * 0.7;
+      const offset = areaValues[i] * maxAmplitude * 0.8;
       const y = baseline - offset;
-      if (i === 0) {
-        context.moveTo(x, baseline);
-        context.lineTo(x, y);
-      } else {
-        context.lineTo(x, y);
-      }
+      context.lineTo(x, y);
     }
     context.lineTo(width, baseline);
-    context.lineTo(0, baseline);
     context.closePath();
-    context.fillStyle = highlightGradient;
-    context.globalAlpha = 0.45;
+    context.fillStyle = glowGradient;
+    context.globalAlpha = 0.5;
     context.fill();
     context.globalAlpha = 1;
 
-    const layers = [
-      { color: 'rgba(255, 112, 255, 1)', width: 2.8, glow: 18 },
-      { color: 'rgba(223, 132, 255, 0.7)', width: 2.1, glow: 12 },
-      { color: 'rgba(152, 94, 255, 0.55)', width: 1.4, glow: 6 },
-    ];
-
     context.globalCompositeOperation = 'lighter';
-    layers.forEach((layer, layerIndex) => {
+    waveLayers.forEach((layer, layerIndex) => {
+      const values = layerValues[layerIndex];
+      const amplitude = maxAmplitude * layer.amplitude;
       context.lineJoin = 'round';
       context.lineCap = 'round';
       context.lineWidth = layer.width;
-      context.strokeStyle = layer.color;
-      context.shadowColor = layer.color;
+      context.strokeStyle = layer.stroke;
+      context.shadowColor = layer.stroke;
       context.shadowBlur = layer.glow;
 
-      context.beginPath();
-      for (let i = 0; i < segments; i++) {
-        const x = (i / (segments - 1)) * width;
-        const offset = values[i] * (maxAmplitude - layerIndex * 6);
-        const y = baseline - offset;
-        if (i === 0) {
-          context.moveTo(x, y);
-        } else {
-          context.lineTo(x, y);
+      const drawPath = (direction: 1 | -1) => {
+        context.beginPath();
+        for (let i = 0; i < segments; i++) {
+          const x = (i / (segments - 1)) * width;
+          const offset = values[i] * amplitude;
+          const y = baseline + direction * offset;
+          if (i === 0) {
+            context.moveTo(x, y);
+          } else {
+            context.lineTo(x, y);
+          }
         }
-      }
-      context.stroke();
+        context.stroke();
+      };
 
-      context.beginPath();
-      for (let i = 0; i < segments; i++) {
-        const x = (i / (segments - 1)) * width;
-        const offset = values[i] * (maxAmplitude - layerIndex * 6);
-        const y = baseline + offset;
-        if (i === 0) {
-          context.moveTo(x, y);
-        } else {
-          context.lineTo(x, y);
-        }
-      }
-      context.stroke();
+      drawPath(-1);
+      drawPath(1);
     });
     context.globalCompositeOperation = 'source-over';
-
     context.shadowBlur = 0;
-    context.strokeStyle = 'rgba(255, 255, 255, 0.16)';
-    context.lineWidth = 1.2;
-    context.setLineDash([4, 6]);
+
+    context.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    context.lineWidth = 1;
+    context.setLineDash([5, 7]);
     context.beginPath();
     context.moveTo(0, baseline);
     context.lineTo(width, baseline);
