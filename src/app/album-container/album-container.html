@@ -1,6 +1,6 @@
-<div class="solid album-container" (click)="navigateToAlbum()">
+<div class="solid album-container">
   
-  <div class="image-wrapper">
+  <div class="image-wrapper" (click)="navigateToAlbum()">
     <img [src]="album.coverArt || '/blank.png'" loading="lazy" alt="Album Art" />
   </div>
 
@@ -10,7 +10,7 @@
   </div>
 
   <div class="actions-area">
-    <button class="action-btn" (click)="favoriteAlbum($event)" title="Add to favorites">
+    <button class="action-btn" (click)="favoriteAlbum()" title="Add to favorites">
       @if (isFavorited()) {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>

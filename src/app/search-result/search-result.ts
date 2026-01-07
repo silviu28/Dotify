@@ -3,10 +3,11 @@ import { MusicService } from '../music-service';
 import { ActivatedRoute } from '@angular/router';
 import { SongContainer } from "../song-container/song-container";
 import { AlbumContainer } from "../album-container/album-container";
+import { TextPill } from "../text-pill/text-pill";
 
 @Component({
   selector: 'app-search-result',
-  imports: [SongContainer, AlbumContainer],
+  imports: [SongContainer, AlbumContainer, TextPill],
   templateUrl: './search-result.html',
   styleUrl: './search-result.css',
 })

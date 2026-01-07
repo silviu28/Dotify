@@ -19,11 +19,9 @@
   </div>
 
   <h2>Artists ({{ resultArtistNames().length }})</h2>
-  <div class="songs-grid">
     @for (artistName of resultArtistNames(); track $index) {
-      <p>{{ artistName }}</p>
+      <app-text-pill [text]="artistName" />
     } @empty {
       <small>No results.</small>
     }
-  </div>
 </div>

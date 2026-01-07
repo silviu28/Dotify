@@ -1,4 +1,4 @@
-<div class="solid playlist-container" (click)="navigateToPlaylist()" [title]="playlist.title">
+<div class="playlist-container" (click)="navigateToPlaylist()" [title]="playlist.title">
   <div class="image-wrapper">
     <img [src]="playlist.songs[0].albumArt || './blank.png'" loading="lazy" alt="First song" />
     @if (playlist.songs[1]) {
@@ -27,6 +27,7 @@
 
   @if (isMenuOpen()) {
     <div class="context-menu solid">
+
     @if (isRemovingPlaylist()) {
       <p>You sure?</p>
       <button (click)="toggleRemovingPlaylist($event)">
@@ -47,6 +48,7 @@
         Can it
       </button>
     }
+    
     </div>
   }
 </div>

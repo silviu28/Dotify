@@ -1,7 +1,9 @@
 <div class="artist-page glassmorph-container fade-in">
     <div style="display:flex;flex-direction:row;justify-content:space-between;">
 			<div style="display:flex;flex-direction:column;">
-				<h1>{{ artist }}
+
+				<h1>
+					{{ artist }}
 					<button (click)="favoriteArtist($event)">
 						@if (isFavorited()) {
 							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
@@ -14,21 +16,26 @@
 						}
 					</button>
 				</h1>
+
 				<h2>{{ fanCount() | number : "1.0-0" }} {{ "fans" }}</h2>
+
 			</div>
+			
 			<div style="display:flex;flex-direction:column">
 				<img [src]="pictureSrc()" style="border-radius:15px;">
 			</div>
 		</div>
+
     <h2>Songs</h2>
     @if(songs().length === 0) {
         <p>No songs found for this artist.</p>
     } @else {
-        <div class="songs-grid">
-        @for(song of songs(); track song.title) {
-					<app-song-container [song]="song" />
-    }
-        </div>
+			<div class="songs-grid">
+			@for(song of songs(); track song.title) {
+				<app-song-container [song]="song" />
+			}
+			</div>
+
 		<h2>Albums</h2>
 		<div class="songs-grid">
 			@for (album of albums(); track $index) {

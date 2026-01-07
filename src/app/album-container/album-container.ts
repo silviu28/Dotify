@@ -22,8 +22,7 @@ export class AlbumContainer {
     this.router.navigate(['/album', encodeURI(this.album.name!)]);
   }
 
-  favoriteAlbum(event: Event) {
-    event.stopPropagation();
+  favoriteAlbum() {
     if (this.isFavorited()) {
       this.userPrefsService.removeAlbumFromFavorites(this.album);
     } else {

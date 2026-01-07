@@ -6,7 +6,6 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-library',
-  // Add SongContainer to imports so we can use it in HTML
   imports: [SongContainer, FormsModule], 
   templateUrl: './library.html',
   styleUrl: './library.css',
