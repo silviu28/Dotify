@@ -206,6 +206,7 @@ export class UserPreferencesService implements OnDestroy {
   }
 
   removePlaylist(playlistName: string) {
+    console.log("deleting...", playlistName);
     const currentPlaylists = this.savedPlaylists();
     if (currentPlaylists.delete(playlistName)) {
       this.savedPlaylists.set(currentPlaylists);

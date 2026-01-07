@@ -3,7 +3,7 @@
   
   <div class="songs-grid">
     @for (song of playlist().songs; track $index) {
-      <app-song-container [song]="song" />
+      <app-song-container [song]="song" [playlistName]="playlist().title"/>
     } @empty {
       <p>How would you even get here...</p>
     }

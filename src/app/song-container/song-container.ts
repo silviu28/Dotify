@@ -16,7 +16,9 @@ export class SongContainer {
   private musicService = inject(MusicService);
   private userPrefsService = inject(UserPreferencesService);
 
-  @Input() song!: Song;
+  @Input() declare song: Song;
+  // pass playlist name if in the playlist view
+  @Input() playlistName = "";
 
   isMenuOpen = signal(false);
   isFavorited = computed(() =>
@@ -82,5 +84,11 @@ export class SongContainer {
     this.toggleAddingToPlaylist(event);
     this.selectedPlaylistOption.set("New...");
     this.newPlaylistName.set("");
+  }
+
+  removeFromPlaylist(event: Event) {
+    event.stopPropagation();
+    this.userPrefsService
+      .removeSongFromPlaylist(this.song, this.playlistName);
   }
 }
