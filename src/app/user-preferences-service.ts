@@ -44,25 +44,49 @@ export class UserPreferencesService implements OnDestroy {
   constructor() {
     // parse user preferences from localStorage object
     const prefs: Prefs = JSON.parse(localStorage.getItem("prefs")!);
-    if (prefs.username) {
-      this.username.set(prefs.username);
-    }
-    if (prefs.favoriteSongs) {
-      this.favoriteSongs.set(prefs.favoriteSongs);
-    }
-    if (prefs.favoriteAlbums) {
-      this.favoriteAlbums.set(prefs.favoriteAlbums);
-    }
-    if (prefs.favoriteArtists) {
-      this.favoriteArtists.set(prefs.favoriteArtists);
-    }
-    if (prefs.savedPlaylists) {
+    this.loadFrom(prefs);
+  }
+
+  getAll(): Prefs {
+    return {
+      username: this.username(),
+      favoriteSongs: this.favoriteSongs(),
+      favoriteAlbums: this.favoriteAlbums(),
+      favoriteArtists: this.favoriteArtists(),
+      savedPlaylists: Object.fromEntries(this.savedPlaylists()),
+      equalizer: this.equalizerSettings(),
+    };
+  }
+
+  loadFrom(prefs: Prefs, save = false) {
+    console.log("loading from", prefs);
+    try {
+      if (prefs.username) {
+        this.username.set(prefs.username);
+      }
+      if (prefs.favoriteSongs) {
+        this.favoriteSongs.set(prefs.favoriteSongs);
+      }
+      if (prefs.favoriteAlbums) {
+        this.favoriteAlbums.set(prefs.favoriteAlbums);
+      }
+      if (prefs.favoriteArtists) {
+        this.favoriteArtists.set(prefs.favoriteArtists);
+      }
+      if (prefs.savedPlaylists) {
       // create map from serialized savedPlaylists object
-      this.savedPlaylists.set(
-        new Map<string, Playlist>(Object.entries(prefs.savedPlaylists))
-      );
+        this.savedPlaylists.set(
+          new Map<string, Playlist>(Object.entries(prefs.savedPlaylists))
+        );
+      }
+      this.equalizerSettings.set(this.mergeEqualizerSettings(prefs.equalizer));
+      
+      if (save) this.savePreferences();
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error("Unable to load from this file.", e);
+      }
     }
-    this.equalizerSettings.set(this.mergeEqualizerSettings(prefs.equalizer));
   }
 
   private mergeEqualizerSettings(settings?: EqualizerSettings): EqualizerSettings {

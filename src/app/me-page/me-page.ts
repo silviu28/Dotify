@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { UserPreferencesService } from '../user-preferences-service';
 import { Router } from '@angular/router';
 import { PlaylistContainer } from "../playlist-container/playlist-container";
+import { Prefs } from '../../types';
 
 @Component({
   selector: 'app-me-page',
@@ -42,5 +43,48 @@ export class MePage implements OnDestroy {
       "favoriteSongs", JSON.stringify(this.favoritedSongs())
     );
     localStorage.setItem("name", this.name());
+  }
+
+  loadPreferencesFromFile() {
+    // create a file type input component outside of the DOM to handle the dialog
+    const _input = document.createElement("input");
+    _input.type = "file";
+    _input.accept = ".json";
+    _input.onchange = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const file = target.files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          try {
+            const content = e.target?.result as string;
+            const prefs: Prefs = JSON.parse(content);
+            // also save to not have everything blank next time
+            this.userPrefsService.loadFrom(prefs, true);
+          } catch {
+            // nothing...
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+
+    _input.click();
+  }
+
+  savePreferencesToFile() {
+    const prefs = this.userPrefsService.getAll();
+    const serializedPrefs = JSON.stringify(prefs, null, 2);
+    const blob = new Blob([serializedPrefs], { type: "application/json" });
+
+    // just like we did for the dialog, we create a DOM-detached anchor to send a download command
+    const _url = URL.createObjectURL(blob);
+    const _a = document.createElement("a");
+    _a.href = _url;
+    _a.download = "preferences.json";
+    // mock a click of the anchor
+    _a.click();
+
+    URL.revokeObjectURL(_url);
   }
 }
