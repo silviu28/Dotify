@@ -1,20 +1,23 @@
 <div
   class="solid song-container"
   [class.menu-active]="isMenuOpen()"
-  (click)="play(song)">
+  >
   
   <div class="image-wrapper">
-    <img [src]="song.albumArt || '/blank.png'" loading="lazy" alt="Album Art" />
+    <img
+      [src]="song.albumArt || '/blank.png'" loading="lazy" alt="Album Art"
+      (click)="play(song)"
+    />
   </div>
 
   <div class="info-wrapper">
     <h2>{{ song.title }}</h2>
-    <p (click)="navigateToArtist($event)" class="artist-link">{{ song.artist }}</p>
+    <p (click)="navigateToArtist()" class="artist-link">{{ song.artist }}</p>
     <sub> {{ song.year }}, <span (click)="navigateToAlbum()" class="artist-link">{{ song.album }}</span></sub>
   </div>
 
   <div class="actions-area">
-    <button class="action-btn" (click)="favoriteSong($event)" title="Add to favorites">
+    <button class="action-btn" (click)="favoriteSong()" title="Add to favorites">
       @if (isFavorited()) {
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
           <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
@@ -26,7 +29,7 @@
       }
     </button>
 
-    <button class="action-btn" (click)="toggleMenu($event)" title="More options">
+    <button class="action-btn" (click)="toggleMenu()" title="More options">
       <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
         <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
       </svg>
@@ -36,22 +39,22 @@
   @if (isMenuOpen()) {
     <div class="context-menu solid">
       @if (!addingToPlaylist()) {
-        <button (click)="onPlayNext($event)">
+        <button (click)="onPlayNext()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M12.5 4a.5.5 0 0 0-1 0v3.248L5.233 3.612C4.693 3.3 4 3.678 4 4.308v7.384c0 .63.692 1.01 1.233.697L11.5 8.753V12a.5.5 0 0 0 1 0z"/></svg>
           Play Next
         </button>
-        <button (click)="onAddToQueue($event)">
+        <button (click)="onAddToQueue()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6zm5.5-4a.5.5 0 0 1 .8-.4l3 2a.5.5 0 0 1 0 .8l-3 2a.5.5 0 0 1-.8-.4z"/></svg>
           Add to Queue
         </button>
-        <button (click)="toggleAddingToPlaylist($event)">
+        <button (click)="toggleAddingToPlaylist()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-plus-fill" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5m6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5z"/>
           </svg>
           Add to playlist
         </button>
         @if (playlistName) {
-          <button (click)="removeFromPlaylist($event)">
+          <button (click)="removeFromPlaylist()">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
               <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0"/>
             </svg>
@@ -72,12 +75,12 @@
           <input [(ngModel)]="newPlaylistName" />
         }
 
-        <button (click)="addToPlaylist($event)">
+        <button (click)="addToPlaylist()">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-lg" viewBox="0 0 16 16">
             <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
           </svg>
         </button>
-        <button (click)="toggleAddingToPlaylist($event)">
+        <button (click)="toggleAddingToPlaylist()">
           <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
             <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
           </svg>

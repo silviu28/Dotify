@@ -6,10 +6,11 @@ import { UserPreferencesService } from '../user-preferences-service';
 import { Router } from '@angular/router';
 import { PlaylistContainer } from "../playlist-container/playlist-container";
 import { Prefs } from '../../types';
+import { TextPill } from "../text-pill/text-pill";
 
 @Component({
   selector: 'app-me-page',
-  imports: [SongContainer, AlbumContainer, FormsModule, PlaylistContainer],
+  imports: [SongContainer, AlbumContainer, FormsModule, PlaylistContainer, TextPill],
   templateUrl: './me-page.html',
   styleUrl: './me-page.css',
 })
@@ -88,5 +89,9 @@ export class MePage implements OnDestroy {
     _a.click();
 
     URL.revokeObjectURL(_url);
+  }
+
+  removeArtistFromFavorites(artistName: string) {
+    this.userPrefsService.removeArtistFromFavorites(artistName);
   }
 }

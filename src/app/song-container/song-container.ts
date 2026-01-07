@@ -34,8 +34,7 @@ export class SongContainer {
 
   addingToPlaylist = signal<boolean>(false);
 
-  navigateToArtist(event: Event) {
-    event.stopPropagation();
+  navigateToArtist() {
     const encodedName = encodeURIComponent(this.song.artist);
     this.router.navigate(['/artist', encodedName]);
   }
@@ -45,8 +44,7 @@ export class SongContainer {
     this.router.navigate(['/album', encodedName]);
   }
 
-  favoriteSong(event: Event) {
-    event.stopPropagation(); // OPRIRE PLAY CÂND DAI LIKE
+  favoriteSong() {
     if (this.isFavorited()) {
       this.userPrefsService.removeSongFromFavorites(this.song);
     } else {
@@ -54,31 +52,26 @@ export class SongContainer {
     }
   }
 
-  toggleMenu(event: Event) {
-    event.stopPropagation(); 
+  toggleMenu() {
     this.isMenuOpen.set(!this.isMenuOpen());
   }
 
-  onAddToQueue(event: Event) {
-    event.stopPropagation();
+  onAddToQueue() {
     this.musicService.addToQueue(this.song);
     this.isMenuOpen.set(false);
   }
 
-  onPlayNext(event: Event) {
-    event.stopPropagation();
+  onPlayNext() {
     this.musicService.playNextInQueue(this.song);
     this.isMenuOpen.set(false);
   }
 
-  toggleAddingToPlaylist(event: Event) {
-    event.stopPropagation();
+  toggleAddingToPlaylist() {
     this.addingToPlaylist.set(!this.addingToPlaylist());
   }
 
-  addToPlaylist(event: Event) {
+  addToPlaylist() {
     console.log("add to ", this.newPlaylistName());
-    event.stopPropagation();
     if (this.newPlaylistName()) {
       this.userPrefsService
         .addSongToPlaylist(this.song, this.newPlaylistName());
@@ -87,13 +80,11 @@ export class SongContainer {
         .addSongToPlaylist(this.song, this.selectedPlaylistOption());
     }
     
-    this.toggleAddingToPlaylist(event);
     this.selectedPlaylistOption.set("New...");
     this.newPlaylistName.set("");
   }
 
-  removeFromPlaylist(event: Event) {
-    event.stopPropagation();
+  removeFromPlaylist() {
     this.userPrefsService
       .removeSongFromPlaylist(this.song, this.playlistName);
   }

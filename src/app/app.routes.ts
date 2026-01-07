@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainPage } from './main-page/main-page';
-import { MusicListing } from './music-listing/music-listing';
+import { MusicListing } from './library/library';
 import { RecentlyPlayed } from './recently-played/recently-played';
 import { ArtistPage } from './artist-page/artist-page';
 import { SearchResult } from './search-result/search-result';

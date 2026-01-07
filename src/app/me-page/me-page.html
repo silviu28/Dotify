@@ -1,5 +1,5 @@
 <div class="me-page glassmorph-container fade-in">
-  <h1>Hello, 
+  <h1 style="display:flex;gap:10px;">Hello, 
     @if (editModeEnabled()) {
       <input [ngModel]="name()" (ngModelChange)="name.set($event)">
     } @else {
@@ -52,7 +52,6 @@
   <h2>Favorite albums:</h2>
   <div class="songs-grid">
     @for (album of favoritedAlbums(); track $index) {
-      <!-- album data as props... -->
       <app-album-container
         [album]="album"
       />
@@ -63,7 +62,12 @@
 
   <h2>Favorite artists:</h2>
   @for (artist of favoritedArtists(); track $index) {
-    <p (click)="navigateToArtist(artist)" class="artist-link">{{ artist }}</p>
+    <app-text-pill
+      (click)="navigateToArtist(artist)"
+      [text]="artist"
+      [removable]="true"
+      (remove)="removeArtistFromFavorites(artist)"
+    />
   } @empty {
     <p>Nothing to show for now.</p>
   }

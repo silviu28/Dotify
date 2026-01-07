@@ -5,11 +5,11 @@ import { MusicService } from '../music-service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-music-listing',
+  selector: 'app-library',
   // Add SongContainer to imports so we can use it in HTML
   imports: [SongContainer, FormsModule], 
-  templateUrl: './music-listing.html',
-  styleUrl: './music-listing.css',
+  templateUrl: './library.html',
+  styleUrl: './library.css',
 })
 export class MusicListing implements OnInit {
   songs = signal<Song[]>([]);
