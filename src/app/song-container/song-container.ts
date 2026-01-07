@@ -77,9 +77,15 @@ export class SongContainer {
   }
 
   addToPlaylist(event: Event) {
+    console.log("add to ", this.newPlaylistName());
     event.stopPropagation();
-    this.userPrefsService
-      .addSongToPlaylist(this.song, this.newPlaylistName());
+    if (this.newPlaylistName()) {
+      this.userPrefsService
+        .addSongToPlaylist(this.song, this.newPlaylistName());
+    } else {
+      this.userPrefsService
+        .addSongToPlaylist(this.song, this.selectedPlaylistOption());
+    }
     
     this.toggleAddingToPlaylist(event);
     this.selectedPlaylistOption.set("New...");
@@ -90,5 +96,9 @@ export class SongContainer {
     event.stopPropagation();
     this.userPrefsService
       .removeSongFromPlaylist(this.song, this.playlistName);
+  }
+
+  play(song: Song) {
+    this.musicService.playSong(song);
   }
 }

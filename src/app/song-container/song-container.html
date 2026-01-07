@@ -1,4 +1,7 @@
-<div class="solid song-container" [class.menu-active]="isMenuOpen()">
+<div
+  class="solid song-container"
+  [class.menu-active]="isMenuOpen()"
+  (click)="play(song)">
   
   <div class="image-wrapper">
     <img [src]="song.albumArt || '/blank.png'" loading="lazy" alt="Album Art" />

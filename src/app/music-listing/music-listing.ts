@@ -2,7 +2,6 @@ import { Component, inject, model, signal, OnInit, computed } from '@angular/cor
 import { SongContainer } from "../song-container/song-container"; // Import the component
 import { GroupCriterion, Song, SortCriterion } from '../../types';
 import { MusicService } from '../music-service';
-import { ArtistListing } from "../artist-listing/artist-listing";
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -101,10 +100,5 @@ export class MusicListing implements OnInit {
     else {
       this.musicService.getSongsByName(search).subscribe(songs => updateSongs(songs));
     }
-  }
-
-  // METHOD: Plays the selected song when a container is clicked
-  play(song: Song) {
-    this.musicService.playSong(song);
   }
 }

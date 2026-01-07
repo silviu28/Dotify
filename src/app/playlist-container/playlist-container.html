@@ -1,13 +1,13 @@
-<div class="solid playlist-container" (click)="navigateToPlaylist()">
+<div class="solid playlist-container" (click)="navigateToPlaylist()" [title]="playlist.title">
   <div class="image-wrapper">
-    <img [src]="playlist.songs[0].albumArt" loading="lazy" alt="First song" />
+    <img [src]="playlist.songs[0].albumArt || './blank.png'" loading="lazy" alt="First song" />
     @if (playlist.songs[1]) {
-      <img [src]="playlist.songs[1].albumArt" loading="lazy" alt="Second song"
+      <img [src]="playlist.songs[1].albumArt || './blank.png'" loading="lazy" alt="Second song"
         style="transform: translateY(-150px);"
       />
     }
     @if (playlist.songs[2]) {
-      <img [src]="playlist.songs[2].albumArt" loading="lazy" alt="Third song"
+      <img [src]="playlist.songs[2].albumArt || './blank.png'" loading="lazy" alt="Third song"
         style="transform: translateY(-300px);"
       />
     }

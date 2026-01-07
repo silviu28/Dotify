@@ -61,8 +61,10 @@ export class MePage implements OnDestroy {
             const prefs: Prefs = JSON.parse(content);
             // also save to not have everything blank next time
             this.userPrefsService.loadFrom(prefs, true);
-          } catch {
-            // nothing...
+          } catch (e: unknown) {
+            if (e instanceof Error) {
+              console.error("Unable to load", e);
+            }
           }
         };
         reader.readAsText(file);

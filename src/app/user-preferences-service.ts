@@ -218,22 +218,32 @@ export class UserPreferencesService implements OnDestroy {
 
   removeSongFromPlaylist(song: Song, playlistName: string) {
     const currentPlaylists = this.savedPlaylists();
-    let playlist = currentPlaylists.get(playlistName);
+    const playlist = currentPlaylists.get(playlistName)!;
     if (playlist) {
-      playlist = {
-        ... playlist,
-        songs: playlist.songs.filter(s => song.title !== s.title || song.artist !== s.artist)
-      };
-      currentPlaylists.set(playlistName, playlist);
-      this.savedPlaylists.set(currentPlaylists);
+      const updatedSongs = playlist.songs
+        .filter(s => song.title !== s.title || song.artist !== s.artist);
+
+      if (updatedSongs.length === playlist.songs.length) {
+        return;
+      }
+
+      const updatedPlaylists = new Map(currentPlaylists);
+      updatedPlaylists.set(playlistName, {
+        ...playlist,
+        songs: updatedSongs
+      });
+
+      this.savedPlaylists.set(updatedPlaylists);
+      this.savePreferences();
     }
   }
 
   removePlaylist(playlistName: string) {
-    console.log("deleting...", playlistName);
     const currentPlaylists = this.savedPlaylists();
-    if (currentPlaylists.delete(playlistName)) {
-      this.savedPlaylists.set(currentPlaylists);
+    const updatedPlaylists = new Map(currentPlaylists);
+    
+    if (updatedPlaylists.delete(playlistName)) {
+      this.savedPlaylists.set(updatedPlaylists);
       this.savePreferences();
     }
   }
