@@ -30,8 +30,12 @@ button svg {
   min-height: 15px;
 }
 
-button:hover {
+button:hover, input:hover {
   color: #00FF00;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+input:hover, select:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 

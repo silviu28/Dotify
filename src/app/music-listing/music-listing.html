@@ -16,8 +16,8 @@
       <select
         [(ngModel)]="sortingCriterion">
         @for (criterion of sortingCriteria; track criterion) {
-          <option class="sorting-dropdown" 
-           [value]="criterion">{{ criterion }}
+          <option class="sorting-dropdown" [value]="criterion">
+           {{ criterion }}
           </option>
         }
       </select>
@@ -28,26 +28,31 @@
       <select
         [(ngModel)]="groupingCriterion">
         @for (criterion of groupingCriteria; track criterion) {
-          <option class="sorting-dropdown"
-           [value]="criterion">{{ criterion }}
+          <option class="sorting-dropdown" [value]="criterion">
+            {{ criterion }}
           </option>
         }
       </select>
     </div>
   </div>
 
+  <br> 
+
   <!-- can't destructure, [0] is group name, [1] is the group -->
   @for (songGroup of sortedSongGroups(); track songGroup[0]) {
-    <h1>{{ songGroup[0] }}</h1>
-    <div class="song-grid">
-      @for (song of songGroup[1]; track song) {
-        <app-song-container
-          class="clickable-card"
-          (click)="play(song)"
-          [song]="song"
-        />
-      }
+    <div class="glassmorph-container" style="padding:10px;">
+      <h2> {{ songGroup[0] }}</h2>
+      <div class="song-grid">
+        @for (song of songGroup[1]; track song) {
+          <app-song-container
+            class="clickable-card"
+            (click)="play(song)"
+            [song]="song"
+          />
+        }
+      </div>
     </div>
+    <br>
   } @empty {
     <div class="empty-state">
       <p>No songs found.</p>
