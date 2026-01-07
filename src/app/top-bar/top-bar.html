@@ -29,7 +29,7 @@
     [value]="searchTerm()"
     (input)="this.searchTerm.set($any($event.target).value)"
     (keypress)="$event.key === 'Enter' ? search() : null"
-    placeholder="Search for songs or artists" />
+    placeholder="Search" />
 
   <button #notificationToggle (click)="toggleNotificationPanel()">
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">

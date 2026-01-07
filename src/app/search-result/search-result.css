@@ -1,0 +1,15 @@
+.search-container {
+  padding: 1rem;
+  margin: 0 auto;
+  padding-top: 4.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, p {
+  color: white;
+}
+
+small {
+  color: rgb(190, 190, 190);
+}

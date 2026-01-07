@@ -23,6 +23,7 @@ export class MusicService {
 
   albums = signal<Album[]>([]);
   artistNames = signal<string[]>([]);
+  songs = signal<Song[]>([]);
 
   constructor() {
     this.loadData();
@@ -43,6 +44,7 @@ export class MusicService {
 
   loadData() {
     this.getSongs().pipe(map(res => {
+      this.songs.set(res.songs);
       this.artistNames.set(this.aggregateArtistNames(res.songs));
       this.albums.set(this.aggregateAlbums(res.songs));
       console.log("Built listings from response stream", this.artistNames(), this.albums());

@@ -43,10 +43,7 @@ export class TopBar {
   }
 
   search() {
-    if(this.searchTerm() === '') {
-      this.navigateHome();
-      return;
-    }
+    if (this.searchTerm() === '') return;
 
     this.router.navigate(["/search", encodeURI(this.searchTerm())]);
   }

@@ -1,1 +1,29 @@
-<p>search-result works!</p>
+<div class="search-container glassmorph-container fade-in">
+  <h1>Results for '{{ query() }}'</h1>
+  <h2>Songs ({{ resultSongs().length }})</h2>
+    <div class="songs-grid">
+      @for (song of resultSongs(); track song.title) {
+        <app-song-container [song]="song" />
+      } @empty {
+        <small>No results.</small>
+      }
+    </div>
+
+  <h2>Albums ({{ resultAlbums().length }})</h2>
+  <div class="songs-grid">
+    @for (album of resultAlbums(); track album.name) {
+      <app-album-container [album]="album" />
+    } @empty {
+      <small>No results.</small>
+    }
+  </div>
+
+  <h2>Artists ({{ resultArtistNames().length }})</h2>
+  <div class="songs-grid">
+    @for (artistName of resultArtistNames(); track $index) {
+      <p>{{ artistName }}</p>
+    } @empty {
+      <small>No results.</small>
+    }
+  </div>
+</div>

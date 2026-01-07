@@ -122,6 +122,15 @@ select:focus {
   gap: 10px;
 }
 
+.songs-grid {
+  display: grid;
+  /* Creates a responsive grid: minimum 200px per card, fits as many as possible */
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+  margin-top: 40px;
+}
+
 /* Animations, keyframes and stuff... */
 .fade-in {
   opacity: 0;
