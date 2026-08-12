@@ -14,6 +14,7 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
+    icon: path.join(__dirname, '..', 'public', 'LogoDotifyFavIcon.png'),
   });
 
   if (isDev) {
