@@ -1,0 +1,18 @@
+version: 2
+updates:
+  # Angular (npm)
+  - package-ecosystem: "npm"
+    directory: "."
+    schedule:
+      interval: "weekly"
+    groups:
+      angular:
+        patterns:
+          - "@angular/*"
+          - "@angular-eslint/*"
+
+  # GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
