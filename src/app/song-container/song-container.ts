@@ -18,7 +18,7 @@ export class SongContainer {
 
   @Input() declare song: Song;
   // pass playlist name if in the playlist view
-  @Input() playlistName = "";
+  @Input() playlistName = '';
 
   isMenuOpen = signal(false);
   isFavorited = computed(() =>
@@ -29,8 +29,8 @@ export class SongContainer {
 
     return Array.from(this.userPrefsService.savedPlaylists());
   });
-  selectedPlaylistOption = model<string>("New...");
-  newPlaylistName = model<string>("");
+  selectedPlaylistOption = model<string>('New...');
+  newPlaylistName = model<string>('');
 
   addingToPlaylist = signal<boolean>(false);
 
@@ -71,7 +71,7 @@ export class SongContainer {
   }
 
   addToPlaylist() {
-    console.log("add to ", this.newPlaylistName());
+    console.log('add to ', this.newPlaylistName());
     if (this.newPlaylistName()) {
       this.userPrefsService
         .addSongToPlaylist(this.song, this.newPlaylistName());
@@ -79,9 +79,9 @@ export class SongContainer {
       this.userPrefsService
         .addSongToPlaylist(this.song, this.selectedPlaylistOption());
     }
-    
-    this.selectedPlaylistOption.set("New...");
-    this.newPlaylistName.set("");
+
+    this.selectedPlaylistOption.set('New...');
+    this.newPlaylistName.set('');
   }
 
   removeFromPlaylist() {

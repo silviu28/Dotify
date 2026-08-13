@@ -1,12 +1,12 @@
 import { Component, computed, inject, OnDestroy, signal } from '@angular/core';
-import { SongContainer } from "../song-container/song-container";
-import { AlbumContainer } from "../album-container/album-container";
+import { SongContainer } from '../song-container/song-container';
+import { AlbumContainer } from '../album-container/album-container';
 import { FormsModule } from '@angular/forms';
 import { UserPreferencesService } from '../user-preferences-service';
 import { Router } from '@angular/router';
-import { PlaylistContainer } from "../playlist-container/playlist-container";
+import { PlaylistContainer } from '../playlist-container/playlist-container';
 import { Prefs } from '../../types';
-import { TextPill } from "../text-pill/text-pill";
+import { TextPill } from '../text-pill/text-pill';
 
 @Component({
   selector: 'app-me-page',
@@ -32,7 +32,7 @@ export class MePage implements OnDestroy {
       this.userPrefsService.savePreferences();
     }
     // when toggled off save to disk
-    this.editModeEnabled.set(!this.editModeEnabled()); 
+    this.editModeEnabled.set(!this.editModeEnabled());
   }
 
   navigateToArtist(artistName: string) {
@@ -42,17 +42,17 @@ export class MePage implements OnDestroy {
   ngOnDestroy() {
     if (!window.electronAPI) {
       localStorage.setItem(
-        "favoriteSongs", JSON.stringify(this.favoritedSongs())
+        'favoriteSongs', JSON.stringify(this.favoritedSongs())
       );
-      localStorage.setItem("name", this.name());
+      localStorage.setItem('name', this.name());
     }
   }
 
   loadPreferencesFromFile() {
     // create a file type input component outside of the DOM to handle the dialog
-    const _input = document.createElement("input");
-    _input.type = "file";
-    _input.accept = ".json";
+    const _input = document.createElement('input');
+    _input.type = 'file';
+    _input.accept = '.json';
     _input.onchange = (event: Event) => {
       const target = event.target as HTMLInputElement;
       const file = target.files?.[0];
@@ -66,7 +66,7 @@ export class MePage implements OnDestroy {
             this.userPrefsService.loadFrom(prefs, true);
           } catch (e: unknown) {
             if (e instanceof Error) {
-              console.error("Unable to load", e);
+              console.error('Unable to load', e);
             }
           }
         };
@@ -80,13 +80,13 @@ export class MePage implements OnDestroy {
   savePreferencesToFile() {
     const prefs = this.userPrefsService.getAll();
     const serializedPrefs = JSON.stringify(prefs, null, 2);
-    const blob = new Blob([serializedPrefs], { type: "application/json" });
+    const blob = new Blob([serializedPrefs], { type: 'application/json' });
 
     // just like we did for the dialog, we create a DOM-detached anchor to send a download command
     const _url = URL.createObjectURL(blob);
-    const _a = document.createElement("a");
+    const _a = document.createElement('a');
     _a.href = _url;
-    _a.download = "preferences.json";
+    _a.download = 'preferences.json';
     // mock a click of the anchor
     _a.click();
 

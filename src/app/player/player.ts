@@ -54,7 +54,7 @@ export class Player implements AfterViewInit, OnDestroy {
 
   private lastExpandedView: PlayerView = 'full';
   private forcedBarByEmptyQueue = false;
-  
+
   // Instead of a local signal, we read from the service
   song = this.musicService.currentSong;
   albumArtUrl = computed(() => {
@@ -157,7 +157,7 @@ export class Player implements AfterViewInit, OnDestroy {
   // Method to start playing a specific track
   playTrack(newSong: Song) {
     // Note: We don't set this.song here anymore, the service handles the state
-    
+
     const streamUrl = this.musicService.getSongStreamUrl(newSong.filename);
     this.audio.src = streamUrl;
     this.audio.load();
@@ -205,7 +205,7 @@ export class Player implements AfterViewInit, OnDestroy {
   seek(event: Event) {
     const input = event.target as HTMLInputElement;
     const valueInSeconds = Number(input.value);
-    
+
     this.audio.currentTime = valueInSeconds;
   }
 
@@ -396,11 +396,11 @@ export class Player implements AfterViewInit, OnDestroy {
   }
 
   seekVolume(event: Event) {
-    console.log("update volume");
+    console.log('update volume');
     const input = event.target as HTMLInputElement;
     const vol = parseInt(input.value);
     this.volume.set(vol);
-    
+
     // volume takes 0-1
     this.audio.volume = vol / 100;
   }
@@ -507,14 +507,14 @@ export class Player implements AfterViewInit, OnDestroy {
     const maxAmplitude = height * 0.63;
     const segments = 80;
 
-    type WaveLayer = {
+    interface WaveLayer {
       amplitude: number;
       speed: number;
       phase: number;
       stroke: string;
       glow: number;
       width: number;
-    };
+    }
 
     const waveLayers: WaveLayer[] = [
       { amplitude: 0.85, speed: 1.45, phase: 0, stroke: 'rgba(255, 160, 255, 0.95)', glow: 24, width: 2.6 },

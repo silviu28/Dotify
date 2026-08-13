@@ -2,9 +2,9 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MusicService } from '../music-service';
 import { ActivatedRoute } from '@angular/router';
 import { DeezerResponse, Song } from '../../types';
-import { SongContainer } from "../song-container/song-container";
+import { SongContainer } from '../song-container/song-container';
 import { DecimalPipe } from '@angular/common';
-import { AlbumContainer } from "../album-container/album-container";
+import { AlbumContainer } from '../album-container/album-container';
 import { UserPreferencesService } from '../user-preferences-service';
 
 @Component({
@@ -17,7 +17,7 @@ export class ArtistPage implements OnInit {
   private musicService = inject(MusicService);
   private userPrefsService = inject(UserPreferencesService);
   private activatedRoute = inject(ActivatedRoute);
-  
+
   songs = signal<Song[]>([]);
 
   albums = computed(() =>
@@ -28,9 +28,9 @@ export class ArtistPage implements OnInit {
     this.userPrefsService.isArtistFavorited(this.artist));
 
   artist = '';
-  pictureSrc = signal<string>("");
+  pictureSrc = signal<string>('');
   fanCount = signal<number>(0);
-  
+
   ngOnInit() {
     this.activatedRoute.params.subscribe(
       params => {
@@ -42,8 +42,8 @@ export class ArtistPage implements OnInit {
           const artistId = songs[0]?.deezer_artist_id;
           if (artistId) {
             this.musicService.getArtistData(artistId).subscribe((data: DeezerResponse) => {
-              console.log("your sweet artist kind sire", data);
-              if (!("message" in data) && !("code" in data)) {
+              console.log('your sweet artist kind sire', data);
+              if (!('message' in data) && !('code' in data)) {
                 console.log(data);
                 const { picture, nb_fan } = data;
                 this.pictureSrc.set(picture);

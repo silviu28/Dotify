@@ -90,9 +90,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "src/styles.css"
-            ]
+            "browsers": "ChromeHeadless"
           }
         },
         "lint": {

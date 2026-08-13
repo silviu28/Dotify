@@ -50,7 +50,7 @@ interface DeezerGoodResponse {
   nb_fan: number;
   radio: boolean;
   tracklist: string;
-  type: "artist";
+  type: 'artist';
 }
 
 interface DeezerBadResponse {
@@ -78,11 +78,11 @@ export interface Artist {
   picture_medium: string;
   picture_big: string;
   picture_xl: string;
-  type: "artist";
+  type: 'artist';
 }
 
-export type SortCriterion = "No sort" | "Title" | "Album" | "Artist";
-export type GroupCriterion = "No group" | "Album" | "Artist";
+export type SortCriterion = 'No sort' | 'Title' | 'Album' | 'Artist';
+export type GroupCriterion = 'No group' | 'Album' | 'Artist';
 
 export interface Playlist {
   title: string;

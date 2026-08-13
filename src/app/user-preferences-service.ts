@@ -11,14 +11,14 @@ declare global {
 }
 
 const DEFAULT_EQUALIZER_BANDS: EqualizerBand[] = [
-  { label: "60 Hz", frequency: 60, value: 0 },
-  { label: "170 Hz", frequency: 170, value: 0 },
-  { label: "310 Hz", frequency: 310, value: 0 },
-  { label: "600 Hz", frequency: 600, value: 0 },
-  { label: "1 kHz", frequency: 1000, value: 0 },
-  { label: "3 kHz", frequency: 3000, value: 0 },
-  { label: "6 kHz", frequency: 6000, value: 0 },
-  { label: "12 kHz", frequency: 12000, value: 0 }
+  { label: '60 Hz', frequency: 60, value: 0 },
+  { label: '170 Hz', frequency: 170, value: 0 },
+  { label: '310 Hz', frequency: 310, value: 0 },
+  { label: '600 Hz', frequency: 600, value: 0 },
+  { label: '1 kHz', frequency: 1000, value: 0 },
+  { label: '3 kHz', frequency: 3000, value: 0 },
+  { label: '6 kHz', frequency: 6000, value: 0 },
+  { label: '12 kHz', frequency: 12000, value: 0 }
 ] as const;
 
 const cloneBands = (bands: EqualizerBand[] = []) =>
@@ -26,7 +26,7 @@ const cloneBands = (bands: EqualizerBand[] = []) =>
 
 const createDefaultEqualizer = (): EqualizerSettings => ({
   enabled: true,
-  preset: "Balanced",
+  preset: 'Balanced',
   preamp: 0,
   bands: cloneBands(DEFAULT_EQUALIZER_BANDS)
 });
@@ -35,7 +35,7 @@ const createDefaultEqualizer = (): EqualizerSettings => ({
   providedIn: 'root',
 })
 export class UserPreferencesService implements OnDestroy {
-  username = signal<string>("user");
+  username = signal<string>('user');
   favoriteSongs = signal<Song[]>([]);
   favoriteAlbums = signal<Album[]>([]);
   favoriteArtists = signal<string[]>([]);
@@ -56,7 +56,7 @@ export class UserPreferencesService implements OnDestroy {
       window.electronAPI.getPrefs()
         .then((prefs) => this.loadFrom(prefs));
     } else {
-      const prefs: Prefs = JSON.parse(localStorage.getItem("prefs")!);
+      const prefs: Prefs = JSON.parse(localStorage.getItem('prefs')!);
       this.loadFrom(prefs);
     }
   }
@@ -73,7 +73,7 @@ export class UserPreferencesService implements OnDestroy {
   }
 
   loadFrom(prefs: Prefs, save = false) {
-    console.log("loading from", prefs);
+    console.log('loading from', prefs);
     try {
       if (prefs.username) {
         this.username.set(prefs.username);
@@ -94,11 +94,11 @@ export class UserPreferencesService implements OnDestroy {
         );
       }
       this.equalizerSettings.set(this.mergeEqualizerSettings(prefs.equalizer));
-      
+
       if (save) this.savePreferences();
     } catch (e: unknown) {
       if (e instanceof Error) {
-        console.error("Unable to load from this file.", e);
+        console.error('Unable to load from this file.', e);
       }
     }
   }
@@ -114,7 +114,7 @@ export class UserPreferencesService implements OnDestroy {
 
     return {
       enabled: settings.enabled ?? true,
-      preset: settings.preset ?? "Balanced",
+      preset: settings.preset ?? 'Balanced',
       preamp: settings.preamp ?? 0,
       bands: cloneBands(DEFAULT_EQUALIZER_BANDS).map(band => {
         const override = incomingBands.get(band.label);
@@ -139,7 +139,7 @@ export class UserPreferencesService implements OnDestroy {
   }
 
   savePreferences() {
-    console.log("i'm saving it omg so good");
+    console.log('i\'m saving it omg so good');
     const prefs: Prefs = {};
     prefs.username = this.username();
     prefs.favoriteSongs = this.favoriteSongs();
@@ -154,7 +154,7 @@ export class UserPreferencesService implements OnDestroy {
         .then((success) => {
           if (!success) console.error('Unable to save!');
         });
-    } else localStorage.setItem("prefs", JSON.stringify(prefs));
+    } else localStorage.setItem('prefs', JSON.stringify(prefs));
   }
 
   private songKey(song: Song): string {
@@ -261,7 +261,7 @@ export class UserPreferencesService implements OnDestroy {
   removePlaylist(playlistName: string) {
     const currentPlaylists = this.savedPlaylists();
     const updatedPlaylists = new Map(currentPlaylists);
-    
+
     if (updatedPlaylists.delete(playlistName)) {
       this.savedPlaylists.set(updatedPlaylists);
       this.savePreferences();

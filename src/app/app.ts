@@ -1,9 +1,9 @@
 import { Component, signal, model } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TopBar } from "./top-bar/top-bar";
-import { Player } from "./player/player";
+import { TopBar } from './top-bar/top-bar';
+import { Player } from './player/player';
 import { Song } from '../types';
-import { Suspense } from "./suspense/suspense";
+import { Suspense } from './suspense/suspense';
 
 @Component({
   selector: 'app-root',
@@ -19,8 +19,8 @@ export class App {
   constructor() {
     // make sure that prefs is set even if localStorage is empty
     if (!window.electronAPI) {
-      const rawPrefs = localStorage.getItem("prefs");
-      if (!rawPrefs) localStorage.setItem("prefs", "{}");
+      const rawPrefs = localStorage.getItem('prefs');
+      if (!rawPrefs) localStorage.setItem('prefs', '{}');
     }
   }
 }

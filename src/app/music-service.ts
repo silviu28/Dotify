@@ -11,9 +11,9 @@ export class MusicService {
   private onPlaySubject = new Subject<Song>();
   onPlay = this.onPlaySubject.asObservable();
 
-  apiUrl = "http://localhost:4000";
+  apiUrl = 'http://localhost:4000';
   currentSong = signal<Song | null>(null);
-  
+
   // Playlist-ul principal (contextul curent: album, search results, etc.)
   playlist = signal<Song[]>([]);
   recentlyPlayed = signal<Song[]>([]); // Now managed by the service
@@ -47,7 +47,7 @@ export class MusicService {
       this.songs.set(res.songs);
       this.artistNames.set(this.aggregateArtistNames(res.songs));
       this.albums.set(this.aggregateAlbums(res.songs));
-      console.log("Built listings from response stream", this.artistNames(), this.albums());
+      console.log('Built listings from response stream', this.artistNames(), this.albums());
       return res;
     })).subscribe();
   }
@@ -60,7 +60,7 @@ export class MusicService {
         // if album doesn't exist, create it
         albums.set(song.album, {
           name: song.album,
-          coverArt: song.albumArt || "",
+          coverArt: song.albumArt || '',
           songs: [song],
           artist: song.artist,
         });
@@ -119,7 +119,7 @@ export class MusicService {
   playSong(song: Song) {
     this.currentSong.set(song);
     this.onPlaySubject.next(song);
-    
+
     this.addToRecentlyPlayed(song);
   }
 
@@ -133,14 +133,14 @@ export class MusicService {
   playNext() {
     // 1. Verificăm întâi Coada de Prioritate (Queue)
     const userQueue = this.queue();
-    
+
     if (userQueue.length > 0) {
-      console.log("🛑 Priority Queue found! Playing:", userQueue[0].title);
-      
+      console.log('🛑 Priority Queue found! Playing:', userQueue[0].title);
+
       const nextSong = userQueue[0];
-      
+
       // O scoatem din coadă și o redăm (stergem primul element)
-      this.queue.update(q => q.slice(1)); 
+      this.queue.update(q => q.slice(1));
       this.playSong(nextSong);
       return;
     }
@@ -148,28 +148,28 @@ export class MusicService {
     // 2. Dacă nu e nimic în coadă, continuăm lista normală (Playlist)
     const current = this.currentSong();
     const list = this.playlist();
-    
+
 
     if (!current || list.length === 0) {
-      console.warn("❌ Nu am piesă curentă sau playlist gol.");
+      console.warn('❌ Nu am piesă curentă sau playlist gol.');
       return;
     }
 
     // Folosim findIndex după filename pentru siguranță
     const currentIndex = list.findIndex(s => s.filename === current.filename);
-    console.log("Index găsit în playlist:", currentIndex);
+    console.log('Index găsit în playlist:', currentIndex);
 
     if (currentIndex === -1) {
-      console.error("❌ Piesa curentă nu a fost găsită în playlist-ul activ! Redau prima piesă.");
+      console.error('❌ Piesa curentă nu a fost găsită în playlist-ul activ! Redau prima piesă.');
       this.playSong(list[0]);
       return;
     }
 
     if (currentIndex < list.length - 1) {
-      console.log("⏭️ Trec la piesa următoare din playlist:", list[currentIndex + 1].title);
+      console.log('⏭️ Trec la piesa următoare din playlist:', list[currentIndex + 1].title);
       this.playSong(list[currentIndex + 1]);
     } else {
-      console.log("🔄 Loop la început:", list[0].title);
+      console.log('🔄 Loop la început:', list[0].title);
       this.playSong(list[0]);
     }
   }

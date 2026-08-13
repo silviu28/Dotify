@@ -36,19 +36,19 @@ export const routes: Routes = [
     component: SearchResult
   },
   {
-    path: "me",
+    path: 'me',
     component: MePage,
   },
   {
-    path: "settings",
+    path: 'settings',
     component: SettingsPage
   },
   {
-    path: "album/:name",
+    path: 'album/:name',
     component: AlbumPage
   },
   {
-    path: "playlist/:title",
+    path: 'playlist/:title',
     component: PlaylistPage
   }
 ];
