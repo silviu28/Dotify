@@ -2,6 +2,7 @@ version: 2
 updates:
   # Angular (npm)
   - package-ecosystem: "npm"
+    directory: "."
     schedule:
       interval: "weekly"
     groups:
