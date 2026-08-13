@@ -2,7 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Song } from '../../types';
 import { MusicService } from '../music-service';
-import { SongContainer } from "../song-container/song-container";
+import { SongContainer } from '../song-container/song-container';
 
 @Component({
   selector: 'app-album-page',
@@ -18,13 +18,13 @@ export class AlbumPage implements OnInit {
     this.musicService
       .albums()
       .find(album => album.name === this.albumName())
-      ?? { songs: [], artist: "" });
+      ?? { songs: [], artist: '' });
 
-  albumName = signal<string>("");
+  albumName = signal<string>('');
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(
-      params => this.albumName.set(decodeURI(String(params["name"])))
+      params => this.albumName.set(decodeURI(String(params['name'])))
     );
   }
 

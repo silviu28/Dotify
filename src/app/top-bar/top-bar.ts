@@ -45,7 +45,7 @@ export class TopBar {
   search() {
     if (this.searchTerm() === '') return;
 
-    this.router.navigate(["/search", encodeURI(this.searchTerm())]);
+    this.router.navigate(['/search', encodeURI(this.searchTerm())]);
   }
 
   toggleNotificationPanel() {
@@ -71,10 +71,10 @@ export class TopBar {
   }
 
   navigateToMe() {
-    this.router.navigate(["/me"]);
+    this.router.navigate(['/me']);
   }
 
   navigateToSettings() {
-    this.router.navigate(["/settings"]);
+    this.router.navigate(['/settings']);
   }
 }

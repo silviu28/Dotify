@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MusicService } from '../music-service';
 import { UserPreferencesService } from '../user-preferences-service';
 import { Song } from '../../types';
-import { SongContainer } from "../song-container/song-container";
+import { SongContainer } from '../song-container/song-container';
 
 @Component({
   selector: 'app-playlist-page',
@@ -20,14 +20,14 @@ export class PlaylistPage implements OnInit {
     this.userPreferencesService
       .savedPlaylists()
       .get(this.playlistName())
-      ?? { title: "how", songs: [] }
+      ?? { title: 'how', songs: [] }
   );
 
-  playlistName = signal<string>("");
+  playlistName = signal<string>('');
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(
-      params => this.playlistName.set(decodeURI(String(params["title"])))
+      params => this.playlistName.set(decodeURI(String(params['title'])))
     );
   }
 

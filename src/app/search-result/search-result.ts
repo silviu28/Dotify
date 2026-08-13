@@ -1,9 +1,9 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { MusicService } from '../music-service';
 import { ActivatedRoute } from '@angular/router';
-import { SongContainer } from "../song-container/song-container";
-import { AlbumContainer } from "../album-container/album-container";
-import { TextPill } from "../text-pill/text-pill";
+import { SongContainer } from '../song-container/song-container';
+import { AlbumContainer } from '../album-container/album-container';
+import { TextPill } from '../text-pill/text-pill';
 
 @Component({
   selector: 'app-search-result',
@@ -16,10 +16,10 @@ export class SearchResult {
   activatedRoute = inject(ActivatedRoute);
   query = signal<string>('');
 
-  resultSongs = computed(() => 
+  resultSongs = computed(() =>
     this.musicService
       .songs()
-      .filter(song => 
+      .filter(song =>
         song.title
           .toLowerCase()
           .includes(this.query().trim().toLowerCase()))

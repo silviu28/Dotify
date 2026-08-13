@@ -1,7 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
-import { RecentlyPlayed } from "../recently-played/recently-played";
+import { RecentlyPlayed } from '../recently-played/recently-played';
 import { RouterLink } from '@angular/router';
-import { ImageConveyorBelt } from "../image-conveyor-belt/image-conveyor-belt";
+import { ImageConveyorBelt } from '../image-conveyor-belt/image-conveyor-belt';
 import { UserPreferencesService } from '../user-preferences-service';
 
 @Component({
@@ -12,6 +12,6 @@ import { UserPreferencesService } from '../user-preferences-service';
 })
 export class MainPage {
   private userPrefsService = inject(UserPreferencesService);
-  
+
   username = computed(() => this.userPrefsService.username());
 }

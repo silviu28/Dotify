@@ -1,12 +1,12 @@
 import { Component, inject, model, signal, OnInit, computed } from '@angular/core';
-import { SongContainer } from "../song-container/song-container"; // Import the component
+import { SongContainer } from '../song-container/song-container'; // Import the component
 import { GroupCriterion, Song, SortCriterion } from '../../types';
 import { MusicService } from '../music-service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-library',
-  imports: [SongContainer, FormsModule], 
+  imports: [SongContainer, FormsModule],
   templateUrl: './library.html',
   styleUrl: './library.css',
 })
@@ -14,27 +14,27 @@ export class MusicListing implements OnInit {
   songs = signal<Song[]>([]);
   searchQuery = model<string>('');
 
-  sortingCriterion = model<SortCriterion>("No sort");
-  sortingCriteria: SortCriterion[] = ["No sort", "Title", "Album", "Artist"];
+  sortingCriterion = model<SortCriterion>('No sort');
+  sortingCriteria: SortCriterion[] = ['No sort', 'Title', 'Album', 'Artist'];
 
-  groupingCriterion = model<GroupCriterion>("No group");
-  groupingCriteria: GroupCriterion[] = ["No group", "Album", "Artist"];
+  groupingCriterion = model<GroupCriterion>('No group');
+  groupingCriteria: GroupCriterion[] = ['No group', 'Album', 'Artist'];
 
   // use a computed signal to both sort and group songs by given criteria
   sortedSongGroups = computed(() => {
-    console.log("sorting and grouping songs...");
+    console.log('sorting and grouping songs...');
     const _songs = this.songs();
 
     switch (this.sortingCriterion()) {
-    case "Album":
+    case 'Album':
       _songs.sort((s1, s2) => s1.album.localeCompare(s2.album));
       break;
 
-    case "Artist":
+    case 'Artist':
       _songs.sort((s1, s2) => s1.artist.localeCompare(s2.artist));
       break;
 
-    case "Title":
+    case 'Title':
       _songs.sort((s1, s2) => s1.title.localeCompare(s2.title));
       break;
     // Apply nothing
@@ -43,7 +43,7 @@ export class MusicListing implements OnInit {
 
     const songGroups = new Map<string, Song[]>();
     switch (this.groupingCriterion()) {
-    case "Album":
+    case 'Album':
       _songs.forEach(song => {
         if (songGroups.has(song.album)) {
           songGroups.set(song.album,
@@ -55,7 +55,7 @@ export class MusicListing implements OnInit {
       });
       break;
 
-    case "Artist":
+    case 'Artist':
       _songs.forEach(song => {
         if (songGroups.has(song.artist)) {
           songGroups.set(song.artist,
@@ -66,17 +66,17 @@ export class MusicListing implements OnInit {
         }
       });
       break;
-      
+
     default:
       // make one big group
-      songGroups.set("All", _songs);
+      songGroups.set('All', _songs);
       break;
     }
 
     // flatten the map to an array for ease of iteration
     return Array.from(songGroups.entries());
   });
-  
+
   private musicService = inject(MusicService);
 
   ngOnInit() {
@@ -90,7 +90,7 @@ export class MusicListing implements OnInit {
     const search = this.searchQuery().trim();
     const updateSongs = (songs: Song[]) => {
       this.songs.set(songs);
-      this.musicService.setQueue(songs); 
+      this.musicService.setQueue(songs);
     };
 
     if(search === '') {
