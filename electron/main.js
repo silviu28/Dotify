@@ -1,10 +1,20 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
+const Store = require('electron-store').default;
 const path = require('path');
+
+const store = new Store({
+  defaults: {
+    prefs: {
+
+    }
+  }
+});
 
 const isDev = !app.isPackaged;
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
+    autoHideMenuBar: !isDev,
     width: 1280,
     height: 800,
     minWidth: 900,
@@ -26,6 +36,15 @@ function createWindow() {
     );
   }
 }
+
+ipcMain.handle('prefs:get', () => {
+  return store.get('prefs');
+});
+
+ipcMain.handle('prefs:set', (event, prefs) => {
+  store.set('prefs', prefs);
+  return true;
+});
 
 app.whenReady().then(() => {
   createWindow();

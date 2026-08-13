@@ -18,9 +18,9 @@ export class App {
 
   constructor() {
     // make sure that prefs is set even if localStorage is empty
-    const rawPrefs = localStorage.getItem("prefs");
-    if (!rawPrefs) {
-      localStorage.setItem("prefs", "{}");
+    if (!window.electronAPI) {
+      const rawPrefs = localStorage.getItem("prefs");
+      if (!rawPrefs) localStorage.setItem("prefs", "{}");
     }
   }
 }

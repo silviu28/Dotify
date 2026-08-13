@@ -1,6 +1,15 @@
 import { computed, Injectable, OnDestroy, signal } from '@angular/core';
 import { Album, EqualizerBand, EqualizerSettings, Playlist, Prefs, Song } from '../types';
 
+declare global {
+  interface Window {
+    electronAPI?: {
+      getPrefs: () => Promise<Prefs>;
+      setPrefs: (prefs: Prefs) => Promise<boolean>;
+    }
+  }
+}
+
 const DEFAULT_EQUALIZER_BANDS: EqualizerBand[] = [
   { label: "60 Hz", frequency: 60, value: 0 },
   { label: "170 Hz", frequency: 170, value: 0 },
@@ -10,7 +19,7 @@ const DEFAULT_EQUALIZER_BANDS: EqualizerBand[] = [
   { label: "3 kHz", frequency: 3000, value: 0 },
   { label: "6 kHz", frequency: 6000, value: 0 },
   { label: "12 kHz", frequency: 12000, value: 0 }
-];
+] as const;
 
 const cloneBands = (bands: EqualizerBand[] = []) =>
   bands.map(band => ({ ... band }));
@@ -43,8 +52,13 @@ export class UserPreferencesService implements OnDestroy {
 
   constructor() {
     // parse user preferences from localStorage object
-    const prefs: Prefs = JSON.parse(localStorage.getItem("prefs")!);
-    this.loadFrom(prefs);
+    if (window.electronAPI) {
+      window.electronAPI.getPrefs()
+        .then((prefs) => this.loadFrom(prefs));
+    } else {
+      const prefs: Prefs = JSON.parse(localStorage.getItem("prefs")!);
+      this.loadFrom(prefs);
+    }
   }
 
   getAll(): Prefs {
@@ -125,6 +139,7 @@ export class UserPreferencesService implements OnDestroy {
   }
 
   savePreferences() {
+    console.log("i'm saving it omg so good");
     const prefs: Prefs = {};
     prefs.username = this.username();
     prefs.favoriteSongs = this.favoriteSongs();
@@ -134,7 +149,12 @@ export class UserPreferencesService implements OnDestroy {
     prefs.savedPlaylists = Object.fromEntries(this.savedPlaylists());
     prefs.equalizer = this.equalizerSettings();
 
-    localStorage.setItem("prefs", JSON.stringify(prefs));
+    if (window.electronAPI) {
+      window.electronAPI.setPrefs(prefs)
+        .then((success) => {
+          if (!success) console.error('Unable to save!');
+        });
+    } else localStorage.setItem("prefs", JSON.stringify(prefs));
   }
 
   private songKey(song: Song): string {
