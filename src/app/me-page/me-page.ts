@@ -28,11 +28,11 @@ export class MePage implements OnDestroy {
   editModeEnabled = signal<boolean>(false);
 
   toggleEditMode() {
-    this.editModeEnabled.set(!this.editModeEnabled());
-    // when toggled off save to disk
     if (this.editModeEnabled()) {
       this.userPrefsService.savePreferences();
     }
+    // when toggled off save to disk
+    this.editModeEnabled.set(!this.editModeEnabled()); 
   }
 
   navigateToArtist(artistName: string) {
@@ -40,10 +40,12 @@ export class MePage implements OnDestroy {
   }
 
   ngOnDestroy() {
-    localStorage.setItem(
-      "favoriteSongs", JSON.stringify(this.favoritedSongs())
-    );
-    localStorage.setItem("name", this.name());
+    if (!window.electronAPI) {
+      localStorage.setItem(
+        "favoriteSongs", JSON.stringify(this.favoritedSongs())
+      );
+      localStorage.setItem("name", this.name());
+    }
   }
 
   loadPreferencesFromFile() {
